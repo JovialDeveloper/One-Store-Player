@@ -11,7 +11,9 @@ import SwiftUI
 struct One_Store_PlayerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MoviesView()
+            //MainHomeView()
+            //LoginView()
         }
     }
 }
