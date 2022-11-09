@@ -7,11 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */; };
+		D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82A291BFD4100EFEFFA /* CollectionView.swift */; };
+		D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */; };
+		D07CF830291C00D200EFEFFA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82F291C00D200EFEFFA /* SettingsView.swift */; };
+		D07CF832291C055E00EFEFFA /* NavigationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF831291C055E00EFEFFA /* NavigationHeaderView.swift */; };
+		D07CF83A291C260800EFEFFA /* cairo_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D07CF837291C260800EFEFFA /* cairo_light.ttf */; };
+		D07CF83B291C260800EFEFFA /* cairo_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D07CF838291C260800EFEFFA /* cairo_regular.ttf */; };
+		D07CF83C291C265C00EFEFFA /* cairo_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D07CF836291C260700EFEFFA /* cairo_bold.ttf */; };
 		D0840003291670FB00465873 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0840002291670FB00465873 /* Preview Assets.xcassets */; };
 		D084000D291684E400465873 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084000C291684E400465873 /* LoginView.swift */; };
-		D08400122916859900465873 /* cairo_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D084000F2916859800465873 /* cairo_regular.ttf */; };
-		D08400132916859900465873 /* cairo_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D08400102916859900465873 /* cairo_light.ttf */; };
-		D08400142916859900465873 /* cairo_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D08400112916859900465873 /* cairo_bold.ttf */; };
 		D0840017291685C200465873 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0840016291685C200465873 /* Helper.swift */; };
 		D084001A291689AE00465873 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0840019291689AE00465873 /* Modifiers.swift */; };
 		D084001D29168B8D00465873 /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084001C29168B8D00465873 /* TextFieldView.swift */; };
@@ -25,12 +30,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutView.swift; sourceTree = "<group>"; };
+		D07CF82A291BFD4100EFEFFA /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicLayoutView.swift; sourceTree = "<group>"; };
+		D07CF82F291C00D200EFEFFA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D07CF831291C055E00EFEFFA /* NavigationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHeaderView.swift; sourceTree = "<group>"; };
+		D07CF836291C260700EFEFFA /* cairo_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cairo_bold.ttf; sourceTree = "<group>"; };
+		D07CF837291C260800EFEFFA /* cairo_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cairo_light.ttf; sourceTree = "<group>"; };
+		D07CF838291C260800EFEFFA /* cairo_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cairo_regular.ttf; sourceTree = "<group>"; };
 		D0840000291670FB00465873 /* One_Store_Player.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = One_Store_Player.entitlements; sourceTree = "<group>"; };
 		D0840002291670FB00465873 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D084000C291684E400465873 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		D084000F2916859800465873 /* cairo_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cairo_regular.ttf; sourceTree = "<group>"; };
-		D08400102916859900465873 /* cairo_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cairo_light.ttf; sourceTree = "<group>"; };
-		D08400112916859900465873 /* cairo_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cairo_bold.ttf; sourceTree = "<group>"; };
 		D0840016291685C200465873 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D08400182916874500465873 /* One-Store-Player-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "One-Store-Player-Info.plist"; sourceTree = SOURCE_ROOT; };
 		D0840019291689AE00465873 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
@@ -56,6 +66,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D07CF82E291C00BF00EFEFFA /* SettingsView */ = {
+			isa = PBXGroup;
+			children = (
+				D07CF82F291C00D200EFEFFA /* SettingsView.swift */,
+			);
+			path = SettingsView;
+			sourceTree = "<group>";
+		};
 		D0840001291670FB00465873 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -67,10 +85,12 @@
 		D0840009291684B900465873 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D07CF82E291C00BF00EFEFFA /* SettingsView */,
 				D0C6189B291917B700A9529A /* MoviesView */,
 				D084001B29168B7B00465873 /* SubViews */,
 				D084000C291684E400465873 /* LoginView.swift */,
 				D0EF924A2916DE8E003225F0 /* MainHomeView.swift */,
+				D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -92,9 +112,9 @@
 		D084000E2916858000465873 /* CustomFonts */ = {
 			isa = PBXGroup;
 			children = (
-				D08400112916859900465873 /* cairo_bold.ttf */,
-				D08400102916859900465873 /* cairo_light.ttf */,
-				D084000F2916859800465873 /* cairo_regular.ttf */,
+				D07CF836291C260700EFEFFA /* cairo_bold.ttf */,
+				D07CF837291C260800EFEFFA /* cairo_light.ttf */,
+				D07CF838291C260800EFEFFA /* cairo_regular.ttf */,
 			);
 			path = CustomFonts;
 			sourceTree = "<group>";
@@ -114,6 +134,8 @@
 			children = (
 				D084001C29168B8D00465873 /* TextFieldView.swift */,
 				D084001E2916A0C500465873 /* ButtonView.swift */,
+				D07CF82A291BFD4100EFEFFA /* CollectionView.swift */,
+				D07CF831291C055E00EFEFFA /* NavigationHeaderView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -156,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				D0C6189C291917D000A9529A /* MoviesView.swift */,
+				D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */,
 			);
 			path = MoviesView;
 			sourceTree = "<group>";
@@ -218,9 +241,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D08400142916859900465873 /* cairo_bold.ttf in Resources */,
-				D08400132916859900465873 /* cairo_light.ttf in Resources */,
-				D08400122916859900465873 /* cairo_regular.ttf in Resources */,
+				D07CF83C291C265C00EFEFFA /* cairo_bold.ttf in Resources */,
+				D07CF83A291C260800EFEFFA /* cairo_light.ttf in Resources */,
+				D07CF83B291C260800EFEFFA /* cairo_regular.ttf in Resources */,
 				D0840003291670FB00465873 /* Preview Assets.xcassets in Resources */,
 				D084FFFF291670FB00465873 /* Assets.xcassets in Resources */,
 			);
@@ -234,10 +257,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				D084000D291684E400465873 /* LoginView.swift in Sources */,
+				D07CF832291C055E00EFEFFA /* NavigationHeaderView.swift in Sources */,
 				D084FFFD291670F900465873 /* ContentView.swift in Sources */,
 				D084001D29168B8D00465873 /* TextFieldView.swift in Sources */,
 				D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */,
+				D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */,
+				D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */,
 				D0840017291685C200465873 /* Helper.swift in Sources */,
+				D07CF830291C00D200EFEFFA /* SettingsView.swift in Sources */,
+				D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */,
 				D0C6189F2919186E00A9529A /* Constants.swift in Sources */,
 				D084001A291689AE00465873 /* Modifiers.swift in Sources */,
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
@@ -381,6 +409,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -422,6 +451,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

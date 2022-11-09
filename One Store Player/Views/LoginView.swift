@@ -15,14 +15,16 @@ struct LoginView: View {
     @State private var isSecure = false
     var body: some View {
         ZStack{
-            Color.gray.opacity(0.5).ignoresSafeArea()
+            LinearGradient.bgGradient.ignoresSafeArea()
             HStack{
                 VStack(spacing:20) {
+                    Spacer()
                     Image("Icon")
                         .resizable()
                         .frame(width:140,height: 140)
                     .scaledToFill()
                     
+                    Spacer()
                     Text("To order contact use whatsapp +971551761973")
                 }
                 
@@ -31,6 +33,7 @@ struct LoginView: View {
                 VStack{
                     Text("Login Details")
                         .font(.carioBold)
+                    
                         
                     TextFieldView(text: $anyName,placeHolder: "Any Name")
                     TextFieldView(text: $userName,placeHolder: "User Name")
@@ -40,12 +43,24 @@ struct LoginView: View {
                         },image: isSecure ? "eye-off" : "eye")
                         .frame(width:46,height: 46)
                         
+                        
                         TextFieldView(text: $password,placeHolder: "Password",isSecure: $isSecure)
                     }
                     
                     TextFieldView(text: $port,placeHolder: "url")
-                    ButtonView(buttonTitle:"ADD NEW USER") {
-                        //
+                    
+                    HStack{
+                        Spacer().frame(width:30)
+                        Button {
+                            //
+                        } label: {
+                            Text("ADD NEW USER")
+                                .font(.carioRegular)
+                                .frame(maxWidth:.infinity)
+                        }
+                        .frame(height: 46)
+                        .background(Rectangle().fill(Color.white))
+                        Spacer().frame(width:30)
                     }
                     
                     
@@ -55,6 +70,7 @@ struct LoginView: View {
                 
                 //Spacer()
             }
+            .foregroundColor(.black)
         }
         
 //        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)

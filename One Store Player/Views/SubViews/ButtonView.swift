@@ -27,7 +27,7 @@ struct ButtonView: View {
             }
             
         }
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.white))
 
     }
 }

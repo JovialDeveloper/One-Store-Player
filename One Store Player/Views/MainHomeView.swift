@@ -7,10 +7,21 @@
 
 import SwiftUI
 
+enum StateType:String{
+    case settings
+    case movies
+    case users
+    case userAccount
+}
+extension StateType: Identifiable {
+    var id: RawValue { rawValue }
+}
+
 struct MainHomeView: View {
+    @State private var stateType : StateType?
     var body: some View {
         ZStack{
-            Color.black.ignoresSafeArea()
+            Color.primaryColor.ignoresSafeArea()
             VStack{
                 // Top Header View
                 HStack{
@@ -38,7 +49,7 @@ struct MainHomeView: View {
                             Image("user_account_info")
                                 .resizable()
                                 .frame(width:20,height: 20)
-                                .scaledToFill()
+                                .scaledToFit()
                         }
                         .frame(width:20,height: 20)
                         
@@ -48,20 +59,20 @@ struct MainHomeView: View {
                         } label: {
                             Image("ic_users")
                                 .resizable()
-                                .frame(width:20,height: 20)
+                                .frame(width:30,height: 30)
                                 .scaledToFill()
                         }
-                        .frame(width:20,height: 20)
+                        .frame(width:30,height: 30)
                         //Settings Button
                         Button {
-                            //
+                            stateType = .settings
                         } label: {
                             Image("ic_settings")
                                 .resizable()
-                                .frame(width:20,height: 20)
+                                .frame(width:30,height: 30)
                                 .scaledToFill()
                         }
-                        .frame(width:20,height: 20)
+                        .frame(width:30,height: 30)
                         
                             
                     }
@@ -89,6 +100,7 @@ struct MainHomeView: View {
                         // Movies
                         Button {
                             // movies
+                            stateType = .movies
                         } label: {
                             Image("movies")
                                 .resizable()
@@ -164,6 +176,13 @@ struct MainHomeView: View {
             .foregroundColor(.white)
             
             .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height)
+            .sheet(item: $stateType) { state in
+                if state == .movies {
+                    MoviesView(title:"All")
+                }else if state == .settings {
+                    SettingsView(title:"Settings")
+                }
+            }
         }
     }
 }
