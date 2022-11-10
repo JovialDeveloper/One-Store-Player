@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct CollectionGridView:View{
+    
+    var width : CGFloat = 130
+    var height : CGFloat = 180
+    
     let data = (1...100).map { "Item \($0)" }
     
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 4)
@@ -26,7 +30,7 @@ struct CollectionGridView:View{
         ZStack{
             Image("movie1")
                 .resizable()
-                .frame(width:130,height: 180)
+                .frame(width:width,height: height)
                 .scaledToFill()
                 //.clipped()
                 .overlay(imageOverLayView,alignment: .bottom)
@@ -51,20 +55,19 @@ struct CollectionGridView:View{
     var imageOverLayView:some View{
         VStack{
             Text("Title")
-                .font(.carioRegular)
+                .font(.carioBold)
                 .foregroundColor(.white)
                 .lineLimit(0)
-                .minimumScaleFactor(0.7)
+                //.minimumScaleFactor(0.7)
             
             Text("Description")
                 .font(.carioRegular)
                 .lineLimit(0)
-                .minimumScaleFactor(0.7)
+                //.minimumScaleFactor(0.7)
                 .foregroundColor(.white)
         }
         .padding()
-        .frame(maxWidth:.infinity,maxHeight: 50)
-        .background(Color.black)
-        .opacity(0.4)
+        .frame(maxWidth:.infinity,maxHeight: 65)
+        .background(Color.black.opacity(0.4))
     }
 }
