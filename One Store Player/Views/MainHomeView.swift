@@ -44,7 +44,7 @@ struct MainHomeView: View {
                     // Users Catalog
                     HStack{
                         Button {
-                            //
+                            stateType = .userAccount
                         } label: {
                             Image("user_account_info")
                                 .resizable()
@@ -55,7 +55,7 @@ struct MainHomeView: View {
                         
                         // Users Button
                         Button {
-                            //
+                            stateType = .users
                         } label: {
                             Image("ic_users")
                                 .resizable()
@@ -181,6 +181,12 @@ struct MainHomeView: View {
                     MoviesView(title:"All")
                 }else if state == .settings {
                     SettingsView(title:"Settings")
+                }
+                else if state == .users {
+                    UserListView()
+                }
+                else if state == .userAccount {
+                    UserAccountInfoView()
                 }
             }
         }

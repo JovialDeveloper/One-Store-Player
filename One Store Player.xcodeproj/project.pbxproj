@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
+		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
 		D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */; };
 		D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82A291BFD4100EFEFFA /* CollectionView.swift */; };
 		D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */; };
@@ -30,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
+		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
 		D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutView.swift; sourceTree = "<group>"; };
 		D07CF82A291BFD4100EFEFFA /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicLayoutView.swift; sourceTree = "<group>"; };
@@ -66,6 +70,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D00925FF2922B27B0093648A /* ListUsers */ = {
+			isa = PBXGroup;
+			children = (
+				D00926002922B29D0093648A /* UserListView.swift */,
+			);
+			path = ListUsers;
+			sourceTree = "<group>";
+		};
+		D00926022922B9180093648A /* UserAccountInfoView */ = {
+			isa = PBXGroup;
+			children = (
+				D00926032922B9360093648A /* UserAccountInfoView.swift */,
+			);
+			path = UserAccountInfoView;
+			sourceTree = "<group>";
+		};
 		D07CF82E291C00BF00EFEFFA /* SettingsView */ = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +105,8 @@
 		D0840009291684B900465873 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D00926022922B9180093648A /* UserAccountInfoView */,
+				D00925FF2922B27B0093648A /* ListUsers */,
 				D07CF82E291C00BF00EFEFFA /* SettingsView */,
 				D0C6189B291917B700A9529A /* MoviesView */,
 				D084001B29168B7B00465873 /* SubViews */,
@@ -259,6 +281,7 @@
 				D084000D291684E400465873 /* LoginView.swift in Sources */,
 				D07CF832291C055E00EFEFFA /* NavigationHeaderView.swift in Sources */,
 				D084FFFD291670F900465873 /* ContentView.swift in Sources */,
+				D00926012922B29D0093648A /* UserListView.swift in Sources */,
 				D084001D29168B8D00465873 /* TextFieldView.swift in Sources */,
 				D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */,
 				D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */,
@@ -268,6 +291,7 @@
 				D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */,
 				D0C6189F2919186E00A9529A /* Constants.swift in Sources */,
 				D084001A291689AE00465873 /* Modifiers.swift in Sources */,
+				D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */,
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
 				D0C6189D291917D000A9529A /* MoviesView.swift in Sources */,
 				D084001F2916A0C500465873 /* ButtonView.swift in Sources */,
