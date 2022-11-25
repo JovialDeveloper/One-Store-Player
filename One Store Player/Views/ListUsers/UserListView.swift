@@ -16,13 +16,17 @@ struct UserListView: View {
             VStack{
                 HStack{
                     // Logo
-                    Image("Icon")
-                        .resizable()
-                        .frame(width:60,height: 60)
-                        .scaledToFill()
-                        .onTapGesture {
-                            presentationMode.wrappedValue.dismiss()
-                        }
+                    if #available(iOS 13.0,tvOS 16.0, *) {
+                        Image("Icon")
+                            .resizable()
+                            .frame(width:60,height: 60)
+                            .scaledToFill()
+                            .onTapGesture {
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                    } else {
+                        // Fallback on earlier versions
+                    }
                     Spacer()
                     // Today Date
                     Text("List of Users")

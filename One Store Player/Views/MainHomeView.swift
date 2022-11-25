@@ -12,6 +12,9 @@ enum StateType:String{
     case movies
     case users
     case userAccount
+    case sereris
+    case liveTV
+    case fixtures
 }
 extension StateType: Identifiable {
     var id: RawValue { rawValue }
@@ -32,7 +35,7 @@ struct MainHomeView: View {
                         .scaledToFill()
                     Spacer()
                     // Today Date
-                    if #available(iOS 15.0, *) {
+                    if #available(iOS 15.0,tvOS 15.0, *) {
                         Text("\(Date().formatted())")
                             .font(.carioRegular)
                     } else {
@@ -88,6 +91,7 @@ struct MainHomeView: View {
                         //Live TV
                         Button {
                             // Live TV
+                            stateType = .liveTV
                         } label: {
                             Image("livetv")
                                 .resizable()
@@ -113,6 +117,7 @@ struct MainHomeView: View {
                         // Series
                         Button {
                             // Series
+                            stateType = .movies
                         } label: {
                             Image("series")
                                 .resizable()
@@ -177,10 +182,18 @@ struct MainHomeView: View {
             
             .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height)
             .sheet(item: $stateType) { state in
-                if state == .movies {
+                if state == .liveTV {
+                    LIveTVView()
+                }
+                else if state == .movies {
                     MoviesView(title:"All")
                 }else if state == .settings {
+                    #if os(tvOS)
+                    TVOS_Settings()
+                    #else
                     SettingsView(title:"Settings")
+                    
+                    #endif
                 }
                 else if state == .users {
                     UserListView()
@@ -195,7 +208,7 @@ struct MainHomeView: View {
 
 struct MainHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        if #available(iOS 15.0, *) {
+        if #available(iOS 15.0,tvOS 15.0, *) {
             MainHomeView()
                 .previewInterfaceOrientation(.landscapeLeft)
         } else {

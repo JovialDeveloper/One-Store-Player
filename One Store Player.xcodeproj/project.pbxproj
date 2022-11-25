@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
 		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
+		D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339DF2930E54E00213D85 /* LIveTVView.swift */; };
+		D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339E1293139D700213D85 /* TVOS Settings.swift */; };
+		D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048C32029292AF4001B4DD0 /* WatchView.swift */; };
 		D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */; };
 		D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82A291BFD4100EFEFFA /* CollectionView.swift */; };
 		D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */; };
@@ -34,6 +37,9 @@
 /* Begin PBXFileReference section */
 		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
+		D04339DF2930E54E00213D85 /* LIveTVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIveTVView.swift; sourceTree = "<group>"; };
+		D04339E1293139D700213D85 /* TVOS Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TVOS Settings.swift"; sourceTree = "<group>"; };
+		D048C32029292AF4001B4DD0 /* WatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchView.swift; sourceTree = "<group>"; };
 		D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutView.swift; sourceTree = "<group>"; };
 		D07CF82A291BFD4100EFEFFA /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicLayoutView.swift; sourceTree = "<group>"; };
@@ -86,10 +92,27 @@
 			path = UserAccountInfoView;
 			sourceTree = "<group>";
 		};
+		D048C31E29292877001B4DD0 /* Live TV */ = {
+			isa = PBXGroup;
+			children = (
+				D04339DF2930E54E00213D85 /* LIveTVView.swift */,
+			);
+			path = "Live TV";
+			sourceTree = "<group>";
+		};
+		D048C31F29292ADF001B4DD0 /* WatchView */ = {
+			isa = PBXGroup;
+			children = (
+				D048C32029292AF4001B4DD0 /* WatchView.swift */,
+			);
+			path = WatchView;
+			sourceTree = "<group>";
+		};
 		D07CF82E291C00BF00EFEFFA /* SettingsView */ = {
 			isa = PBXGroup;
 			children = (
 				D07CF82F291C00D200EFEFFA /* SettingsView.swift */,
+				D04339E1293139D700213D85 /* TVOS Settings.swift */,
 			);
 			path = SettingsView;
 			sourceTree = "<group>";
@@ -105,6 +128,8 @@
 		D0840009291684B900465873 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D048C31F29292ADF001B4DD0 /* WatchView */,
+				D048C31E29292877001B4DD0 /* Live TV */,
 				D00926022922B9180093648A /* UserAccountInfoView */,
 				D00925FF2922B27B0093648A /* ListUsers */,
 				D07CF82E291C00BF00EFEFFA /* SettingsView */,
@@ -280,6 +305,8 @@
 			files = (
 				D084000D291684E400465873 /* LoginView.swift in Sources */,
 				D07CF832291C055E00EFEFFA /* NavigationHeaderView.swift in Sources */,
+				D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */,
+				D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */,
 				D084FFFD291670F900465873 /* ContentView.swift in Sources */,
 				D00926012922B29D0093648A /* UserListView.swift in Sources */,
 				D084001D29168B8D00465873 /* TextFieldView.swift in Sources */,
@@ -291,6 +318,7 @@
 				D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */,
 				D0C6189F2919186E00A9529A /* Constants.swift in Sources */,
 				D084001A291689AE00465873 /* Modifiers.swift in Sources */,
+				D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */,
 				D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */,
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
 				D0C6189D291917D000A9529A /* MoviesView.swift in Sources */,

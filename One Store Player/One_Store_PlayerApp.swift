@@ -9,11 +9,13 @@ import SwiftUI
 
 @main
 struct One_Store_PlayerApp: App {
+    
     var body: some Scene {
         WindowGroup {
             //MoviesView()
-            MainHomeView()
-            //LoginView()
+            //MainHomeView()
+            LoginView()
+            //WatchView()
         }
     }
 }

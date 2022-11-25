@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
-
+fileprivate class MediaViewModel:ObservableObject{
+    @Published var isShowWatch = false
+}
 struct CollectionGridView:View{
     
     var width : CGFloat = 130
@@ -15,19 +17,40 @@ struct CollectionGridView:View{
     let data = (1...100).map { "Item \($0)" }
     
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 4)
+    @ObservedObject fileprivate var viewModel = MediaViewModel()
     var body: some View{
         ScrollView {
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(data, id: \.self) { item in
-                    movieCell
+                    Button {
+                        viewModel.isShowWatch.toggle()
+                    } label: {
+                        movieCell
+                    }
                 }
             }
+        }.fullScreenCover(isPresented: $viewModel.isShowWatch) {
+            WatchView()
         }
     }
     
     
     var movieCell:some View{
-        ZStack{
+        #if os(tvOS)
+         return  ZStack{
+             Image("movie1")
+                 .resizable()
+                 .frame(minWidth: width,minHeight: height)
+                 //.frame(width:width,height: height)
+                 .scaledToFill()
+                 //.clipped()
+                 .overlay(imageOverLayView,alignment: .bottom)
+                 .overlay(ratingView,alignment: .topLeading)
+             
+             //.frame(height: 130)
+         }.cornerRadius(5)
+        #else
+        return ZStack{
             Image("movie1")
                 .resizable()
                 .frame(width:width,height: height)
@@ -38,6 +61,7 @@ struct CollectionGridView:View{
             
             //.frame(height: 130)
         }.cornerRadius(5)
+        #endif
     }
     
     

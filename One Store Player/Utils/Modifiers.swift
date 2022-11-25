@@ -10,6 +10,6 @@ import UIKit
 struct TextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor.systemGroupedBackground)))
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor(named:"SystemBG")!)))
     }
 }

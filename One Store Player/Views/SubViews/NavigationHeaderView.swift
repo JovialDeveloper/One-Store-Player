@@ -14,14 +14,18 @@ struct NavigationHeaderView: View {
     var body: some View {
         HStack{
             // Logo
-            Image("arrow_back")
-                .resizable()
-                .frame(width:40,height: 40)
-                .scaledToFill()
-                .foregroundColor(.white)
-                .onTapGesture {
-                    presentationMode.wrappedValue.dismiss()
-                }
+            if #available(iOS 13.0,tvOS 16.0, *) {
+                Image("arrow_back")
+                    .resizable()
+                    .frame(width:40,height: 40)
+                    .scaledToFill()
+                    .foregroundColor(.white)
+                    .onTapGesture {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+            } else {
+                // Fallback on earlier versions
+            }
             Spacer()
             
             Text(title)

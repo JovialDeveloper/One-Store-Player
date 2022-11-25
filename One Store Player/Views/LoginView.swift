@@ -7,12 +7,17 @@
 
 import SwiftUI
 
+fileprivate class LoginViewModel:ObservableObject {
+    @Published var successfullyLogin = false
+}
+
 struct LoginView: View {
     @State private var anyName = ""
     @State private var userName = ""
     @State private var password = ""
     @State private var port = ""
     @State private var isSecure = false
+    @ObservedObject fileprivate var loginViewModel = LoginViewModel()
     var body: some View {
         ZStack{
             LinearGradient.bgGradient.ignoresSafeArea()
@@ -52,7 +57,7 @@ struct LoginView: View {
                     HStack{
                         Spacer().frame(width:30)
                         Button {
-                            //
+                            loginViewModel.successfullyLogin.toggle()
                         } label: {
                             Text("ADD NEW USER")
                                 .font(.carioRegular)
@@ -71,6 +76,9 @@ struct LoginView: View {
                 //Spacer()
             }
             .foregroundColor(.black)
+            .fullScreenCover(isPresented: $loginViewModel.successfullyLogin) {
+                MainHomeView()
+            }
         }
         
 //        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
@@ -81,8 +89,12 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            LoginView()
-                .previewInterfaceOrientation(.landscapeLeft)
+            if #available(tvOS 15.0, *) {
+                LoginView()
+                    .previewInterfaceOrientation(.landscapeLeft)
+            } else {
+                // Fallback on earlier versions
+            }
         } else {
             // Fallback on earlier versions
         }

@@ -31,10 +31,14 @@ struct ClassicListGridView:View{
         ScrollView {
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(data, id: \.self) { item in
-                   rowListView
-                        .onTapGesture {
-                            self.isSelectItem.toggle()
-                        }
+                    if #available(iOS 13.0,tvOS 16.0, *) {
+                        rowListView
+                            .onTapGesture {
+                                self.isSelectItem.toggle()
+                            }
+                    } else {
+                        // Fallback on earlier versions
+                    }
                 }
             }
         }.fullScreenCover(isPresented: $isSelectItem) {
@@ -97,7 +101,7 @@ struct ClassicListGridView:View{
 
 struct ClassicLayoutView_Previews: PreviewProvider {
     static var previews: some View {
-        if #available(iOS 15.0, *) {
+        if #available(iOS 15.0,tvOS 15.0, *) {
             ClassicLayoutView(title: "")
                 .previewInterfaceOrientation(.landscapeLeft)
         } else {

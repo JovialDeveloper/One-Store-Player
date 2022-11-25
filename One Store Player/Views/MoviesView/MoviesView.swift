@@ -37,7 +37,7 @@ struct MoviesView: View {
 
 struct MoviesView_Previews: PreviewProvider {
     static var previews: some View {
-        if #available(iOS 15.0, *) {
+        if #available(iOS 15.0,tvOS 15.0, *) {
             MoviesView(title: "ALL")
                 .previewInterfaceOrientation(.landscapeLeft)
         } else {

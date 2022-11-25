@@ -16,7 +16,7 @@ enum SettingsKeys:String,CaseIterable{
     case automation1
 }
 struct SettingsView: View {
-    @AppStorage(AppStorageKeys.layout.rawValue) private var layout: AppKeys.RawValue =  AppKeys.modern.rawValue
+    
     @Environment(\.presentationMode) private var presentationMode
     //let data = ["layout","EPGTime","lang","parentalcontrol","stream format","time","automation1"]
     fileprivate let data = SettingsKeys.allCases
@@ -38,6 +38,30 @@ struct SettingsView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(data, id: \.self) { item in
+                           #if os(tvOS)
+                            
+                            ButtonView(action: {
+                                if item == .layout {
+                                    isLayoutGuideOn.toggle()
+                                }
+                                if item == .time {
+                                    isTimeFormatButtonOn.toggle()
+                                }
+                                if item == .EPGTime{
+                                    isEPGButtonOn.toggle()
+                                }
+                                if item == .lang{
+                                    isLanguageButtonOn.toggle()
+                                }
+                                if item == .automation1{
+                                    isAutomationOn.toggle()
+                                }
+                                
+                            },image: item.rawValue)
+                            .frame(minWidth:200,minHeight: 180)
+                            .cornerRadius(10)
+                            
+                            #else
                             ButtonView(action: {
                                 if item == .layout {
                                     isLayoutGuideOn.toggle()
@@ -58,6 +82,9 @@ struct SettingsView: View {
                             },image: item.rawValue)
                             .frame(width:200,height: 180)
                             .cornerRadius(10)
+                            
+                            #endif
+                            
                         }
                     }
                 }
@@ -94,7 +121,7 @@ fileprivate struct LayoutDialoguView: View{
     @State var buttonSelected: Int = 0
     
     @Binding var isClose : Bool
-    
+    @AppStorage(AppStorageKeys.layout.rawValue) private var layout: AppKeys.RawValue =  AppKeys.modern.rawValue
     
     var body: some View{
         VStack{
@@ -140,7 +167,14 @@ fileprivate struct LayoutDialoguView: View{
             
             Button {
                 //Save
-                isClose.toggle()
+                if buttonSelected == 0 {
+                    layout = AppKeys.modern.rawValue
+                    isClose.toggle()
+                }else{
+                    layout = AppKeys.classic.rawValue
+                    isClose.toggle()
+                }
+                
             } label: {
                 Text("Save")
                     .font(.carioRegular)
@@ -418,7 +452,7 @@ fileprivate struct LangaugeSelectView: View{
                         }.foregroundColor(.black)
                     }
                     .frame(width:250)
-                    .background(RoundedRectangle(cornerRadius: 5).fill(Color(UIColor.systemGroupedBackground)))
+                    .background(RoundedRectangle(cornerRadius: 5).fill(Color(UIColor(named:"SystemBG")!)))
                     
                 }
                 
@@ -480,7 +514,7 @@ fileprivate struct LangaugeSelectView: View{
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        if #available(iOS 15.0, *) {
+        if #available(iOS 15.0,tvOS 15.0, *) {
             SettingsView(title: "ALL")
                 .previewInterfaceOrientation(.landscapeLeft)
         } else {
