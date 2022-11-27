@@ -32,6 +32,13 @@
 		D0C6189D291917D000A9529A /* MoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C6189C291917D000A9529A /* MoviesView.swift */; };
 		D0C6189F2919186E00A9529A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C6189E2919186D00A9529A /* Constants.swift */; };
 		D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF924A2916DE8E003225F0 /* MainHomeView.swift */; };
+		D0F879F829324F5E00E5DD06 /* IptvView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F879F729324F5E00E5DD06 /* IptvView.swift */; };
+		D0FB64E729339EA0009C55C4 /* LoginViewModelExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */; };
+		D0FB64E92933AF23009C55C4 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64E82933AF23009C55C4 /* LoginModel.swift */; };
+		D0FB64EC2933BAFE009C55C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = D0FB64EB2933BAFE009C55C4 /* AlertToast */; };
+		D0FB64EE2933D73C009C55C4 /* LiveStreamingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */; };
+		D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64EF2933D7E1009C55C4 /* Networking.swift */; };
+		D0FB64F22933DBDB009C55C4 /* LiveStreamingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64F12933DBDB009C55C4 /* LiveStreamingsModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +70,12 @@
 		D0C6189C291917D000A9529A /* MoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesView.swift; sourceTree = "<group>"; };
 		D0C6189E2919186D00A9529A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D0EF924A2916DE8E003225F0 /* MainHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeView.swift; sourceTree = "<group>"; };
+		D0F879F729324F5E00E5DD06 /* IptvView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IptvView.swift; sourceTree = "<group>"; };
+		D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelExt.swift; sourceTree = "<group>"; };
+		D0FB64E82933AF23009C55C4 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamingViewModel.swift; sourceTree = "<group>"; };
+		D0FB64EF2933D7E1009C55C4 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		D0FB64F12933DBDB009C55C4 /* LiveStreamingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamingsModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0FB64EC2933BAFE009C55C4 /* AlertToast in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +159,8 @@
 		D084000A291684C500465873 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */,
+				D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -152,6 +168,8 @@
 		D084000B291684D000465873 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D0FB64E82933AF23009C55C4 /* LoginModel.swift */,
+				D0FB64F12933DBDB009C55C4 /* LiveStreamingsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -172,6 +190,7 @@
 				D0840016291685C200465873 /* Helper.swift */,
 				D0840019291689AE00465873 /* Modifiers.swift */,
 				D0C6189E2919186D00A9529A /* Constants.swift */,
+				D0FB64EF2933D7E1009C55C4 /* Networking.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -206,6 +225,7 @@
 		D084FFF9291670F900465873 /* One Store Player */ = {
 			isa = PBXGroup;
 			children = (
+				D0F879F629324F2D00E5DD06 /* tvOS */,
 				D08400182916874500465873 /* One-Store-Player-Info.plist */,
 				D0840015291685A900465873 /* Utils */,
 				D084000E2916858000465873 /* CustomFonts */,
@@ -230,6 +250,14 @@
 			path = MoviesView;
 			sourceTree = "<group>";
 		};
+		D0F879F629324F2D00E5DD06 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				D0F879F729324F5E00E5DD06 /* IptvView.swift */,
+			);
+			path = tvOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -246,6 +274,9 @@
 			dependencies = (
 			);
 			name = "One Store Player";
+			packageProductDependencies = (
+				D0FB64EB2933BAFE009C55C4 /* AlertToast */,
+			);
 			productName = "One Store Player";
 			productReference = D084FFF7291670F900465873 /* One Store Player.app */;
 			productType = "com.apple.product-type.application";
@@ -274,6 +305,9 @@
 				Base,
 			);
 			mainGroup = D084FFEE291670F900465873;
+			packageReferences = (
+				D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
+			);
 			productRefGroup = D084FFF8291670F900465873 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -305,8 +339,10 @@
 			files = (
 				D084000D291684E400465873 /* LoginView.swift in Sources */,
 				D07CF832291C055E00EFEFFA /* NavigationHeaderView.swift in Sources */,
+				D0F879F829324F5E00E5DD06 /* IptvView.swift in Sources */,
 				D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */,
 				D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */,
+				D0FB64EE2933D73C009C55C4 /* LiveStreamingViewModel.swift in Sources */,
 				D084FFFD291670F900465873 /* ContentView.swift in Sources */,
 				D00926012922B29D0093648A /* UserListView.swift in Sources */,
 				D084001D29168B8D00465873 /* TextFieldView.swift in Sources */,
@@ -315,13 +351,17 @@
 				D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */,
 				D0840017291685C200465873 /* Helper.swift in Sources */,
 				D07CF830291C00D200EFEFFA /* SettingsView.swift in Sources */,
+				D0FB64F22933DBDB009C55C4 /* LiveStreamingsModel.swift in Sources */,
+				D0FB64E92933AF23009C55C4 /* LoginModel.swift in Sources */,
 				D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */,
 				D0C6189F2919186E00A9529A /* Constants.swift in Sources */,
 				D084001A291689AE00465873 /* Modifiers.swift in Sources */,
 				D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */,
 				D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */,
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
+				D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */,
 				D0C6189D291917D000A9529A /* MoviesView.swift in Sources */,
+				D0FB64E729339EA0009C55C4 /* LoginViewModelExt.swift in Sources */,
 				D084001F2916A0C500465873 /* ButtonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -544,6 +584,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D0FB64EB2933BAFE009C55C4 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D084FFEF291670F900465873 /* Project object */;
 }

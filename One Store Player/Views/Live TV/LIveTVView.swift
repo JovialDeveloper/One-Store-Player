@@ -10,11 +10,14 @@ import AVKit
 struct LIveTVView: View {
     @State private var isRemoveOverLay = false
     @Environment(\.presentationMode) private var presentationMode
+    @StateObject private var vm = LiveStreamingViewModel()
+    @State private var streams = [LiveStreams]()
+    @State private var subStreams = [LiveStreams]()
     var body: some View {
         ZStack{
+            Color.primaryColor.ignoresSafeArea()
             if #available(tvOS 16.0, *) {
                 AVPlayerControllerRepresented(player: .init())
-                    .ignoresSafeArea()
                     .frame(maxWidth: .infinity,maxHeight: .infinity)
                     .onTapGesture {
                         isRemoveOverLay.toggle()
@@ -25,37 +28,71 @@ struct LIveTVView: View {
 //                .overlay(overLayView)
             if !isRemoveOverLay {
                 overLayView
-                    .frame(maxWidth: .infinity,maxHeight: .infinity)
+                    //.frame(maxWidth: .infinity,maxHeight: .infinity)
             }
             
+        }.onAppear {
+            vm.fetchAllLiveStreaming().sink { SubscriberError in
+                switch SubscriberError {
+                case .failure(let error):
+                    break
+                case .finished:
+                    break
+                }
+            } receiveValue: { livestreams in
+                self.streams = livestreams
+            }.store(in: &vm.subscriptions)
+
         }
     }
     
     var overLayView:some View{
         HStack{
+            Spacer(minLength: 80)
             HStack{
-                List(0..<8){_ in
-                    Text("Movie Name")
-                        .font(.carioRegular)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth:.infinity,alignment: .leading)
-                        .listRowBackground(Color.secondaryColor)
+                ScrollView {
+                    LazyVStack {
+                        ForEach(streams) { stream in
+                            Text(stream.name)
+                                .font(.carioRegular)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth:.infinity,alignment: .leading)
+                                .onTapGesture {
+                                    vm.fetchAllSubStreamsInCategory(category: stream.categoryID).sink { SubscriberError in
+                                        switch SubscriberError {
+                                        case .failure(let error):
+                                            break
+                                        case .finished:
+                                            break
+                                        }
+                                    } receiveValue: { livestreams in
+                                        self.subStreams.removeAll()
+                                        self.subStreams = livestreams
+                                    }.store(in: &vm.subscriptions)
+                                }
+                        }
+                    }
+                    .background(Color.secondaryColor)
                 }
-                .listStyle(PlainListStyle())
                 
-                List(0..<8){_ in
-                    Text("Movie Name")
-                        .font(.carioRegular)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth:.infinity,alignment: .leading)
-                        .listRowBackground(Color.secondaryColor)
+                ScrollView {
+                    LazyVStack {
+                        ForEach(subStreams) { stream in
+                            Text(stream.name)
+                                .font(.carioRegular)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth:.infinity,alignment: .leading)
+                        }
+                    }
+                    .background(Color.secondaryColor)
                 }
-                .listStyle(PlainListStyle())
             }
             .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
-            .background(Color.gray)
+            .background(Color.secondaryColor)
+            
+            
             VStack{
                 HStack{
                     Button {
@@ -97,8 +134,6 @@ struct LIveTVView: View {
             .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
             
         }
-        .ignoresSafeArea()
-        
     }
 }
 

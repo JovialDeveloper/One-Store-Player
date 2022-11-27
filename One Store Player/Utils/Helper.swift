@@ -24,6 +24,16 @@ extension Font{
     
     static let carioRegular = Font.custom("cairo_regular", size: 17)
     
+    struct TVFonts{
+        static let carioBold = Font.custom("cairo_bold", size: 30)
+        
+        ///Font(OnePlayerFonts.cairoBold!)
+        static let carioLight = Font.custom("cairo_light", size: 22)
+        //Font(OnePlayerFonts.cairoLight ?? .systemFont(ofSize: 16, weight: .light))
+        
+        static let carioRegular = Font.custom("cairo_regular", size: 25)
+    }
+    
       //Font(OnePlayerFonts.cairo_regular ?? .systemFont(ofSize: 18, weight: .regular))
 }
 extension Color {
