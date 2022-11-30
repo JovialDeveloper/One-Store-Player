@@ -119,7 +119,7 @@ struct MainHomeView: View {
                             // Series
                             Button {
                                 // Series
-                                stateType = .movies
+                                stateType = .sereris
                             } label: {
                                 Image("series")
                                     .resizable()
@@ -187,8 +187,12 @@ struct MainHomeView: View {
                         LIveTVView()
                     }
                     else if state == .movies {
-                        MoviesView(title:"All")
-                    }else if state == .settings {
+                        MoviesView(title:"Movies", type: .movie)
+                    }
+                    else if state == .sereris {
+                        SeriesView(title: "Series", type: .series)
+                    }
+                    else if state == .settings {
                         #if os(tvOS)
                         TVOS_Settings()
                         #else

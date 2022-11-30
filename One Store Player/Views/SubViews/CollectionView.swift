@@ -6,26 +6,27 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 fileprivate class MediaViewModel:ObservableObject{
     @Published var isShowWatch = false
 }
 struct CollectionGridView:View{
     
-    var width : CGFloat = 130
-    var height : CGFloat = 180
     
-    let data = (1...100).map { "Item \($0)" }
     
-    let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 4)
+    //let data = (1...100).map { "Item \($0)" }
+    @Binding var data : [MovieModel]
+    
+    let columns : [GridItem] = Array(repeating: .init(.flexible(),spacing: 20), count: 4)
     @ObservedObject fileprivate var viewModel = MediaViewModel()
     var body: some View{
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(data, id: \.self) { item in
+            LazyVGrid(columns: columns, spacing: 0) {
+                ForEach(data, id: \.num) { item in
                     Button {
                         viewModel.isShowWatch.toggle()
                     } label: {
-                        movieCell
+                        MovieCell(movie: item)
                     }
                 }
             }
@@ -34,42 +35,48 @@ struct CollectionGridView:View{
         }
     }
     
-    
-    var movieCell:some View{
-        #if os(tvOS)
-         return  ZStack{
-             Image("movie1")
-                 .resizable()
-                 .frame(minWidth: width,minHeight: height)
-                 //.frame(width:width,height: height)
-                 .scaledToFill()
-                 //.clipped()
-                 .overlay(imageOverLayView,alignment: .bottom)
-                 .overlay(ratingView,alignment: .topLeading)
-             
-             //.frame(height: 130)
-         }.cornerRadius(5)
-        #else
-        return ZStack{
-            Image("movie1")
+}
+
+struct MovieCell:View{
+    var width : CGFloat = 120
+    var height : CGFloat = 180
+    var movie : MovieModel
+    var body: some View{
+#if os(tvOS)
+        return  ZStack{
+            WebImage(url: .init(string:movie.streamIcon ?? ""))
                 .resizable()
-                .frame(width:width,height: height)
+                .frame(minWidth: width,minHeight: height)
+            //.frame(width:width,height: height)
                 .scaledToFill()
-                //.clipped()
+            //.clipped()
                 .overlay(imageOverLayView,alignment: .bottom)
                 .overlay(ratingView,alignment: .topLeading)
             
             //.frame(height: 130)
         }.cornerRadius(5)
-        #endif
+#else
+        return ZStack{
+            WebImage(url: .init(string:movie.streamIcon ?? ""))
+                .resizable()
+                .frame(width:width,height: height)
+                .scaledToFill()
+            //.clipped()
+                .overlay(imageOverLayView,alignment: .bottom)
+                .overlay(ratingView,alignment: .topLeading)
+            
+            //.frame(height: 130)
+        }.cornerRadius(5)
+#endif
     }
-    
     
     var ratingView:some View{
         ZStack{
-            Text("4.7")
+            Text("\(String(format: "%.2f",movie.rating5Based ?? 0.0))")
                 .font(.carioLight)
                 .foregroundColor(.white)
+                .lineLimit(0)
+                .minimumScaleFactor(0.5)
         }
         .frame(width: 25,height: 30)
         .background(Color.purple.cornerRadius(5))
@@ -78,17 +85,17 @@ struct CollectionGridView:View{
     
     var imageOverLayView:some View{
         VStack{
-            Text("Title")
+            Text(movie.name ?? "N/A")
                 .font(.carioBold)
                 .foregroundColor(.white)
                 .lineLimit(0)
-                //.minimumScaleFactor(0.7)
+                .minimumScaleFactor(0.7)
             
-            Text("Description")
-                .font(.carioRegular)
-                .lineLimit(0)
-                //.minimumScaleFactor(0.7)
-                .foregroundColor(.white)
+//            Text(movie. ?? "N/A")
+//                .font(.carioRegular)
+//                .lineLimit(0)
+//            //.minimumScaleFactor(0.7)
+//                .foregroundColor(.white)
         }
         .padding()
         .frame(maxWidth:.infinity,maxHeight: 65)

@@ -18,6 +18,11 @@ enum AppKeys:String{
     case modern
     case classic
 }
+enum ViewType:String{
+    typealias RawValue = String
+    case movie
+    case series
+}
 enum APIError: Error, LocalizedError {
 case unknown, apiError(reason: String), credientialsWrong
 var errorDescription: String? {

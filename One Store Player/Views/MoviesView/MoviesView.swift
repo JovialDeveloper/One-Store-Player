@@ -11,6 +11,7 @@ struct MoviesView: View {
     @AppStorage(AppStorageKeys.layout.rawValue) var layout: AppKeys.RawValue = AppKeys.modern.rawValue
     @Environment(\.presentationMode) var presentationMode
     var title : String
+    var type:ViewType
     @State var selectMoview = 0
 //    init(){
 //        UITableView.appearance().backgroundColor = .red
@@ -22,27 +23,15 @@ struct MoviesView: View {
             
             if layout == AppKeys.modern.rawValue {
                 // Modern View
-                ModernLayoutView(title: title)
+                ModernLayoutView(subject: (title,type))
             }
             else {
-                ClassicLayoutView(title: title)
+                ClassicLayoutView(subject: (title,type))
             }
         }
         .frame(maxWidth:.infinity,maxHeight: .infinity)
-        .ignoresSafeArea()
         
         
-    }
-}
-
-struct MoviesView_Previews: PreviewProvider {
-    static var previews: some View {
-        if #available(iOS 15.0,tvOS 15.0, *) {
-            MoviesView(title: "ALL")
-                .previewInterfaceOrientation(.landscapeLeft)
-        } else {
-            // Fallback on earlier versions
-        }
     }
 }
 

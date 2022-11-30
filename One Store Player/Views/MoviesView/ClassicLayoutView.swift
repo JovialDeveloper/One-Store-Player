@@ -6,55 +6,112 @@
 //
 
 import SwiftUI
+import AlertToast
 
 struct ClassicLayoutView: View {
-    var title : String
+    var subject : (String,ViewType)
+    @StateObject private var vm = ClassicViewModel()
+    @State private var categories = [MovieCategoriesModel]()
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
             VStack{
-                NavigationHeaderView(title: title)
+                NavigationHeaderView(title: subject.0)
                 
-                ClassicListGridView()
+                ClassicListGridView(data: $categories, subject: subject)
+                    .environmentObject(vm)
                 
             }
+        }.onAppear {
+            vm.fetchAllMoviewCategories(type: subject.1).sink { subError in
+                //
+            } receiveValue: { categories in
+                self.categories = categories
+            }.store(in: &vm.subscriptions)
+            
+            
+            
+            
         }
     }
 }
 
 struct ClassicListGridView:View{
     @State private var isSelectItem = false
-    let data = (1...100).map { "Item \($0)" }
-    
+    @Binding var data : [MovieCategoriesModel]
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
+    @State private var selectItem : MovieCategoriesModel?
+    @EnvironmentObject private var vm:ClassicViewModel
+    @State private var movies = [MovieModel]()
+    var subject : (String,ViewType)
     var body: some View{
         ScrollView {
             LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(data, id: \.self) { item in
+                ForEach(data, id: \.categoryID) { item in
                     if #available(iOS 13.0,tvOS 16.0, *) {
-                        rowListView
+                        RowCell(data: item)
                             .onTapGesture {
-                                self.isSelectItem.toggle()
+                                selectItem = item
+                                
+                                //self.isSelectItem.toggle()
                             }
+                        
+                        
                     } else {
                         // Fallback on earlier versions
                     }
                 }
             }
-        }.fullScreenCover(isPresented: $isSelectItem) {
+        }
+        
+        .onChange(of: selectItem, perform: { newValue in
+            if newValue != nil {
+                vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
+                    .sink { subErrr in
+                        vm.isLoading.toggle()
+                        switch subErrr {
+                        case .failure(let err):
+                            debugPrint(err)
+                        case .finished:
+                            vm.isLoading.toggle()
+                            break
+                        }
+                       debugPrint(subErrr)
+                    } receiveValue: { movies in
+                        debugPrint("M",movies)
+                        vm.isLoading.toggle()
+                        self.movies.removeAll()
+                        
+                        self.movies = movies
+                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                            self.isSelectItem.toggle()
+                        }
+                        
+                    }.store(in: &vm.subscriptions)
+
+            }
+            
+        })
+        .toast(isPresenting: $vm.isLoading) {
+            AlertToast(displayMode: .alert, type: .loading)
+        }
+        .fullScreenCover(isPresented: $isSelectItem) {
             //
             ZStack{
                 Color.primaryColor.ignoresSafeArea()
                 VStack{
-                    NavigationHeaderView(title: "Movie")
+                    NavigationHeaderView(title: subject.0)
                     
-                    CollectionGridView(width:160,height: 200)
+                    CollectionGridView(data: $movies)
                 }
             }
         }
     }
-    
-    var rowListView:some View{
+}
+
+struct RowCell:View{
+    let data:MovieCategoriesModel
+    var body: some View{
         HStack{
             // Logo
             Image("tv")
@@ -64,7 +121,7 @@ struct ClassicListGridView:View{
                 .foregroundColor(.white)
             Spacer()
             
-            Text("Title")
+            Text(data.categoryName)
                 .font(.carioBold)
                 .padding()
                 .frame(maxWidth:.infinity,alignment: .leading)
@@ -75,7 +132,7 @@ struct ClassicListGridView:View{
             
             Spacer()
             // Users Catalog
-            Text("0")
+            Text(data.categoryID)
                 .font(.carioBold)
                 .foregroundColor(.white)
             
@@ -99,13 +156,3 @@ struct ClassicListGridView:View{
     }
 }
 
-struct ClassicLayoutView_Previews: PreviewProvider {
-    static var previews: some View {
-        if #available(iOS 15.0,tvOS 15.0, *) {
-            ClassicLayoutView(title: "")
-                .previewInterfaceOrientation(.landscapeLeft)
-        } else {
-            // Fallback on earlier versions
-        }
-    }
-}

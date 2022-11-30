@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
 		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
+		D041377729362A2600EC4723 /* MovieCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377629362A2600EC4723 /* MovieCategoriesModel.swift */; };
+		D041377929362A9300EC4723 /* ModernLayoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */; };
+		D041377B29362DBA00EC4723 /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377A29362DBA00EC4723 /* MovieModel.swift */; };
+		D041377E293642AF00EC4723 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D041377D293642AF00EC4723 /* SDWebImageSwiftUI */; };
 		D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339DF2930E54E00213D85 /* LIveTVView.swift */; };
 		D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339E1293139D700213D85 /* TVOS Settings.swift */; };
 		D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048C32029292AF4001B4DD0 /* WatchView.swift */; };
@@ -29,6 +33,8 @@
 		D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFA291670F900465873 /* One_Store_PlayerApp.swift */; };
 		D084FFFD291670F900465873 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFC291670F900465873 /* ContentView.swift */; };
 		D084FFFF291670FB00465873 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D084FFFE291670FB00465873 /* Assets.xcassets */; };
+		D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AA08D0293775B7009E9D55 /* SeriesView.swift */; };
+		D0AFD464293667910064F487 /* SeriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AFD463293667910064F487 /* SeriesModel.swift */; };
 		D0C6189D291917D000A9529A /* MoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C6189C291917D000A9529A /* MoviesView.swift */; };
 		D0C6189F2919186E00A9529A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C6189E2919186D00A9529A /* Constants.swift */; };
 		D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF924A2916DE8E003225F0 /* MainHomeView.swift */; };
@@ -44,6 +50,9 @@
 /* Begin PBXFileReference section */
 		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
+		D041377629362A2600EC4723 /* MovieCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCategoriesModel.swift; sourceTree = "<group>"; };
+		D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutViewModel.swift; sourceTree = "<group>"; };
+		D041377A29362DBA00EC4723 /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
 		D04339DF2930E54E00213D85 /* LIveTVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIveTVView.swift; sourceTree = "<group>"; };
 		D04339E1293139D700213D85 /* TVOS Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TVOS Settings.swift"; sourceTree = "<group>"; };
 		D048C32029292AF4001B4DD0 /* WatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchView.swift; sourceTree = "<group>"; };
@@ -67,6 +76,8 @@
 		D084FFFA291670F900465873 /* One_Store_PlayerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = One_Store_PlayerApp.swift; sourceTree = "<group>"; };
 		D084FFFC291670F900465873 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D084FFFE291670FB00465873 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D0AA08D0293775B7009E9D55 /* SeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesView.swift; sourceTree = "<group>"; };
+		D0AFD463293667910064F487 /* SeriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesModel.swift; sourceTree = "<group>"; };
 		D0C6189C291917D000A9529A /* MoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesView.swift; sourceTree = "<group>"; };
 		D0C6189E2919186D00A9529A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D0EF924A2916DE8E003225F0 /* MainHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeView.swift; sourceTree = "<group>"; };
@@ -83,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D041377E293642AF00EC4723 /* SDWebImageSwiftUI in Frameworks */,
 				D0FB64EC2933BAFE009C55C4 /* AlertToast in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -152,6 +164,7 @@
 				D084000C291684E400465873 /* LoginView.swift */,
 				D0EF924A2916DE8E003225F0 /* MainHomeView.swift */,
 				D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */,
+				D0AA08D0293775B7009E9D55 /* SeriesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,6 +174,7 @@
 			children = (
 				D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */,
 				D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */,
+				D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -170,6 +184,9 @@
 			children = (
 				D0FB64E82933AF23009C55C4 /* LoginModel.swift */,
 				D0FB64F12933DBDB009C55C4 /* LiveStreamingsModel.swift */,
+				D041377629362A2600EC4723 /* MovieCategoriesModel.swift */,
+				D041377A29362DBA00EC4723 /* MovieModel.swift */,
+				D0AFD463293667910064F487 /* SeriesModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -276,6 +293,7 @@
 			name = "One Store Player";
 			packageProductDependencies = (
 				D0FB64EB2933BAFE009C55C4 /* AlertToast */,
+				D041377D293642AF00EC4723 /* SDWebImageSwiftUI */,
 			);
 			productName = "One Store Player";
 			productReference = D084FFF7291670F900465873 /* One Store Player.app */;
@@ -307,6 +325,7 @@
 			mainGroup = D084FFEE291670F900465873;
 			packageReferences = (
 				D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
+				D041377C293642AF00EC4723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = D084FFF8291670F900465873 /* Products */;
 			projectDirPath = "";
@@ -354,12 +373,17 @@
 				D0FB64F22933DBDB009C55C4 /* LiveStreamingsModel.swift in Sources */,
 				D0FB64E92933AF23009C55C4 /* LoginModel.swift in Sources */,
 				D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */,
+				D041377929362A9300EC4723 /* ModernLayoutViewModel.swift in Sources */,
+				D041377729362A2600EC4723 /* MovieCategoriesModel.swift in Sources */,
 				D0C6189F2919186E00A9529A /* Constants.swift in Sources */,
 				D084001A291689AE00465873 /* Modifiers.swift in Sources */,
 				D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */,
+				D041377B29362DBA00EC4723 /* MovieModel.swift in Sources */,
 				D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */,
+				D0AFD464293667910064F487 /* SeriesModel.swift in Sources */,
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
 				D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */,
+				D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */,
 				D0C6189D291917D000A9529A /* MoviesView.swift in Sources */,
 				D0FB64E729339EA0009C55C4 /* LoginViewModelExt.swift in Sources */,
 				D084001F2916A0C500465873 /* ButtonView.swift in Sources */,
@@ -586,6 +610,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D041377C293642AF00EC4723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elai950/AlertToast.git";
@@ -597,6 +629,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D041377D293642AF00EC4723 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D041377C293642AF00EC4723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
 		D0FB64EB2933BAFE009C55C4 /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */;

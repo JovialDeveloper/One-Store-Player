@@ -35,6 +35,7 @@ struct LIveTVView: View {
             vm.fetchAllLiveStreaming().sink { SubscriberError in
                 switch SubscriberError {
                 case .failure(let error):
+                    debugPrint(error)
                     break
                 case .finished:
                     break
@@ -62,6 +63,7 @@ struct LIveTVView: View {
                                     vm.fetchAllSubStreamsInCategory(category: stream.categoryID).sink { SubscriberError in
                                         switch SubscriberError {
                                         case .failure(let error):
+                                            debugPrint(error)
                                             break
                                         case .finished:
                                             break
