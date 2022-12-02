@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
-
-struct WatchView: View {
+import Combine
+import SDWebImageSwiftUI
+struct WatchView<T:Codable>: View {
     @Environment(\.presentationMode) private var presentationMode
     @State var rating = 5
+    var data : T
+    @State var cancelable = [AnyCancellable]()
+    @State var customObject : MovieModelWatchResponse?
+    @State var seriesObject : SeriesResponse?
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -30,7 +35,7 @@ struct WatchView: View {
                     }
                     Spacer()
                     
-                    Text("title")
+                    Text(data is MovieModel ? (data as! MovieModel).name ?? "" : (data as! SeriesModel).name)
                         .font(.carioBold)
                         .foregroundColor(.white)
                     
@@ -59,21 +64,21 @@ struct WatchView: View {
                         HStack{
                             
                             VStack{
-                                Image("Icon")
+                                WebImage(url: .init(string: data is MovieModel ? customObject?.info.movieImage ?? "" : seriesObject?.info?.cover ?? ""))
                                     .resizable()
-                                    .frame(width:130,height: 180)
+                                    .frame(width:140,height: 240)
                                     .scaledToFill()
                                     .foregroundColor(.white)
                                 
-                                RatingView(rating: $rating)
+                                RatingView(rating: data is MovieModel ? Int(customObject?.info.rating ?? "0.0") ?? 5 : Int(seriesObject?.info?.rating ?? "0.0") ?? 5)
                             }
                             
                             VStack(alignment: .leading, spacing:20){
-                                SubscriptionCell(title: "Directed By:", description: "N/A")
-                                SubscriptionCell(title: "Release Date:", description: "N/A")
-                                SubscriptionCell(title: "Duration:", description: "N/A")
-                                SubscriptionCell(title: "Genre:", description: "N/A")
-                                SubscriptionCell(title: "Cast:", description: "N/A")
+                                SubscriptionCell(title: "Directed By:", description: data is MovieModel ? customObject?.info.director ?? "" : seriesObject?.info?.director ?? "")
+                                SubscriptionCell(title: "Release Date:", description: data is MovieModel ? customObject?.info.releasedate ?? "" : seriesObject?.info?.releaseDate ?? "")
+                                SubscriptionCell(title: "Duration:", description: data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? "")
+                                SubscriptionCell(title: "Genre:", description: data is MovieModel ? customObject?.info.genre ?? "" : seriesObject?.info?.genre ?? "")
+                                SubscriptionCell(title: "Cast:", description: data is MovieModel ? customObject?.info.cast ?? "" : seriesObject?.info?.cast ?? "")
                             }
                         }
                         
@@ -88,7 +93,7 @@ struct WatchView: View {
                         }.background(Rectangle().fill(Color.blue))
 
                         
-                        Text("BLA BLA BLA BLA BAL ABLAB BBLLABBA")
+                        Text((data is MovieModel ? customObject?.info.infoDescription ?? "" : seriesObject?.info?.plot) ?? "")
                             .font(.carioRegular)
                             .foregroundColor(.white)
                             .padding()
@@ -97,19 +102,104 @@ struct WatchView: View {
                     
                 }
             }
+            .padding()
         }
+        .onAppear {
+            if data is MovieModel {
+                guard let userInfo =  Networking.shared.getUserDetails()
+                else {
+                    return 
+                }
+                if userInfo.port.last == "/" {
+                    let uri = "\(userInfo.port)player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_vod_info&vod_id=\((data as! MovieModel).streamID)"
+                    
+                    let data : AnyPublisher<MovieModelWatchResponse, APIError> = fetchDataRequest(baseURL: uri)
+                    data.sink { subError in
+                        switch subError {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error)
+                            break
+                        }
+                    } receiveValue: { response in
+                        debugPrint(response)
+                        customObject = response
+                    }.store(in: &cancelable)
+                }else{
+                    let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_vod_info&vod_id=\((data as! MovieModel).streamID)"
+                    
+                    let data : AnyPublisher<MovieModelWatchResponse, APIError> = fetchDataRequest(baseURL: uri)
+                    
+                    data.sink { subError in
+                        switch subError {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error)
+                            break
+                        }
+                    } receiveValue: { response in
+                        debugPrint(response)
+                        customObject = response
+                    }.store(in: &cancelable)
+                }
+                
+
+            }else{
+                guard let userInfo =  Networking.shared.getUserDetails()
+                else {
+                    return
+                }
+                if userInfo.port.last == "/" {
+                    let uri = "\(userInfo.port)player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series_info&series_id=\((data as! SeriesModel).seriesID)"
+                    
+                    let data : AnyPublisher<SeriesResponse, APIError> = fetchDataRequest(baseURL: uri)
+                    data.sink { subError in
+                        switch subError {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error)
+                            break
+                        }
+                    } receiveValue: { response in
+                        debugPrint(response)
+                        seriesObject = response
+                    }.store(in: &cancelable)
+                }else{
+                    let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series_info&series_id=\((data as! SeriesModel).seriesID)"
+                    
+                    let data : AnyPublisher<SeriesResponse, APIError> = fetchDataRequest(baseURL: uri)
+                    
+                    data.sink { subError in
+                        switch subError {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error)
+                            break
+                        }
+                    } receiveValue: { response in
+                        debugPrint(response)
+                        seriesObject = response
+                    }.store(in: &cancelable)
+                }
+            }
+            
+        }
+    }
+    
+    func fetchDataRequest<T:Codable>(baseURL:String) -> AnyPublisher<T, APIError>{
+        
+        return Networking.shared.fetch(uri: baseURL)
     }
 }
 
-struct WatchView_Previews: PreviewProvider {
-    static var previews: some View {
-        WatchView()
-    }
-}
 
 struct RatingView:View{
     
-    @Binding var rating: Int
+    var rating: Int
 
     var label = ""
 
@@ -126,14 +216,20 @@ struct RatingView:View{
             if label.isEmpty == false {
                 Text(label)
             }
-
-            ForEach(1..<maximumRating + 1, id: \.self) { number in
-                image(for: number)
-                    .foregroundColor(number > rating ? offColor : onColor)
-//                    .onTapGesture {
-//                        rating = number
-//                    }
+            if Double(rating) > 5.0 {
+                ForEach(1..<maximumRating + 1, id: \.self) { number in
+                    onImage.foregroundColor(onColor)
+                }
+            }else{
+                ForEach(1..<maximumRating + 1, id: \.self) { number in
+                    image(for: number)
+                        .foregroundColor(number > rating ? offColor : onColor)
+    //                    .onTapGesture {
+    //                        rating = number
+    //                    }
+                }
             }
+            
         }
     }
     

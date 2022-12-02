@@ -12,6 +12,7 @@ enum AppStorageKeys:String{
     case layout
     case lang
     case userInfo
+    case currentUser
 }
 enum AppKeys:String{
     typealias RawValue = String

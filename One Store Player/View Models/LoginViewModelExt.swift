@@ -44,13 +44,43 @@ extension LoginView {
                         
                         let dic = try JSONSerialization.jsonObject(with: data) as! [String:Any]
                         let userinfo = dic["user_info"] as! [String:Any]
-                        let model = UserInfo(name: self.name, data: userinfo)
+                        let model = UserInfo(name: self.name, port: self.port, data: userinfo)
                         
-                        let encoder = JSONEncoder()
-                            // Encode Note
-                        let modelData = try encoder.encode(model)
+                        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.userInfo.rawValue) as? Data {
+                            do {
+                                // Create JSON Decoder
+                                let decoder = JSONDecoder()
+                                
+                                // Decode Note
+                                var usersinfo = try decoder.decode([UserInfo].self, from: data)
+                                usersinfo.append(model)
+                                
+                                let encoder = JSONEncoder()
+                                    // Encode Note
+                                let modelData = try encoder.encode(usersinfo)
 
-                        UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
+                                UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
+                                let currentModel = try encoder.encode(model)
+                                
+                                UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                                
+                                //return model
+                                
+                            } catch {
+                                print("Unable to Decode Note (\(error))")
+                            }
+
+                        }
+                        else{
+                            let encoder = JSONEncoder()
+                                // Encode Note
+                            
+                            let modelData = try encoder.encode([model])
+                            UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
+                            let currentModel = try encoder.encode(model)
+                            UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                            //return model
+                        }
                         return model
                     }catch{
                         throw APIError.apiError(reason: error.localizedDescription)

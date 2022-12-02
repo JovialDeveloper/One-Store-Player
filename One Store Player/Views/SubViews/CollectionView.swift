@@ -7,44 +7,78 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
-fileprivate class MediaViewModel:ObservableObject{
-    @Published var isShowWatch = false
-}
 struct CollectionGridView:View{
-    
-    
-    
-    //let data = (1...100).map { "Item \($0)" }
-    @Binding var data : [MovieModel]
-    
+
+    @Binding var data : [MovieModel]?
+    @Binding var series : [SeriesModel]?
     let columns : [GridItem] = Array(repeating: .init(.flexible(),spacing: 20), count: 4)
-    @ObservedObject fileprivate var viewModel = MediaViewModel()
+    @State private var selectItem : MovieModel?
+    @State private var selectSeriesItem : SeriesModel?
+    @State private var isShowWatch = false
+    var width : CGFloat = 120
+    var height : CGFloat = 180
+    
+    init(movies: Binding<[MovieModel]?>?,series: Binding<[SeriesModel]?>?,width:CGFloat = 120 , height:CGFloat = 180) {
+        self._data = movies ?? Binding.constant(nil)
+        self._series = series ?? Binding.constant(nil)
+        self.width = width
+        self.height = height
+    }
     var body: some View{
         ScrollView {
             LazyVGrid(columns: columns, spacing: 0) {
-                ForEach(data, id: \.num) { item in
-                    Button {
-                        viewModel.isShowWatch.toggle()
-                    } label: {
-                        MovieCell(movie: item)
+                if data != nil {
+                    ForEach(data!, id: \.num) { item in
+                        Button {
+                            selectItem = item
+                           
+                        } label: {
+                            MovieCell(width: width, height: height, data: item)
+                        }
+                    }
+                }else{
+                    ForEach(series ?? [], id: \.num) { item in
+                        Button {
+                            selectSeriesItem = item
+                           
+                        } label: {
+                            MovieCell(width: width, height: height, data: item)
+                        }
                     }
                 }
+                
             }
-        }.fullScreenCover(isPresented: $viewModel.isShowWatch) {
-            WatchView()
+        }
+        .onChange(of: selectItem, perform: { newValue in
+            DispatchQueue.main.asyncAfter(wallDeadline: .now()+2) {
+                isShowWatch.toggle()
+            }
+        })
+        .onChange(of: selectSeriesItem, perform: { newValue in
+            DispatchQueue.main.asyncAfter(wallDeadline: .now()+2) {
+                isShowWatch.toggle()
+            }
+        })
+        .fullScreenCover(isPresented: $isShowWatch) {
+            if selectItem != nil {
+                WatchView(data: selectItem)
+            }
+            else{
+                WatchView(data: selectSeriesItem)
+            }
         }
     }
     
 }
 
-struct MovieCell:View{
+struct MovieCell<T:Codable>:View{
     var width : CGFloat = 120
     var height : CGFloat = 180
-    var movie : MovieModel
+    var data : T
     var body: some View{
 #if os(tvOS)
         return  ZStack{
-            WebImage(url: .init(string:movie.streamIcon ?? ""))
+            WebImage(url: .init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover ?? ""))
                 .resizable()
                 .frame(minWidth: width,minHeight: height)
             //.frame(width:width,height: height)
@@ -57,11 +91,11 @@ struct MovieCell:View{
         }.cornerRadius(5)
 #else
         return ZStack{
-            WebImage(url: .init(string:movie.streamIcon ?? ""))
+            WebImage(url: .init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover))
                 .resizable()
-                .frame(width:width,height: height)
+//                .frame(width:width,height: height)
                 .scaledToFill()
-            //.clipped()
+                .clipped()
                 .overlay(imageOverLayView,alignment: .bottom)
                 .overlay(ratingView,alignment: .topLeading)
             
@@ -72,7 +106,7 @@ struct MovieCell:View{
     
     var ratingView:some View{
         ZStack{
-            Text("\(String(format: "%.2f",movie.rating5Based ?? 0.0))")
+            Text("\(String(format: "%.2f",data is MovieModel ?  (data as! MovieModel).rating5Based ?? 0.0 : (data as! SeriesModel).rating5Based))")
                 .font(.carioLight)
                 .foregroundColor(.white)
                 .lineLimit(0)
@@ -85,7 +119,7 @@ struct MovieCell:View{
     
     var imageOverLayView:some View{
         VStack{
-            Text(movie.name ?? "N/A")
+            Text(data is MovieModel ?  (data as! MovieModel).name ?? "" : (data as! SeriesModel).name)
                 .font(.carioBold)
                 .foregroundColor(.white)
                 .lineLimit(0)

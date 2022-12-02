@@ -54,7 +54,7 @@ class ClassicViewModel:ObservableObject{
         return Networking.shared.fetch(uri: uri)
     }
     
-    func fetchAllMoviesById(baseURL:String = "http://1player.cc:80",id:String,type:ViewType) -> AnyPublisher<[MovieModel], APIError>
+    func fetchAllMoviesById<T:Codable>(baseURL:String = "http://1player.cc:80",id:String,type:ViewType) -> AnyPublisher<[T], APIError>
     {
         guard let userInfo =  Networking.shared.getUserDetails()
         else {

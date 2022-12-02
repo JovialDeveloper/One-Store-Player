@@ -73,19 +73,20 @@ struct SubscriptionCell:View{
     var description:String
     var body: some View{
         ZStack{
-            HStack{
+            HStack(spacing: 20){
                 Text(title)
                     .font(.carioBold)
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity,alignment: .leading)
+                    //.frame(maxWidth: .infinity,alignment: .leading)
                 
                 Text(description)
                     .font(.carioRegular)
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity,alignment: .leading)
+                    //.frame(maxWidth: .infinity,alignment: .leading)
+                
+                Spacer()
             }
         }
-        .padding()
         //.frame(width: .infinity)
             
     }

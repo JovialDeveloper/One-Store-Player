@@ -9,7 +9,10 @@ import SwiftUI
 
 struct NavigationHeaderView: View {
     var title:String
-    
+    @State private var isSeachFieldHide = true
+    @State private var searchText = ""
+    var searchAction : ((String)->Void)? = nil
+    var moreAction : (()->Void)? = nil
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
         HStack{
@@ -27,7 +30,13 @@ struct NavigationHeaderView: View {
                 // Fallback on earlier versions
             }
             Spacer()
-            
+            if !isSeachFieldHide {
+                TextField("Search", text: $searchText) {
+                    isSeachFieldHide.toggle()
+                    searchAction?(searchText)
+                }
+
+            }
             Text(title)
                 .font(.carioBold)
                 .foregroundColor(.white)
@@ -36,7 +45,7 @@ struct NavigationHeaderView: View {
             // Users Catalog
             HStack{
                 Button {
-                    //
+                    isSeachFieldHide.toggle()
                 } label: {
                     Image("search")
                         .resizable()
@@ -48,7 +57,7 @@ struct NavigationHeaderView: View {
                 
                 // Users Button
                 Button {
-                    //
+                    moreAction?()
                 } label: {
                     Image("more")
                         .resizable()

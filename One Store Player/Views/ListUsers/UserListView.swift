@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserListView: View {
     @Environment(\.presentationMode) var presentationMode
+    @State private var users = [UserInfo]()
     var body: some View {
         ZStack{
             // Top Header View
@@ -57,7 +58,7 @@ struct UserListView: View {
                 ScrollView{
                     
                     
-                    ForEach(0..<1) {
+                    ForEach(users) {
                         item in
                         HStack{
                             Image("user_avatar")
@@ -67,14 +68,14 @@ struct UserListView: View {
                                 .foregroundColor(.blue)
                             Spacer()
                             VStack{
-                                Text("Ali")
+                                Text(item.name)
                                     .font(.carioBold)
                                     .foregroundColor(.black)
-                                Text("url:exmaple.com")
+                                Text("url:\(item.port)")
                                     .font(.carioRegular)
                                     .foregroundColor(.black)
                                 
-                                Text("username: test09")
+                                Text("username: \(item.username)")
                                     .font(.carioRegular)
                                     .foregroundColor(.black)
                             }.frame(maxWidth: .infinity,alignment: .leading)
@@ -101,6 +102,19 @@ struct UserListView: View {
             
         }
         .foregroundColor(.white)
+        .onAppear {
+            if let data = UserDefaults.standard.value(forKey: AppStorageKeys.userInfo.rawValue) as? Data {
+                do {
+                    // Create JSON Decoder
+                    let decoder = JSONDecoder()
+                    // Decode Note
+                    let userinfo = try decoder.decode([UserInfo].self, from: data)
+                    self.users = userinfo
+                } catch {
+                    print("Unable to Decode Note (\(error))")
+                }
+            }
+        }
     }
 }
 

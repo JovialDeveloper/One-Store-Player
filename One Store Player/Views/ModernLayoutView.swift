@@ -14,7 +14,7 @@ struct ModernLayoutView:View{
     var subject : (String,ViewType)
     @StateObject private var vm = ModernLayoutViewModel()
     @State private var categories = [MovieCategoriesModel]()
-    @State private var movies = [MovieModel]()
+    @State private var movies : [MovieModel]?
     var body: some View {
         ZStack{
             HStack{
@@ -46,7 +46,7 @@ struct ModernLayoutView:View{
                                         } receiveValue: { movies in
                                             debugPrint("M",movies)
                                             vm.isLoading.toggle()
-                                            self.movies.removeAll()
+                                            self.movies?.removeAll()
                                             DispatchQueue.main.asyncAfter(deadline: .now()+2) {
                                                 self.movies = movies
                                             }
@@ -65,8 +65,33 @@ struct ModernLayoutView:View{
                 Spacer()
                 
                 VStack{
-                    NavigationHeaderView(title: subject.0)
-                    CollectionGridView(data: $movies)
+                    NavigationHeaderView(title: subject.0) { text in
+                        let filters = movies?.filter({$0.name == text})
+                        self.movies = filters?.count ?? 0 > 0 ? filters : movies
+                    } moreAction: {
+                        vm.fetchAllMoviesById(id: self.categories[0].categoryID, type: subject.1)
+                            .sink { subErrr in
+                                vm.isLoading.toggle()
+                                switch subErrr {
+                                case .failure(let err):
+                                    debugPrint(err)
+                                case .finished:
+                                    vm.isLoading.toggle()
+                                    break
+                                }
+                               debugPrint(subErrr)
+                            } receiveValue: { movies in
+                                debugPrint("M",movies)
+                                vm.isLoading.toggle()
+                                self.movies?.removeAll()
+                                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                    self.movies = movies
+                                }
+                                
+                            }.store(in: &vm.subscriptions)
+                    }
+
+                    CollectionGridView(movies: $movies, series: nil)
                 }
             
                 // Moviews List
@@ -97,7 +122,7 @@ struct ModernLayoutView:View{
                     } receiveValue: { movies in
                         debugPrint("M",movies)
                         vm.isLoading.toggle()
-                        self.movies.removeAll()
+                        self.movies?.removeAll()
                         DispatchQueue.main.asyncAfter(deadline: .now()+2) {
                             self.movies = movies
                         }

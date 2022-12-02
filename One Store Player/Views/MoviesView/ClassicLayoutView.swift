@@ -7,7 +7,7 @@
 
 import SwiftUI
 import AlertToast
-
+import Combine
 struct ClassicLayoutView: View {
     var subject : (String,ViewType)
     @StateObject private var vm = ClassicViewModel()
@@ -42,7 +42,8 @@ struct ClassicListGridView:View{
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     @State private var selectItem : MovieCategoriesModel?
     @EnvironmentObject private var vm:ClassicViewModel
-    @State private var movies = [MovieModel]()
+    @State private var series : [SeriesModel]?
+    @State private var movies : [MovieModel]?
     var subject : (String,ViewType)
     var body: some View{
         ScrollView {
@@ -65,30 +66,63 @@ struct ClassicListGridView:View{
         }
         
         .onChange(of: selectItem, perform: { newValue in
-            if newValue != nil {
-                vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
-                    .sink { subErrr in
-                        vm.isLoading.toggle()
-                        switch subErrr {
-                        case .failure(let err):
-                            debugPrint(err)
-                        case .finished:
+            if subject.1 == .series {
+                if newValue != nil {
+                    
+                    let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
+                    
+                    responseType.sink { subErrr in
                             vm.isLoading.toggle()
-                            break
-                        }
-                       debugPrint(subErrr)
-                    } receiveValue: { movies in
-                        debugPrint("M",movies)
-                        vm.isLoading.toggle()
-                        self.movies.removeAll()
-                        
-                        self.movies = movies
-                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                            self.isSelectItem.toggle()
-                        }
-                        
-                    }.store(in: &vm.subscriptions)
+                            switch subErrr {
+                            case .failure(let err):
+                                debugPrint(err)
+                            case .finished:
+                                vm.isLoading.toggle()
+                                break
+                            }
+                           debugPrint(subErrr)
+                        } receiveValue: { movies in
+                            debugPrint("M",movies)
+                            vm.isLoading.toggle()
+                            self.series?.removeAll()
+                            
+                            self.series = movies
+                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                self.isSelectItem.toggle()
+                            }
+                            
+                        }.store(in: &vm.subscriptions)
 
+                }
+                
+            }else{
+                if newValue != nil {
+                    
+                    let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
+                    
+                    responseType.sink { subErrr in
+                            vm.isLoading.toggle()
+                            switch subErrr {
+                            case .failure(let err):
+                                debugPrint(err)
+                            case .finished:
+                                vm.isLoading.toggle()
+                                break
+                            }
+                           debugPrint(subErrr)
+                        } receiveValue: { movies in
+                            debugPrint("M",movies)
+                            vm.isLoading.toggle()
+                            self.movies?.removeAll()
+                            self.movies = movies
+                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                self.isSelectItem.toggle()
+                            }
+                            
+                        }.store(in: &vm.subscriptions)
+
+                }
+                
             }
             
         })
@@ -101,8 +135,12 @@ struct ClassicListGridView:View{
                 Color.primaryColor.ignoresSafeArea()
                 VStack{
                     NavigationHeaderView(title: subject.0)
-                    
-                    CollectionGridView(data: $movies)
+                    if series != nil {
+                        CollectionGridView(movies: nil, series: $series,width: .infinity)
+                    }else{
+                        CollectionGridView(movies: $movies, series: nil,width: .infinity)
+                    }
+                   
                 }
             }
         }

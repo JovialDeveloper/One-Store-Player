@@ -186,6 +186,13 @@ fileprivate struct LayoutDialoguView: View{
         
         .frame(width: UIScreen.main.bounds.width/1.5,height: UIScreen.main.bounds.height - 60)
         .background(Color.white)
+        .onAppear {
+            if layout == AppKeys.modern.rawValue {
+                buttonSelected = 0
+            }else{
+                buttonSelected = 1
+            }
+        }
         
     }
 }

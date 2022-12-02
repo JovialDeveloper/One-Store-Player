@@ -147,20 +147,27 @@ extension SeriesView{
         let columns : [GridItem] = Array(repeating: .init(.flexible(),spacing: 10), count: 4)
         //        @ObservedObject fileprivate var viewModel = MediaViewModel()
         @State private var isShowWatch = false
+        @State private var selectItem : SeriesModel?
         var body: some View{
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(data, id: \.num) { item in
                         Button {
-                            
+                            selectItem = item
                         } label: {
                             SeriesCell(serie: item)
                                 
                         }.padding(.all,5)
                     }
                 }
-            }.fullScreenCover(isPresented: $isShowWatch) {
-                WatchView()
+            }
+            .onChange(of: selectItem, perform: { newValue in
+                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                    self.isShowWatch.toggle()
+                }
+            })
+            .fullScreenCover(isPresented: $isShowWatch) {
+                WatchView(data: selectItem)
             }
         }
         

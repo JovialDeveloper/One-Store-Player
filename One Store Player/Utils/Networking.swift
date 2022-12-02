@@ -38,7 +38,7 @@ final class Networking{
     }
     
     func getUserDetails()->UserInfo?{
-        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.userInfo.rawValue) as? Data {
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.currentUser.rawValue) as? Data {
             do {
                 // Create JSON Decoder
                 let decoder = JSONDecoder()
