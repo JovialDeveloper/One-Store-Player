@@ -13,11 +13,12 @@ struct LIveTVView: View {
     @StateObject private var vm = LiveStreamingViewModel()
     @State private var streams = [LiveStreams]()
     @State private var subStreams = [LiveStreams]()
+    @State private var selectId = 0
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
             if #available(tvOS 16.0, *) {
-                AVPlayerControllerRepresented(player: .init())
+                AVPlayerControllerRepresented(player: .init(url: .init(string: "http://1player.cc:80/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130")!))
                     .frame(maxWidth: .infinity,maxHeight: .infinity)
                     .onTapGesture {
                         isRemoveOverLay.toggle()
@@ -70,7 +71,11 @@ struct LIveTVView: View {
                                         }
                                     } receiveValue: { livestreams in
                                         self.subStreams.removeAll()
-                                        self.subStreams = livestreams
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                            self.subStreams = livestreams
+                                            self.selectId = livestreams[0].streamID
+                                        }
+                                        
                                     }.store(in: &vm.subscriptions)
                                 }
                         }

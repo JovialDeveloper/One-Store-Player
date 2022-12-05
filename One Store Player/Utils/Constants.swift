@@ -13,6 +13,8 @@ enum AppStorageKeys:String{
     case lang
     case userInfo
     case currentUser
+    case timeFormatt
+    case language
 }
 enum AppKeys:String{
     typealias RawValue = String
@@ -38,3 +40,12 @@ case .credientialsWrong:
         }
     }
 }
+
+//Time formats
+
+let hour_12 = "hh:mm a"
+
+let hour_24 = "HH:mm a"
+// Languages
+let arbic = "ar"
+let englishLang = "en"

@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  One Store Player
+
+  Created by MacBook Pro on 03/12/2022.
+  
+*/
+"Expiration " = "Expiration ";
+"Login In: " = "Login In: ";
+"Movies" = "Movies";
+"Series" = "Series";
+"Settings" = "Settings";
+"Subscription Info" = "Subscription Info";
+"Username:" = "Username:";
+"Account status:" = "Account status:";
+"Expiry Date:" = "Expiry Date:";
+"Is trial:" = "Is trial:";
+"Active Connections:" = "Active Connections:";
+"Created At:" = "Created At:";
+"Max Connections:" = "Max Connections:";
+
+

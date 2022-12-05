@@ -204,7 +204,7 @@ fileprivate struct TimeDialoguView: View{
     
     @Binding var isClose : Bool
     
-    
+    @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = ""
     var body: some View{
         VStack{
             Text("Time Format")
@@ -249,6 +249,11 @@ fileprivate struct TimeDialoguView: View{
                 Button {
                     //Save
                     isClose.toggle()
+                    if buttonSelected == 0 {
+                        formatte = hour_24
+                    }else{
+                        formatte = hour_12
+                    }
                 } label: {
                     Text("Save")
                         .font(.carioRegular)
@@ -273,6 +278,13 @@ fileprivate struct TimeDialoguView: View{
         
         .frame(width: 300,height: UIScreen.main.bounds.height - 60)
         .background(Color.white)
+        .onAppear {
+            if formatte == hour_12 {
+                buttonSelected = 1
+            }else{
+                buttonSelected = 0
+            }
+        }
         
     }
 }
@@ -424,7 +436,7 @@ fileprivate struct LangaugeSelectView: View{
     @State var buttonSelected: Int = 0
     
     @Binding var isClose : Bool
-    
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     
     var body: some View{
         VStack{
@@ -473,6 +485,11 @@ fileprivate struct LangaugeSelectView: View{
             Button {
                 //Save
                 isClose.toggle()
+                if buttonSelected == 0 {
+                    lang = arbic
+                }else{
+                    lang = englishLang
+                }
             } label: {
                 Text("Submit")
                     .font(.carioRegular)
@@ -485,6 +502,13 @@ fileprivate struct LangaugeSelectView: View{
         
         .frame(width: 300,height: UIScreen.main.bounds.height - 60)
         .background(Color.white)
+        .onAppear {
+            if lang == arbic {
+                buttonSelected = 0
+            }else{
+                buttonSelected = 1
+            }
+        }
         
     }
 }

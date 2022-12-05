@@ -37,6 +37,10 @@
 		D0AFD464293667910064F487 /* SeriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AFD463293667910064F487 /* SeriesModel.swift */; };
 		D0C6189D291917D000A9529A /* MoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C6189C291917D000A9529A /* MoviesView.swift */; };
 		D0C6189F2919186E00A9529A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C6189E2919186D00A9529A /* Constants.swift */; };
+		D0E65B25293B641B00DE3848 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0E65B27293B641B00DE3848 /* Localizable.strings */; };
+		D0E65B2B293B98EC00DE3848 /* Fixtures&ScoresModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E65B2A293B98EC00DE3848 /* Fixtures&ScoresModel.swift */; };
+		D0E65B2E293B997A00DE3848 /* FixturesScoresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E65B2D293B997A00DE3848 /* FixturesScoresView.swift */; };
+		D0E65B30293B999900DE3848 /* FixturesScoresViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E65B2F293B999900DE3848 /* FixturesScoresViewModel.swift */; };
 		D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF924A2916DE8E003225F0 /* MainHomeView.swift */; };
 		D0F879F829324F5E00E5DD06 /* IptvView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F879F729324F5E00E5DD06 /* IptvView.swift */; };
 		D0FB64E729339EA0009C55C4 /* LoginViewModelExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */; };
@@ -80,6 +84,11 @@
 		D0AFD463293667910064F487 /* SeriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesModel.swift; sourceTree = "<group>"; };
 		D0C6189C291917D000A9529A /* MoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesView.swift; sourceTree = "<group>"; };
 		D0C6189E2919186D00A9529A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D0E65B26293B641B00DE3848 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0E65B28293B641D00DE3848 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0E65B2A293B98EC00DE3848 /* Fixtures&ScoresModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Fixtures&ScoresModel.swift"; sourceTree = "<group>"; };
+		D0E65B2D293B997A00DE3848 /* FixturesScoresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixturesScoresView.swift; sourceTree = "<group>"; };
+		D0E65B2F293B999900DE3848 /* FixturesScoresViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixturesScoresViewModel.swift; sourceTree = "<group>"; };
 		D0EF924A2916DE8E003225F0 /* MainHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHomeView.swift; sourceTree = "<group>"; };
 		D0F879F729324F5E00E5DD06 /* IptvView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IptvView.swift; sourceTree = "<group>"; };
 		D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelExt.swift; sourceTree = "<group>"; };
@@ -154,6 +163,7 @@
 		D0840009291684B900465873 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D0E65B2C293B995C00DE3848 /* FixturesScoresView */,
 				D048C31F29292ADF001B4DD0 /* WatchView */,
 				D048C31E29292877001B4DD0 /* Live TV */,
 				D00926022922B9180093648A /* UserAccountInfoView */,
@@ -175,6 +185,7 @@
 				D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */,
 				D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */,
 				D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */,
+				D0E65B2F293B999900DE3848 /* FixturesScoresViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -187,6 +198,7 @@
 				D041377629362A2600EC4723 /* MovieCategoriesModel.swift */,
 				D041377A29362DBA00EC4723 /* MovieModel.swift */,
 				D0AFD463293667910064F487 /* SeriesModel.swift */,
+				D0E65B2A293B98EC00DE3848 /* Fixtures&ScoresModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -226,6 +238,7 @@
 		D084FFEE291670F900465873 = {
 			isa = PBXGroup;
 			children = (
+				D0E65B27293B641B00DE3848 /* Localizable.strings */,
 				D084FFF9291670F900465873 /* One Store Player */,
 				D084FFF8291670F900465873 /* Products */,
 			);
@@ -265,6 +278,14 @@
 				D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */,
 			);
 			path = MoviesView;
+			sourceTree = "<group>";
+		};
+		D0E65B2C293B995C00DE3848 /* FixturesScoresView */ = {
+			isa = PBXGroup;
+			children = (
+				D0E65B2D293B997A00DE3848 /* FixturesScoresView.swift */,
+			);
+			path = FixturesScoresView;
 			sourceTree = "<group>";
 		};
 		D0F879F629324F2D00E5DD06 /* tvOS */ = {
@@ -320,6 +341,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ar,
 				Base,
 			);
 			mainGroup = D084FFEE291670F900465873;
@@ -342,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D07CF83C291C265C00EFEFFA /* cairo_bold.ttf in Resources */,
+				D0E65B25293B641B00DE3848 /* Localizable.strings in Resources */,
 				D07CF83A291C260800EFEFFA /* cairo_light.ttf in Resources */,
 				D07CF83B291C260800EFEFFA /* cairo_regular.ttf in Resources */,
 				D0840003291670FB00465873 /* Preview Assets.xcassets in Resources */,
@@ -368,6 +391,7 @@
 				D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */,
 				D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */,
 				D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */,
+				D0E65B2E293B997A00DE3848 /* FixturesScoresView.swift in Sources */,
 				D0840017291685C200465873 /* Helper.swift in Sources */,
 				D07CF830291C00D200EFEFFA /* SettingsView.swift in Sources */,
 				D0FB64F22933DBDB009C55C4 /* LiveStreamingsModel.swift in Sources */,
@@ -377,10 +401,12 @@
 				D041377729362A2600EC4723 /* MovieCategoriesModel.swift in Sources */,
 				D0C6189F2919186E00A9529A /* Constants.swift in Sources */,
 				D084001A291689AE00465873 /* Modifiers.swift in Sources */,
+				D0E65B2B293B98EC00DE3848 /* Fixtures&ScoresModel.swift in Sources */,
 				D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */,
 				D041377B29362DBA00EC4723 /* MovieModel.swift in Sources */,
 				D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */,
 				D0AFD464293667910064F487 /* SeriesModel.swift in Sources */,
+				D0E65B30293B999900DE3848 /* FixturesScoresViewModel.swift in Sources */,
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
 				D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */,
 				D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */,
@@ -391,6 +417,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		D0E65B27293B641B00DE3848 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D0E65B26293B641B00DE3848 /* en */,
+				D0E65B28293B641D00DE3848 /* ar */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		D0840004291670FB00465873 /* Debug */ = {
@@ -447,6 +485,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -498,6 +537,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;

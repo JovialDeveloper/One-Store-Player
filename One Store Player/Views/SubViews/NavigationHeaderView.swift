@@ -14,6 +14,7 @@ struct NavigationHeaderView: View {
     var searchAction : ((String)->Void)? = nil
     var moreAction : (()->Void)? = nil
     @Environment(\.presentationMode) var presentationMode
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View {
         HStack{
             // Logo
@@ -37,7 +38,7 @@ struct NavigationHeaderView: View {
                 }
 
             }
-            Text(title)
+            Text(title.localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.white)
             

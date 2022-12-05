@@ -9,13 +9,16 @@ import SwiftUI
 
 @main
 struct One_Store_PlayerApp: App {
-    
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some Scene {
         WindowGroup {
             //MoviesView()
             MainHomeView()
+              .environment(\.locale, Locale(identifier: lang))
+            
             //LoginView()
             //WatchView()
+            //FixturesScoresView()
         }
     }
 }

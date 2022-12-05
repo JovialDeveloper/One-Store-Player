@@ -36,7 +36,19 @@ final class Networking{
             }
             .eraseToAnyPublisher()
     }
-    
+    func getStreamingLink(id:Int)->String{
+        if let info = getUserDetails() {
+            if info.port.hasSuffix("/") {
+                let uri = "\(info.port)\(info.username)/\(info.password)/\(id)"
+                return uri
+            }else{
+                let uri = "\(info.port)/\(info.username)/\(info.password)/\(id)"
+                return uri
+            }
+            
+        }
+        return ""
+    }
     func getUserDetails()->UserInfo?{
         if let data = UserDefaults.standard.value(forKey: AppStorageKeys.currentUser.rawValue) as? Data {
             do {

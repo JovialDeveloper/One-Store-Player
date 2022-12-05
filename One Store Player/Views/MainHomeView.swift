@@ -23,6 +23,8 @@ extension StateType: Identifiable {
 struct MainHomeView: View {
     @State private var stateType : StateType?
     @State private var userInfo:UserInfo?
+    @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -37,13 +39,15 @@ struct MainHomeView: View {
                             .scaledToFill()
                         Spacer()
                         // Today Date
-                        if #available(iOS 15.0,tvOS 15.0, *) {
-                            Text("\(Date().formatted())")
-                                .font(.carioRegular)
-                        } else {
-                            Text(Date().description)
-                                .font(.carioRegular)
-                        }
+//                        if #available(iOS 15.0,tvOS 15.0, *) {
+//                            Text("\(Date().formatted())")
+//                                .font(.carioRegular)
+//                        } else {
+//                            Text(Date().description)
+//                                .font(.carioRegular)
+//                        }
+                        
+                        Text(Date().getTime(format: formatte))
                         
                         Spacer()
                         // Users Catalog
@@ -132,6 +136,7 @@ struct MainHomeView: View {
                             // Fixtures
                             Button {
                                 // Fixtures
+                                stateType = .fixtures
                             } label: {
                                 Image("fixtures")
                                     .resizable()
@@ -170,10 +175,11 @@ struct MainHomeView: View {
                     .padding()
                     
                     HStack{
-                        Text("Expiration \(Text("\(Date().description)").font(.carioBold))")
-                            .font(.carioRegular)
+                        Text("\("Expiration ".localized(lang)) \(Date().description)")
+                        .font(.carioBold)
+                        .font(.carioRegular)
                         Spacer()
-                        Text("Login In: \(Text(userInfo?.name ?? "").font(.carioBold))")
+                        Text("\("Login In: ".localized(lang)) \(Text(userInfo?.name ?? "").font(.carioBold))")
                             .font(.carioRegular)
                     }.padding()
                     
@@ -199,6 +205,17 @@ struct MainHomeView: View {
                         SettingsView(title:"Settings")
                         
                         #endif
+                    }
+                    else if state == .fixtures {
+                        
+                        FixturesScoresView()
+                        
+//                        #if os(tvOS)
+//                        TVOS_Settings()
+//                        #else
+//                        FixturesScoresView()
+//
+//                        #endif
                     }
                     else if state == .users {
                         UserListView()

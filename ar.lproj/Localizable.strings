@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  One Store Player
+
+  Created by MacBook Pro on 03/12/2022.
+  
+*/
+"Expiration " = "انتهاء الصلاحية";
+"Login In: " = "تسجيل الدخول:";
+"Movies" = "أفلام";
+"Series" = "سلسلة";
+"Settings" = "الإعدادات";
+"Subscription Info" = "معلومات الاشتراك";
+"Username:" = "اسم المستخدم";
+"Account status:" = "حالة الحساب";
+"Expiry Date:" =  "تاريخ انتهاء الصلاحية";
+"Is trial:" = "إصدار تجريبي";
+"Active Connections:" = "اتصالات نشطة";
+"Created At:" = "تاريخ الإنشاء";
+"Max Connections:" = "الحد الأقصى للاتصالات";
