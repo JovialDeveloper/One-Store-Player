@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 final class Networking{
     static let shared = Networking()
     
@@ -36,13 +37,15 @@ final class Networking{
             }
             .eraseToAnyPublisher()
     }
-    func getStreamingLink(id:Int)->String{
+    func getStreamingLink(id:Int,type:String)->String{
+        @AppStorage(AppStorageKeys.videoFormat.rawValue) var format = VideoFormats.ts.rawValue
+        
         if let info = getUserDetails() {
             if info.port.hasSuffix("/") {
-                let uri = "\(info.port)\(info.username)/\(info.password)/\(id)"
+                let uri = "\(info.port)\(type)/\(info.username)/\(info.password)/\(id).\(format)"
                 return uri
             }else{
-                let uri = "\(info.port)/\(info.username)/\(info.password)/\(id)"
+                let uri = "\(info.port)/\(type)/\(info.username)/\(info.password)/\(id).\(format)"
                 return uri
             }
             
@@ -64,5 +67,21 @@ final class Networking{
 
         }
         return nil
+    }
+    
+    func streamingURL(){
+        let url = URL(string: "http://1player.cc:80/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130")!
+        
+        URLSession.shared.dataTask(with: .init(url: url)) { data, response, error in
+            if error != nil {
+                debugPrint("E",error)
+            }else{
+                if let data = data {
+                    debugPrint(String(data: data, encoding: .utf8))
+                }
+               
+            }
+                
+        }.resume()
     }
 }

@@ -14,6 +14,17 @@ extension ModernLayoutView {
         @Published var isfetched = false
         @Published var isError = (false,"")
         var subscriptions = [AnyCancellable]()
+        
+        func fetchAllMovies() -> AnyPublisher<[MovieModel], APIError>{
+            guard let userInfo =  Networking.shared.getUserDetails()
+            else {
+                return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
+            }
+            
+            let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_vod_streams"
+            return Networking.shared.fetch(uri: uri)
+        }
+        
         func fetchAllMoviewCategories(baseURL:String = "http://1player.cc:80",type:ViewType) -> AnyPublisher<[MovieCategoriesModel], APIError>
         {
             guard let userInfo =  Networking.shared.getUserDetails()

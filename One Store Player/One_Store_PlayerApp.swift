@@ -15,6 +15,7 @@ struct One_Store_PlayerApp: App {
             //MoviesView()
             MainHomeView()
               .environment(\.locale, Locale(identifier: lang))
+              
             
             //LoginView()
             //WatchView()

@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 import SDWebImageSwiftUI
+import _AVKit_SwiftUI
 struct WatchView<T:Codable>: View {
     @Environment(\.presentationMode) private var presentationMode
     @State var rating = 5
@@ -15,6 +16,8 @@ struct WatchView<T:Codable>: View {
     @State var cancelable = [AnyCancellable]()
     @State var customObject : MovieModelWatchResponse?
     @State var seriesObject : SeriesResponse?
+    @State var isWatch = false
+    @State var id = 0
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -84,6 +87,8 @@ struct WatchView<T:Codable>: View {
                         
                         Button {
                             // watch
+                            id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
+                            
                         } label: {
                             Text("WATCH")
                                 .font(.carioRegular)
@@ -188,6 +193,16 @@ struct WatchView<T:Codable>: View {
             }
             
         }
+        .onChange(of: id, perform: { new in
+            
+            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                self.isWatch.toggle()
+            }
+        })
+        .sheet(isPresented: $isWatch) {
+            VLCAgent(id: $id,type: "movie")
+            
+        }
     }
     
     func fetchDataRequest<T:Codable>(baseURL:String) -> AnyPublisher<T, APIError>{
@@ -241,3 +256,4 @@ struct RatingView:View{
         }
     }
 }
+    

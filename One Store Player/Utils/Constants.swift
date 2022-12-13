@@ -15,6 +15,7 @@ enum AppStorageKeys:String{
     case currentUser
     case timeFormatt
     case language
+    case videoFormat
 }
 enum AppKeys:String{
     typealias RawValue = String
@@ -49,3 +50,9 @@ let hour_24 = "HH:mm a"
 // Languages
 let arbic = "ar"
 let englishLang = "en"
+
+enum VideoFormats:String{
+    case ts
+    case mp4
+    case m3u8
+}

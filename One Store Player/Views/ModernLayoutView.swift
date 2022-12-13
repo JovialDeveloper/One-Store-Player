@@ -19,6 +19,47 @@ struct ModernLayoutView:View{
         ZStack{
             HStack{
                 ScrollView{
+                    Button("ALL") {
+                        vm.fetchAllMovies()
+                            .sink { subError in
+                            //
+                        } receiveValue: { movies in
+                            self.movies = movies
+                            
+//                            vm.fetchAllMoviesById(id: self.categories[0].categoryID, type: subject.1)
+//                                .sink { subErrr in
+//                                    vm.isLoading.toggle()
+//                                    switch subErrr {
+//                                    case .failure(let err):
+//                                        debugPrint(err)
+//                                    case .finished:
+//                                        vm.isLoading.toggle()
+//                                        break
+//                                    }
+//                                   debugPrint(subErrr)
+//                                } receiveValue: { movies in
+//                                    debugPrint("M",movies)
+//                                    vm.isLoading.toggle()
+//                                    self.movies?.removeAll()
+//                                    DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+//                                        self.movies = movies
+//                                    }
+//
+//                                }.store(in: &vm.subscriptions)
+                            
+                        }.store(in: &vm.subscriptions)
+                    }
+                    .padding()
+                    .foregroundColor(.white)
+                    .frame(maxWidth:.infinity,alignment: .leading)
+                    
+                    Button("Favourites") {
+                        //
+                    }
+                    .padding()
+                    .foregroundColor(.white)
+                    .frame(maxWidth:.infinity,alignment: .leading)
+                    
                     LazyVStack{
                         ForEach(categories,id: \.categoryID) { category in
                             VStack{

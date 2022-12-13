@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
 		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
+		D023A035294202120026D604 /* MobileVLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D023A034294202110026D604 /* MobileVLCKit.xcframework */; };
+		D023A036294202120026D604 /* MobileVLCKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D023A034294202110026D604 /* MobileVLCKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D041377729362A2600EC4723 /* MovieCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377629362A2600EC4723 /* MovieCategoriesModel.swift */; };
 		D041377929362A9300EC4723 /* ModernLayoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */; };
 		D041377B29362DBA00EC4723 /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377A29362DBA00EC4723 /* MovieModel.swift */; };
-		D041377E293642AF00EC4723 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D041377D293642AF00EC4723 /* SDWebImageSwiftUI */; };
 		D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339DF2930E54E00213D85 /* LIveTVView.swift */; };
 		D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339E1293139D700213D85 /* TVOS Settings.swift */; };
 		D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048C32029292AF4001B4DD0 /* WatchView.swift */; };
@@ -33,6 +34,8 @@
 		D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFA291670F900465873 /* One_Store_PlayerApp.swift */; };
 		D084FFFD291670F900465873 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFC291670F900465873 /* ContentView.swift */; };
 		D084FFFF291670FB00465873 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D084FFFE291670FB00465873 /* Assets.xcassets */; };
+		D08632182948A0D70088142B /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = D08632172948A0D70088142B /* AlertToast */; };
+		D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D086321A2948A1200088142B /* SDWebImageSwiftUI */; };
 		D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AA08D0293775B7009E9D55 /* SeriesView.swift */; };
 		D0AFD464293667910064F487 /* SeriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AFD463293667910064F487 /* SeriesModel.swift */; };
 		D0C6189D291917D000A9529A /* MoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C6189C291917D000A9529A /* MoviesView.swift */; };
@@ -45,15 +48,29 @@
 		D0F879F829324F5E00E5DD06 /* IptvView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F879F729324F5E00E5DD06 /* IptvView.swift */; };
 		D0FB64E729339EA0009C55C4 /* LoginViewModelExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64E629339E9F009C55C4 /* LoginViewModelExt.swift */; };
 		D0FB64E92933AF23009C55C4 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64E82933AF23009C55C4 /* LoginModel.swift */; };
-		D0FB64EC2933BAFE009C55C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = D0FB64EB2933BAFE009C55C4 /* AlertToast */; };
 		D0FB64EE2933D73C009C55C4 /* LiveStreamingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */; };
 		D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64EF2933D7E1009C55C4 /* Networking.swift */; };
 		D0FB64F22933DBDB009C55C4 /* LiveStreamingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FB64F12933DBDB009C55C4 /* LiveStreamingsModel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D023A037294202120026D604 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D023A036294202120026D604 /* MobileVLCKit.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
+		D023A034294202110026D604 /* MobileVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MobileVLCKit.xcframework; path = Carthage/Build/MobileVLCKit.xcframework; sourceTree = "<group>"; };
 		D041377629362A2600EC4723 /* MovieCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCategoriesModel.swift; sourceTree = "<group>"; };
 		D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutViewModel.swift; sourceTree = "<group>"; };
 		D041377A29362DBA00EC4723 /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
@@ -103,8 +120,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D041377E293642AF00EC4723 /* SDWebImageSwiftUI in Frameworks */,
-				D0FB64EC2933BAFE009C55C4 /* AlertToast in Frameworks */,
+				D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */,
+				D023A035294202120026D604 /* MobileVLCKit.xcframework in Frameworks */,
+				D08632182948A0D70088142B /* AlertToast in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +143,14 @@
 				D00926032922B9360093648A /* UserAccountInfoView.swift */,
 			);
 			path = UserAccountInfoView;
+			sourceTree = "<group>";
+		};
+		D023A033294202110026D604 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D023A034294202110026D604 /* MobileVLCKit.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		D048C31E29292877001B4DD0 /* Live TV */ = {
@@ -241,6 +267,7 @@
 				D0E65B27293B641B00DE3848 /* Localizable.strings */,
 				D084FFF9291670F900465873 /* One Store Player */,
 				D084FFF8291670F900465873 /* Products */,
+				D023A033294202110026D604 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -306,6 +333,7 @@
 				D084FFF3291670F900465873 /* Sources */,
 				D084FFF4291670F900465873 /* Frameworks */,
 				D084FFF5291670F900465873 /* Resources */,
+				D023A037294202120026D604 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -313,8 +341,8 @@
 			);
 			name = "One Store Player";
 			packageProductDependencies = (
-				D0FB64EB2933BAFE009C55C4 /* AlertToast */,
-				D041377D293642AF00EC4723 /* SDWebImageSwiftUI */,
+				D08632172948A0D70088142B /* AlertToast */,
+				D086321A2948A1200088142B /* SDWebImageSwiftUI */,
 			);
 			productName = "One Store Player";
 			productReference = D084FFF7291670F900465873 /* One Store Player.app */;
@@ -346,8 +374,8 @@
 			);
 			mainGroup = D084FFEE291670F900465873;
 			packageReferences = (
-				D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
-				D041377C293642AF00EC4723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */,
+				D08632192948A1200088142B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = D084FFF8291670F900465873 /* Products */;
 			projectDirPath = "";
@@ -650,17 +678,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D041377C293642AF00EC4723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+		D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
 			requirement = {
 				branch = master;
 				kind = branch;
 			};
 		};
-		D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+		D08632192948A1200088142B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -669,15 +697,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D041377D293642AF00EC4723 /* SDWebImageSwiftUI */ = {
+		D08632172948A0D70088142B /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D041377C293642AF00EC4723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
-			productName = SDWebImageSwiftUI;
-		};
-		D0FB64EB2933BAFE009C55C4 /* AlertToast */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D0FB64EA2933BAFE009C55C4 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			package = D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */;
 			productName = AlertToast;
+		};
+		D086321A2948A1200088142B /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D08632192948A1200088142B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
