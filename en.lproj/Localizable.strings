@@ -18,5 +18,12 @@
 "Active Connections:" = "Active Connections:";
 "Created At:" = "Created At:";
 "Max Connections:" = "Max Connections:";
+"ALL" = "ALL";
+"Favourites" = "Favourites";
+"Recently Watch" = "Recently Watch";
 
 
+"Time Formatt" = "Time Formatt";
+"View Formatt" = "View Formatt";
+"Save" = "Save";
+"Cancel" = "Cancel";

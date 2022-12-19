@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D003EB0E294CC06100D625B8 /* EPGLiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D003EB0D294CC06100D625B8 /* EPGLiveView.swift */; };
+		D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */ = {isa = PBXBuildFile; productRef = D003EB10294CC8B100D625B8 /* XMLMapper */; };
 		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
 		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
 		D023A035294202120026D604 /* MobileVLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D023A034294202110026D604 /* MobileVLCKit.xcframework */; };
@@ -17,6 +19,9 @@
 		D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339DF2930E54E00213D85 /* LIveTVView.swift */; };
 		D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339E1293139D700213D85 /* TVOS Settings.swift */; };
 		D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048C32029292AF4001B4DD0 /* WatchView.swift */; };
+		D064B7582950789200D7B0B6 /* CatchUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7572950789200D7B0B6 /* CatchUpView.swift */; };
+		D064B75A2950A31C00D7B0B6 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7592950A31C00D7B0B6 /* StartView.swift */; };
+		D078CC712949E244007CB65A /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D078CC702949E244007CB65A /* IQKeyboardManagerSwift */; };
 		D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */; };
 		D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82A291BFD4100EFEFFA /* CollectionView.swift */; };
 		D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */; };
@@ -68,6 +73,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D003EB0D294CC06100D625B8 /* EPGLiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPGLiveView.swift; sourceTree = "<group>"; };
 		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
 		D023A034294202110026D604 /* MobileVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MobileVLCKit.xcframework; path = Carthage/Build/MobileVLCKit.xcframework; sourceTree = "<group>"; };
@@ -77,6 +83,8 @@
 		D04339DF2930E54E00213D85 /* LIveTVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIveTVView.swift; sourceTree = "<group>"; };
 		D04339E1293139D700213D85 /* TVOS Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TVOS Settings.swift"; sourceTree = "<group>"; };
 		D048C32029292AF4001B4DD0 /* WatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchView.swift; sourceTree = "<group>"; };
+		D064B7572950789200D7B0B6 /* CatchUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchUpView.swift; sourceTree = "<group>"; };
+		D064B7592950A31C00D7B0B6 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutView.swift; sourceTree = "<group>"; };
 		D07CF82A291BFD4100EFEFFA /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicLayoutView.swift; sourceTree = "<group>"; };
@@ -120,7 +128,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */,
 				D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */,
+				D078CC712949E244007CB65A /* IQKeyboardManagerSwift in Frameworks */,
 				D023A035294202120026D604 /* MobileVLCKit.xcframework in Frameworks */,
 				D08632182948A0D70088142B /* AlertToast in Frameworks */,
 			);
@@ -129,6 +139,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D003EB0C294CC01A00D625B8 /* EPGLive */ = {
+			isa = PBXGroup;
+			children = (
+				D003EB0D294CC06100D625B8 /* EPGLiveView.swift */,
+			);
+			path = EPGLive;
+			sourceTree = "<group>";
+		};
 		D00925FF2922B27B0093648A /* ListUsers */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +187,14 @@
 			path = WatchView;
 			sourceTree = "<group>";
 		};
+		D064B756295076A300D7B0B6 /* CatchUpView */ = {
+			isa = PBXGroup;
+			children = (
+				D064B7572950789200D7B0B6 /* CatchUpView.swift */,
+			);
+			path = CatchUpView;
+			sourceTree = "<group>";
+		};
 		D07CF82E291C00BF00EFEFFA /* SettingsView */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +215,8 @@
 		D0840009291684B900465873 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D064B756295076A300D7B0B6 /* CatchUpView */,
+				D003EB0C294CC01A00D625B8 /* EPGLive */,
 				D0E65B2C293B995C00DE3848 /* FixturesScoresView */,
 				D048C31F29292ADF001B4DD0 /* WatchView */,
 				D048C31E29292877001B4DD0 /* Live TV */,
@@ -201,6 +229,7 @@
 				D0EF924A2916DE8E003225F0 /* MainHomeView.swift */,
 				D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */,
 				D0AA08D0293775B7009E9D55 /* SeriesView.swift */,
+				D064B7592950A31C00D7B0B6 /* StartView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -343,6 +372,8 @@
 			packageProductDependencies = (
 				D08632172948A0D70088142B /* AlertToast */,
 				D086321A2948A1200088142B /* SDWebImageSwiftUI */,
+				D078CC702949E244007CB65A /* IQKeyboardManagerSwift */,
+				D003EB10294CC8B100D625B8 /* XMLMapper */,
 			);
 			productName = "One Store Player";
 			productReference = D084FFF7291670F900465873 /* One Store Player.app */;
@@ -376,6 +407,8 @@
 			packageReferences = (
 				D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */,
 				D08632192948A1200088142B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				D078CC6F2949E244007CB65A /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				D003EB0F294CC8B100D625B8 /* XCRemoteSwiftPackageReference "XMLMapper" */,
 			);
 			productRefGroup = D084FFF8291670F900465873 /* Products */;
 			projectDirPath = "";
@@ -422,6 +455,7 @@
 				D0E65B2E293B997A00DE3848 /* FixturesScoresView.swift in Sources */,
 				D0840017291685C200465873 /* Helper.swift in Sources */,
 				D07CF830291C00D200EFEFFA /* SettingsView.swift in Sources */,
+				D064B7582950789200D7B0B6 /* CatchUpView.swift in Sources */,
 				D0FB64F22933DBDB009C55C4 /* LiveStreamingsModel.swift in Sources */,
 				D0FB64E92933AF23009C55C4 /* LoginModel.swift in Sources */,
 				D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */,
@@ -437,6 +471,8 @@
 				D0E65B30293B999900DE3848 /* FixturesScoresViewModel.swift in Sources */,
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
 				D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */,
+				D003EB0E294CC06100D625B8 /* EPGLiveView.swift in Sources */,
+				D064B75A2950A31C00D7B0B6 /* StartView.swift in Sources */,
 				D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */,
 				D0C6189D291917D000A9529A /* MoviesView.swift in Sources */,
 				D0FB64E729339EA0009C55C4 /* LoginViewModelExt.swift in Sources */,
@@ -678,6 +714,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D003EB0F294CC8B100D625B8 /* XCRemoteSwiftPackageReference "XMLMapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gcharita/XMLMapper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		D078CC6F2949E244007CB65A /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elai950/AlertToast.git";
@@ -697,6 +749,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D003EB10294CC8B100D625B8 /* XMLMapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D003EB0F294CC8B100D625B8 /* XCRemoteSwiftPackageReference "XMLMapper" */;
+			productName = XMLMapper;
+		};
+		D078CC702949E244007CB65A /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D078CC6F2949E244007CB65A /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
 		D08632172948A0D70088142B /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */;

@@ -95,4 +95,18 @@ extension String {
     private func localized(bundle: Bundle) -> String {
         return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
     }
+    
+    func getDateFormatted(format:String)->String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ssZ"
+        
+        guard let date = dateFormatter.date(from: self)
+        else {
+            return "---"
+        }
+        
+        let dateFormatter1 =  DateFormatter()
+        dateFormatter1.dateFormat = format
+        return dateFormatter1.string(from: date)
+    }
 }

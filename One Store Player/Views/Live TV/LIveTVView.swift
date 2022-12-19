@@ -7,7 +7,70 @@
 
 import SwiftUI
 import AVKit
+class LiveStreamsFavourite:ObservableObject
+{
+    func saveMovies(model:LiveStreams){
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                var favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
+                
+                if favLiveStreams.contains(where: {$0.streamID == model.streamID}) {
+                    return
+                }else{
+                    favLiveStreams.append(model)
+                    
+                    let encoder = JSONEncoder()
+                        // Encode Note
+                    let modelData = try encoder.encode(favLiveStreams)
 
+                    UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
+                    
+                }
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
+        }
+        else{
+            do{
+                let encoder = JSONEncoder()
+                    // Encode Note
+                
+                let modelData = try encoder.encode([model])
+                UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
+            }
+            catch {
+                debugPrint(error)
+            }
+            
+            //return model
+        }
+    }
+    
+    func getLiveStreams()->[LiveStreams]{
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                var favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
+                
+                return favLiveStreams
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
+        }
+        return []
+    }
+}
 struct LIveTVView: View {
     @State private var isRemoveOverLay = false
     @Environment(\.presentationMode) private var presentationMode
@@ -17,6 +80,7 @@ struct LIveTVView: View {
     @State private var selectId = 0
     @State private var searchText = ""
     @State private var isSearch = false
+    @StateObject private var favLiveStreams = LiveStreamsFavourite()
     fileprivate func fetchAllStreaming() {
         // Networking.shared.streamingURL()
         
@@ -99,21 +163,36 @@ struct LIveTVView: View {
                 //MARK:- Streams List
                 ScrollView {
                     LazyVStack {
-                        Button("ALL") {
-                            fetchSubStreams(stream: streams[0])
+                        Button {
+                            selectId = 0
+                            self.streams.removeAll()
+                            fetchAllStreaming()
+                        } label: {
+                            Text("ALL")
+                                .frame(maxWidth:.infinity,alignment: .leading)
                         }
                         .padding()
                         .foregroundColor(.white)
+                        //.background(selectId == 0 ? Color.yellow : Color.secondaryColor)
                         .frame(maxWidth:.infinity,alignment: .leading)
+
                         
-                        Button("Favourites") {
-                            //
+                        Button {
+                            selectId = -0
+//                            self.streams.removeAll()
+//                            fetchAllStreaming()
+                            self.subStreams = favLiveStreams.getLiveStreams()
+                        } label: {
+                            Text("Favourites")
+                                .frame(maxWidth:.infinity,alignment: .leading)
                         }
                         .padding()
                         .foregroundColor(.white)
+                        //.background(selectId == -0 ? Color.yellow : Color.secondaryColor)
                         .frame(maxWidth:.infinity,alignment: .leading)
                         ForEach(streams) { stream in
                             Button {
+                                //selectId = stream.categoryID
                                 fetchSubStreams(stream: stream)
                             } label: {
                                 HStack(spacing: 10){
@@ -130,6 +209,7 @@ struct LIveTVView: View {
                                         .frame(maxWidth:.infinity,alignment: .leading)
                                 }
                             }
+                            
                             
                         }
                     }
@@ -160,8 +240,13 @@ struct LIveTVView: View {
                                 .onTapGesture {
                                     self.selectId = stream.streamID
                                 }
-                                .onLongPressGesture {
-                                    
+                                .contextMenu {
+                                    Button {
+                                        favLiveStreams.saveMovies(model: stream)
+                                    } label: {
+                                        Label("Add to Favourite", systemImage: "suit.heart")
+                                    }
+
                                 }
                             }
                             else{
@@ -173,8 +258,13 @@ struct LIveTVView: View {
                                     .onTapGesture {
                                         self.selectId = stream.streamID
                                     }
-                                    .onLongPressGesture {
-                                        debugPrint("Hello Long PRess")
+                                    .contextMenu {
+                                        Button {
+                                            favLiveStreams.saveMovies(model: stream)
+                                        } label: {
+                                            Label("Add to Favourite", systemImage: "suit.heart")
+                                        }
+
                                     }
                             }
                                 

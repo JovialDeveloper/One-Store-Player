@@ -26,6 +26,22 @@ extension LoginView {
                 return Fail(error: APIError.apiError(reason: "Kindly fill all fields")).eraseToAnyPublisher()
             }
             
+            guard port.hasSuffix("/") else {
+                isError = (true,"Kindly insert / at the end of url")
+                return Fail(error: APIError.apiError(reason: "Kindly insert / at the end of url")).eraseToAnyPublisher()
+            }
+            
+            guard !port.hasSuffix("//") else {
+                isError = (true,"Kindly insert correct url")
+                return Fail(error: APIError.apiError(reason: "Kindly insert correct url")).eraseToAnyPublisher()
+            }
+            
+            guard !port.contains(" ") else {
+                isError = (true,"Kindly insert correct url")
+                return Fail(error: APIError.apiError(reason: "Kindly insert correct url")).eraseToAnyPublisher()
+            }
+            
+            
             let uri = "\(port)player_api.php?username=\(userName)&password=\(password)"
             let url = URL(string: uri)!
             var request = URLRequest(url: url)

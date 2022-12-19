@@ -12,6 +12,7 @@ struct MoviesView: View {
     @Environment(\.presentationMode) var presentationMode
     var title : String
     var type:ViewType
+    @StateObject private var favMovies = MoviesFavourite()
     @State var selectMoview = 0
 //    init(){
 //        UITableView.appearance().backgroundColor = .red
@@ -24,12 +25,15 @@ struct MoviesView: View {
             if layout == AppKeys.modern.rawValue {
                 // Modern View
                 ModernLayoutView(subject: (title,type))
+                    .environmentObject(favMovies)
             }
             else {
                 ClassicLayoutView(subject: (title,type))
+                    .environmentObject(favMovies)
             }
         }
         .frame(maxWidth:.infinity,maxHeight: .infinity)
+        //.ignoresSafeArea(.keyboard,edges: .all)
         
         
     }

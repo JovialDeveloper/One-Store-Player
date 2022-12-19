@@ -6,15 +6,22 @@
 //
 
 import SwiftUI
-
+import IQKeyboardManagerSwift
 @main
 struct One_Store_PlayerApp: App {
     @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some Scene {
         WindowGroup {
+            StartView()
+                .environment(\.locale, Locale(identifier: lang))
+            
             //MoviesView()
-            MainHomeView()
-              .environment(\.locale, Locale(identifier: lang))
+            //MainHomeView()
+              //.environment(\.locale, Locale(identifier: lang))
+//              .onAppear {
+//                  IQKeyboardManager.shared.enable = true
+//              }
+            
               
             
             //LoginView()

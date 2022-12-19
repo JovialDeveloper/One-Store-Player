@@ -15,6 +15,8 @@ enum StateType:String{
     case sereris
     case liveTV
     case fixtures
+    case epgLive
+    case catchup
 }
 extension StateType: Identifiable {
     var id: RawValue { rawValue }
@@ -23,7 +25,7 @@ extension StateType: Identifiable {
 struct MainHomeView: View {
     @State private var stateType : StateType?
     @State private var userInfo:UserInfo?
-    @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = ""
+    @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = hour_12
     @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View {
         ZStack{
@@ -47,8 +49,16 @@ struct MainHomeView: View {
 //                                .font(.carioRegular)
 //                        }
                         
-                        Text(Date().getTime(format: formatte))
+                        if #available(iOS 15.0, *) {
+                            Text("\(Date().description.getDateFormatted(format:defualtDateFormatte)) \(Date().getTime(format: formatte))")
+                                .font(.carioRegular)
+                        } else {
+                            // Fallback on earlier versions
+                            Text("\(Date().description) \(Date().getTime(format: formatte))")
+                                .font(.carioRegular)
+                        }
                         
+                        Spacer()
                         Spacer()
                         // Users Catalog
                         HStack{
@@ -152,6 +162,7 @@ struct MainHomeView: View {
                             Spacer()
                             Button {
                                 // Live TV
+                                stateType = .epgLive
                             } label: {
                                 Image("Livewith")
                                     .resizable()
@@ -160,7 +171,7 @@ struct MainHomeView: View {
                             }
                             
                             Button {
-                                // Live TV
+                                stateType = .catchup
                             } label: {
                                 Image("catchup")
                                     .resizable()
@@ -175,7 +186,7 @@ struct MainHomeView: View {
                     .padding()
                     
                     HStack{
-                        Text("\("Expiration ".localized(lang)) \(Date().description)")
+                        Text("\("Expiration ".localized(lang)) \(Date().description.getDateFormatted(format: defualtDateFormatte))")
                         .font(.carioBold)
                         .font(.carioRegular)
                         Spacer()
@@ -188,7 +199,7 @@ struct MainHomeView: View {
                 }
                 .foregroundColor(.white)
                 .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height)
-                .sheet(item: $stateType) { state in
+                .fullScreenCover(item: $stateType) { state in
                     if state == .liveTV {
                         LIveTVView()
                     }
@@ -222,6 +233,11 @@ struct MainHomeView: View {
                     }
                     else if state == .userAccount {
                         UserAccountInfoView()
+                    }
+                    else if state == .epgLive {
+                        EPGLiveView()
+                    }else {
+                        CatchUpView()
                     }
                 }
             }

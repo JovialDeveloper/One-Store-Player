@@ -29,6 +29,7 @@ struct SettingsView: View {
     @State private var isParentalControlButtonOn = false
     @State private var isEPGButtonOn = false
     @State private var isAutomationOn = false
+    @State private var isStreamOn = false
     @State private var selectButtonType : SettingsKeys?
     var body: some View {
         ZStack{
@@ -78,6 +79,9 @@ struct SettingsView: View {
                                 if item == .automation1{
                                     isAutomationOn.toggle()
                                 }
+                                if item == .streamFormat{
+                                    isStreamOn.toggle()
+                                }
                                 
                             },image: item.rawValue)
                             .frame(width:200,height: 180)
@@ -108,6 +112,9 @@ struct SettingsView: View {
             if isAutomationOn {
                 AutomationView(isClose: $isAutomationOn)
             }
+            if isStreamOn {
+                StreamFormat(isClose: $isStreamOn)
+            }
             
             
         }
@@ -125,7 +132,7 @@ fileprivate struct LayoutDialoguView: View{
     
     var body: some View{
         VStack{
-            Text("View Format")
+            Text("View Formatt")
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -205,9 +212,10 @@ fileprivate struct TimeDialoguView: View{
     @Binding var isClose : Bool
     
     @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View{
         VStack{
-            Text("Time Format")
+            Text("Time Formatt")
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -255,7 +263,7 @@ fileprivate struct TimeDialoguView: View{
                         formatte = hour_12
                     }
                 } label: {
-                    Text("Save")
+                    Text("Save".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -266,7 +274,7 @@ fileprivate struct TimeDialoguView: View{
                     //Save
                     isClose.toggle()
                 } label: {
-                    Text("Cancel")
+                    Text("Cancel".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -290,6 +298,7 @@ fileprivate struct TimeDialoguView: View{
 }
 
 struct EPGView: View{
+    @AppStorage(AppStorageKeys.egp.rawValue) var epg = 0
     fileprivate var data = [0,1,2,3,4,5,6,7,9,10,-1,-2,-3,-4,-5,-6,-7,-9,-10]
     
     @State fileprivate var selection = 0
@@ -331,6 +340,7 @@ struct EPGView: View{
                 
                 Button {
                     //Save
+                    epg = selection
                     isClose.toggle()
                 } label: {
                     Text("Cancel")
@@ -345,13 +355,16 @@ struct EPGView: View{
         
         .frame(width: 300,height: UIScreen.main.bounds.height - 60)
         .background(Color.white)
+        .onAppear {
+            selection = epg
+        }
         
     }
 }
 
 fileprivate struct AutomationView: View{
     var buttons = ["No","Yes"]
-    
+    @AppStorage(AppStorageKeys.automate.rawValue) var udpate = ""
     @State var buttonSelected: Int = 0
     
     @Binding var isClose : Bool
@@ -411,6 +424,7 @@ fileprivate struct AutomationView: View{
                 
                 Button {
                     //Save
+                    udpate = buttons[buttonSelected]
                     isClose.toggle()
                 } label: {
                     Text("Cancel")
@@ -425,6 +439,13 @@ fileprivate struct AutomationView: View{
         
         .frame(width: 300,height: UIScreen.main.bounds.height - 60)
         .background(Color.white)
+        .onAppear {
+            if udpate == "No" {
+                buttonSelected = 0
+            }else {
+                buttonSelected = 1
+            }
+        }
         
     }
 }
@@ -440,7 +461,7 @@ fileprivate struct LangaugeSelectView: View{
     
     var body: some View{
         VStack{
-            Text("Auto-Update Channels and Movies Daily")
+            Text("Select Language")
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -485,11 +506,13 @@ fileprivate struct LangaugeSelectView: View{
             Button {
                 //Save
                 isClose.toggle()
+                
                 if buttonSelected == 0 {
                     lang = arbic
                 }else{
                     lang = englishLang
                 }
+                
             } label: {
                 Text("Submit")
                     .font(.carioRegular)
@@ -507,6 +530,93 @@ fileprivate struct LangaugeSelectView: View{
                 buttonSelected = 0
             }else{
                 buttonSelected = 1
+            }
+        }
+        
+    }
+}
+
+fileprivate struct StreamFormat: View{
+    var buttons = ["Defualt","ts","m3u8"]
+    
+    @State var buttonSelected: Int = 0
+    
+    @Binding var isClose : Bool
+    @AppStorage(AppStorageKeys.videoFormat.rawValue) var streamFormatte = ""
+    
+    var body: some View{
+        VStack{
+            Text("Stream Formatt")
+                .font(.carioBold)
+                .foregroundColor(.black)
+                .padding()
+            Divider()
+                .frame(height: 4)
+                .overlay(Color.black)
+            Spacer()
+            VStack{
+                ForEach(0..<buttons.count,id:\.self) {
+                    index in
+                    
+                    VStack{
+                        Button {
+                            buttonSelected = index
+                        } label: {
+                            HStack{
+                                Image(systemName: buttonSelected == index ? "dot.circle.fill" : "circle")
+                                    .resizable()
+                                    .frame(width: 30,height: 30)
+                                    .scaledToFill()
+                                
+                                
+                                Text(self.buttons[index])
+                                    .padding()
+                                
+                            }
+                            
+                        }.foregroundColor(.black)
+                    }
+                    .frame(width:250)
+                    .background(RoundedRectangle(cornerRadius: 5).fill(Color(UIColor(named:"SystemBG")!)))
+                    
+                }
+                
+                
+                
+                
+                
+            }
+            
+            Spacer()
+            Button {
+                //Save
+                isClose.toggle()
+                
+                if buttonSelected == 0  {
+                    streamFormatte = "ts"
+                }else if buttonSelected == 1{
+                    streamFormatte = "ts"
+                }else{
+                    streamFormatte = "m3u8"
+                }
+                
+            } label: {
+                Text("Submit")
+                    .font(.carioRegular)
+                    .foregroundColor(.white)
+            }.frame(width:200,height:50)
+                .background(RoundedRectangle(cornerRadius: 5).fill(Color(UIColor.systemBlue)))
+                .padding()
+            
+        }
+        
+        .frame(width: 300,height: UIScreen.main.bounds.height - 60)
+        .background(Color.white)
+        .onAppear {
+            if streamFormatte == "ts" {
+                buttonSelected = 1
+            }else if streamFormatte == "m3u8"{
+                buttonSelected = 2
             }
         }
         

@@ -19,7 +19,7 @@ extension LIveTVView{
             else {
                 return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
             }
-            let uri = "\(baseURL)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_live_streams"
+            let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_live_streams"
             return Networking.shared.fetch(uri: uri)
         }
         

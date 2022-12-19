@@ -18,3 +18,19 @@
 "Active Connections:" = "اتصالات نشطة";
 "Created At:" = "تاريخ الإنشاء";
 "Max Connections:" = "الحد الأقصى للاتصالات";
+
+"ALL" = "الكل";
+"Favourites" = "المفضلة";
+"Recently Watch" = "شاهد مؤخرًا";
+"Matches" = "اعواد الكبريت";
+"Today" = "اليوم";
+"Yesterday" = "في الامس";
+"Now" = "الآن";
+"Stream Formatt" = "تنسيق الدفق";
+"Select Language" = "اختار اللغة";
+;"القنوات والأفلام التحديث التلقائي يوميا" = "Auto-Update Channels and Movies Daily"
+"EPG Settings" = "إعدادات EPG";
+"Time Formatt" = "تنسيق الوقت";
+"View Formatt" = "مشاهدة تنسيق";
+"Save" = "يحفظ";
+"Cancel" = "يلغي";

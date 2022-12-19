@@ -13,6 +13,8 @@ extension ModernLayoutView {
         @Published var isLoading = false
         @Published var isfetched = false
         @Published var isError = (false,"")
+        @Published var recentlyWatchMovies = [MovieModel]()
+        
         var subscriptions = [AnyCancellable]()
         
         func fetchAllMovies() -> AnyPublisher<[MovieModel], APIError>{
@@ -53,7 +55,20 @@ class ClassicViewModel:ObservableObject{
     @Published var isLoading = false
     @Published var isfetched = false
     @Published var isError = (false,"")
+    @Published var recentlyWatchMovies = [SeriesModel]()
     var subscriptions = [AnyCancellable]()
+    
+    func fetchAllData<T:Codable>(type:ViewType) -> AnyPublisher<[T], APIError>{
+        guard let userInfo =  Networking.shared.getUserDetails()
+        else {
+            return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
+        }
+        
+        let uri = type == .movie ? "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_vod_streams" : "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series"
+        
+        return Networking.shared.fetch(uri: uri)
+    }
+    
     func fetchAllMoviewCategories(baseURL:String = "http://1player.cc:80",type:ViewType) -> AnyPublisher<[MovieCategoriesModel], APIError>
     {
         guard let userInfo =  Networking.shared.getUserDetails()

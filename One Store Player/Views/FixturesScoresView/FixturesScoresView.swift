@@ -13,43 +13,107 @@ struct FixturesScoresView: View {
     @State private var data : Fixtures_ScoresModel?
     @State private var events : [Event]?
     @State private var datum : [Datum]?
+    @Environment(\.presentationMode) var presentationMode
+    @State private var selectDatum : Datum?
     var body: some View {
-        ZStack{
-            GeometryReader {
-                proxy in
-                VStack{
-                    // Header
+        GeometryReader {
+            proxy in
+            VStack{
+                // Header
+                HStack {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                    .frame(width:46,height: 46)
                     
-                    //
-                    HStack {
-                        ScrollView{
-                            LazyVStack {
-                                ForEach(datum ?? [],id: \.id) {
-                                    item in
-                                    ForEach(item.teams ?? [],id: \.id) {
-                                        event in
-                                        HStack{
-                                            WebImage(url: .init(string:event.logo ?? ""))
-                                                .resizable()
-                                                .frame(width:40,height:40)
-                                                .scaledToFill()
-                                                .clipped()
-                                            Text(event.name ?? "")
-                                        }.frame(height:80)
-                                    }
-                                }
-                                
+                    Spacer()
+                    Text("Matches")
+                        .font(.carioBold)
+                    HStack{
+                        Text("Today")
+                            .font(.carioRegular)
+                        
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                    }
+                    .padding()
+                    .frame(width: 200,height: 56)
+                    .background(Capsule().stroke(lineWidth: 2).fill(Color.white))
+                    .contextMenu {
+                        Button {
+                            //
+                        } label: {
+                            Label("Now", image: "")
+                        }
+                        
+                        Button {
+                            //
+                        } label: {
+                            Label("Yesterday", image: "")
+                        }
+                        
+                        Button {
+                            //
+                        } label: {
+                            Label("Tomorrow", image: "")
+                        }
+
+                    }
+                    Spacer()
+                    
+                }
+                .padding()
+                .foregroundColor(.white)
+                //
+                HStack {
+                    ScrollView{
+                        LazyVStack(spacing:10) {
+                            
+                           ForEach(datum ?? []) {
+                                itm in
+                               HStack{
+                                   WebImage(url: .init(string:itm.league?.logo ?? ""))
+                                        .resizable()
+                                        .frame(width:40,height:40)
+                                        .scaledToFill()
+                                        .clipped()
+                                   Spacer()
+                                   Text(itm.league?.name?.rawValue ?? "")
+                                       .frame(maxWidth: .infinity,alignment: .leading)
+
+                               }
+                               .foregroundColor(.white)
+                               .frame(width:proxy.size.width * 0.4,height:80)
+                               .background(Rectangle().fill(Color.secondaryColor))
+                                   .onTapGesture {
+                                       selectDatum = itm
+                                   }
                                 
                                 
                             }
+                            
+                            
+                            
                         }
-                        .frame(width:proxy.size.width * 0.4,height:proxy.size.height)
                     }
+                    .frame(width:proxy.size.width * 0.4,height:proxy.size.height)
+                    
+                    ScrollView{
+                        if selectDatum != nil {
+                            Fixtures_SocroesCell(data: selectDatum!)
+                                .padding(.top,30)
+                        }
+                        
+                    }
+                    //.padding(.top,80)
+                    .frame(width:proxy.size.width * 0.6,height:proxy.size.height)
                 }
-                
             }
             
         }
+        .background(Color.primaryColor.ignoresSafeArea())
         .onAppear {
             DispatchQueue.global().async {
                 vm.fetchData()
@@ -87,3 +151,77 @@ struct FixturesScoresView_Previews: PreviewProvider {
         }
     }
 }
+
+fileprivate struct Fixtures_SocroesCell:View{
+    var data : Datum
+    
+    var body: some View{
+        HStack(spacing:10){
+            VStack(spacing:20){
+                Text(data.updatedAt ?? "")
+                    .font(.carioRegular)
+                WebImage(url: .init(string: data.teams?[0].logo ?? ""))
+                    .resizable()
+                    .frame(width: 60,height: 60)
+                
+                Text(data.teams?[0].name ?? "")
+                    .font(.carioRegular)
+            }
+            HStack{
+                Text(data.penaltyScore?.numGoalsAway ?? "0")
+                    .font(.carioBold)
+                Text("-")
+                Text(data.penaltyScore?.numGoalsHome ?? "0")
+                    .font(.carioBold)
+            }
+            
+            VStack(spacing:20){
+                Text(data.updatedAt ?? "")
+                    .font(.carioRegular)
+                WebImage(url: .init(string: data.teams?[1].logo ?? ""))
+                    .resizable()
+                    .frame(width: 60,height: 60)
+                
+                Text(data.teams?[1].name ?? "")
+                    .font(.carioRegular)
+            }
+        }
+        .padding()
+        .foregroundColor(.white)
+        .background(Rectangle().fill(Color.secondaryColor))
+        .frame(height: 100)
+        
+    }
+    
+    
+}
+
+struct TeamCell:View{
+    var data : Datum
+    var body: some View{
+        HStack(spacing:20){
+            Text(data.updatedAt ?? "")
+                .font(.carioRegular)
+            WebImage(url: .init(string: data.teams?[0].logo ?? ""))
+                .resizable()
+                .frame(width: 30,height: 30)
+            
+            Text("12-22-2022")
+                .font(.carioRegular)
+        }
+    }
+}
+
+/*
+ ForEach(item. ?? [],id: \.id) {
+     event in
+     HStack{
+         WebImage(url: .init(string:event.logo ?? ""))
+             .resizable()
+             .frame(width:40,height:40)
+             .scaledToFill()
+             .clipped()
+         Text(event.name ?? "")
+     }.frame(height:80)
+ }
+ */

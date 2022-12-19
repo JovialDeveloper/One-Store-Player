@@ -7,6 +7,13 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+
+var recentlyWatchMovies = [MovieModel]()
+
+class DataPassOb:ObservableObject {
+    @Published var selectItem : MovieModel?
+    @Published var selectSeriesItem : SeriesModel?
+}
 struct CollectionGridView:View{
 
     @Binding var data : [MovieModel]?
@@ -15,9 +22,11 @@ struct CollectionGridView:View{
     @State private var selectItem : MovieModel?
     @State private var selectSeriesItem : SeriesModel?
     @State private var isShowWatch = false
+    @StateObject var vm = DataPassOb()
     var width : CGFloat = 120
     var height : CGFloat = 180
-    
+    @EnvironmentObject var favMovies: MoviesFavourite
+    @EnvironmentObject var favSeries: SeriesFavourite
     init(movies: Binding<[MovieModel]?>?,series: Binding<[SeriesModel]?>?,width:CGFloat = 120 , height:CGFloat = 180) {
         self._data = movies ?? Binding.constant(nil)
         self._series = series ?? Binding.constant(nil)
@@ -29,20 +38,62 @@ struct CollectionGridView:View{
             LazyVGrid(columns: columns, spacing: 0) {
                 if data != nil {
                     ForEach(data!, id: \.num) { item in
-                        Button {
-                            selectItem = item
-                           
-                        } label: {
-                            MovieCell(width: width, height: height, data: item)
-                        }
+                        MovieCell(width: width, height: height, data: item)
+                            .onTapGesture {
+                                recentlyWatchMovies.append(item)
+                                vm.selectItem = item
+                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                    isShowWatch.toggle()
+                                }
+                            }
+                            .contextMenu {
+                                Button {
+                                    favMovies.saveMovies(model: item)
+                                } label: {
+                                    Label("Add to Favourite", systemImage: "suit.heart")
+                                }
+
+                            }
+                        
+//                        Button {
+//                           recentlyWatchMovies.append(item)
+//                            vm.selectItem = item
+//                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+//                                isShowWatch.toggle()
+//                            }
+//
+////                            if selectItem != nil {
+////                                selectItem = nil
+////                                DispatchQueue.main.asyncAfter(deadline: .now()+0.8) {
+////                                    selectItem = item
+////                                }
+////
+////                            }else{
+////                                selectItem = item
+////                            }
+//
+//
+//                        } label: {
+//
+//
+//                        }
                     }
                 }else{
                     ForEach(series ?? [], id: \.num) { item in
-                        Button {
-                            selectSeriesItem = item
-                           
-                        } label: {
-                            MovieCell(width: width, height: height, data: item)
+                        MovieCell(width: width, height: height, data: item)
+                            .onTapGesture {
+                                vm.selectSeriesItem = item
+                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                    isShowWatch.toggle()
+                                }
+                            }
+                        .contextMenu {
+                            Button {
+                                favSeries.saveMovies(model: item)
+                            } label: {
+                                Label("Add to Favourite", systemImage: "suit.heart")
+                            }
+
                         }
                     }
                 }
@@ -50,21 +101,24 @@ struct CollectionGridView:View{
             }
         }
         .onChange(of: selectItem, perform: { newValue in
+            
             DispatchQueue.main.asyncAfter(wallDeadline: .now()+2) {
                 isShowWatch.toggle()
+                selectItem = nil
             }
         })
         .onChange(of: selectSeriesItem, perform: { newValue in
+            
             DispatchQueue.main.asyncAfter(wallDeadline: .now()+2) {
                 isShowWatch.toggle()
             }
         })
         .fullScreenCover(isPresented: $isShowWatch) {
-            if selectItem != nil {
-                WatchView(data: selectItem)
+            if vm.selectItem != nil {
+                WatchView(data: vm.selectItem)
             }
             else{
-                WatchView(data: selectSeriesItem)
+                WatchView(data: vm.selectSeriesItem)
             }
         }
     }

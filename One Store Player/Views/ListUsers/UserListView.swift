@@ -10,6 +10,8 @@ import SwiftUI
 struct UserListView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var users = [UserInfo]()
+    @State private var showAddNewUser = false
+    @EnvironmentObject private var state : AppState
     var body: some View {
         ZStack{
             // Top Header View
@@ -39,7 +41,7 @@ struct UserListView: View {
                         
                         //Add New User
                         Button {
-                           //
+                            showAddNewUser.toggle()
                         } label: {
                             Image("icon_plus")
                                 .resizable()
@@ -86,6 +88,18 @@ struct UserListView: View {
                                     .frame(width:40,height: 40)
                                     .scaledToFill()
                                     .foregroundColor(.red)
+                                    .onTapGesture {
+                                        
+                                       UserDefaults.standard.removeObject(forKey: AppStorageKeys.userInfo.rawValue)
+                                        if users.count == 1 {
+                                            UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
+                                            
+                                            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                                state.isLogin = false
+                                            }
+                                        }
+                                        
+                                    }
                                 
                                 Image("ic_edit_user")
                                     .resizable()
@@ -96,6 +110,11 @@ struct UserListView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .background(Rectangle().fill(Color.white))
+                        .onTapGesture {
+                            UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
+                            let currentModel = try? JSONEncoder().encode(item)
+                            UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                        }
                     }
                 }
             }
@@ -114,6 +133,9 @@ struct UserListView: View {
                     print("Unable to Decode Note (\(error))")
                 }
             }
+        }
+        .sheet(isPresented: $showAddNewUser) {
+            LoginView()
         }
     }
 }
