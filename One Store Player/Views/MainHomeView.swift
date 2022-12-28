@@ -210,12 +210,15 @@ struct MainHomeView: View {
                         SeriesView(title: "Series", type: .series)
                     }
                     else if state == .settings {
-                        #if os(tvOS)
-                        TVOS_Settings()
-                        #else
+//                        #if os(tvOS)
+//                        TVOS_Settings()
+//                        #else
+//                        SettingsView(title:"Settings")
+//
+//                        #endif
+                        
                         SettingsView(title:"Settings")
                         
-                        #endif
                     }
                     else if state == .fixtures {
                         

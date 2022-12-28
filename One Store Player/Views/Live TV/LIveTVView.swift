@@ -24,9 +24,9 @@ class LiveStreamsFavourite:ObservableObject
                     favLiveStreams.append(model)
                     
                     let encoder = JSONEncoder()
-                        // Encode Note
+                    // Encode Note
                     let modelData = try encoder.encode(favLiveStreams)
-
+                    
                     UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
                     
                 }
@@ -34,12 +34,12 @@ class LiveStreamsFavourite:ObservableObject
             } catch {
                 print("Unable to Decode Note (\(error))")
             }
-
+            
         }
         else{
             do{
                 let encoder = JSONEncoder()
-                    // Encode Note
+                // Encode Note
                 
                 let modelData = try encoder.encode([model])
                 UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
@@ -66,7 +66,7 @@ class LiveStreamsFavourite:ObservableObject
             } catch {
                 print("Unable to Decode Note (\(error))")
             }
-
+            
         }
         return []
     }
@@ -80,6 +80,8 @@ struct LIveTVView: View {
     @State private var selectId = 0
     @State private var searchText = ""
     @State private var isSearch = false
+    @State private var selection  = 0
+    @State private var tvOSOptions = ["Default","Recently Added","A-Z","Z-A"]
     @StateObject private var favLiveStreams = LiveStreamsFavourite()
     fileprivate func fetchAllStreaming() {
         // Networking.shared.streamingURL()
@@ -102,38 +104,283 @@ struct LIveTVView: View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
             if #available(tvOS 16.0, *) {
-                //https://onair7.xdevel.com/proxy/xautocloud_kpoh_1792?mp=/;1/
-                //http://1player.cc:80/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130.mp4
-//                AVPlayerControllerRepresented(player: .init(url: .init(string: "http://1player.cc:80/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130")!))
+//                AVPlayerControllerRepresented(player: .init(url: .init(string: "http://1player.cc:80/live/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130")!))
                 
-                VLCAgent(id: $selectId)
-                    .frame(maxWidth: .infinity,maxHeight: .infinity)
+                OneStorePlayer(id: $selectId)
                     .onTapGesture {
                         isRemoveOverLay.toggle()
                     }
                 
-//                AVPlayerControllerRepresented(player: .init(playerItem: .init(url: .init(string: "http://1player.cc:80/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27131")!)))
-//                    .frame(maxWidth: .infinity,maxHeight: .infinity)
-//                    .onTapGesture {
-//                        isRemoveOverLay.toggle()
-//                    }
-                    
+                if !isRemoveOverLay {
+                    ScrollView{
+                        HStack{
+                            //            Spacer(minLength: 80)
+                            HStack{
+                                //MARK:- Streams List
+                                ScrollView {
+                                    LazyVStack {
+                                        Button {
+                                            selectId = 0
+                                            self.streams.removeAll()
+                                            fetchAllStreaming()
+                                        } label: {
+                                            Text("ALL")
+                                                .frame(maxWidth:.infinity,alignment: .leading)
+                                        }
+                                        .padding()
+                                        .foregroundColor(.white)
+                                        //.background(selectId == 0 ? Color.yellow : Color.secondaryColor)
+                                        .frame(maxWidth:.infinity,alignment: .leading)
+                                        
+                                        Divider()
+                                            .overlay(Color.white)
+                                        Button {
+                                            selectId = -0
+                                            //                            self.streams.removeAll()
+                                            //                            fetchAllStreaming()
+                                            self.subStreams = favLiveStreams.getLiveStreams()
+                                        } label: {
+                                            Text("Favourites")
+                                                .frame(maxWidth:.infinity,alignment: .leading)
+                                        }
+                                        .padding()
+                                        .foregroundColor(.white)
+                                        //.background(selectId == -0 ? Color.yellow : Color.secondaryColor)
+                                        .frame(maxWidth:.infinity,alignment: .leading)
+                                        
+                                        Divider()
+                                            .overlay(Color.white)
+                                        ForEach(streams) { stream in
+                                            Button {
+                                                //selectId = stream.categoryID
+                                                fetchSubStreams(stream: stream)
+                                            } label: {
+                                                VStack{
+                                                    Text(stream.name)
+                                                        .font(.carioRegular)
+                                                        .foregroundColor(.white)
+                                                        .padding()
+                                                        .frame(maxWidth:.infinity,alignment: .leading)
+                                                        .lineLimit(0)
+                                                        .minimumScaleFactor(0.5)
+                                                    Divider().frame(height:1)
+                                                        .overlay(Color.white)
+                                                }
+                                            }
+                                            
+                                            
+                                        }
+                                    }
+                                    .background(Color.secondaryColor)
+                                }
+                                
+                                //MARK:- SubStreams List
+                                
+                                ScrollView {
+                                    LazyVStack {
+                                        ForEach(subStreams) { stream in
+                                            
+                                            if selectId == stream.streamID {
+                                                Button {
+                                                    self.selectId = stream.streamID
+                                                } label: {
+                                                    VStack{
+                                                        HStack(spacing: 10){
+                                                            Image("play")
+                                                                .resizable()
+                                                                .frame(width: 20,height: 20)
+                                                                .scaledToFit()
+                                                                .clipped()
+                                                                .foregroundColor(.green)
+                                                            Text(stream.name)
+                                                                .font(.carioRegular)
+                                                                .foregroundColor(.white)
+                                                                .padding()
+                                                                .frame(maxWidth:.infinity,alignment: .leading)
+                                                                .lineLimit(0)
+                                                                .minimumScaleFactor(0.5)
+                                                        }
+                                                        
+                                                        Divider().frame(height:1)
+                                                            .overlay(Color.white)
+                                                    }
+                                                    .padding()
+                                                }
+                                                .contextMenu {
+                                                    Button {
+                                                        favLiveStreams.saveMovies(model: stream)
+                                                    } label: {
+                                                        Label("Add to Favourite", systemImage: "suit.heart")
+                                                    }
+                                                    
+                                                }
+                                                
+                                            }
+                                            else{
+                                                Button {
+                                                    self.selectId = stream.streamID
+                                                } label: {
+                                                    VStack{
+                                                        Text(stream.name)
+                                                            .font(.carioRegular)
+                                                            .foregroundColor(.white)
+                                                            .padding()
+                                                            .frame(maxWidth:.infinity,alignment: .leading)
+                                                            .lineLimit(0)
+                                                            .minimumScaleFactor(0.5)
+                                                        Divider().frame(height:1)
+                                                            .overlay(Color.white)
+                                                    }
+                                                    
+                                                }
+                                                .contextMenu {
+                                                    Button {
+                                                        favLiveStreams.saveMovies(model: stream)
+                                                    } label: {
+                                                        Label("Add to Favourite", systemImage: "suit.heart")
+                                                    }
+                                                    
+                                                }
+                                                
+                                            }
+                                            
+                                        }
+                                    }
+                                    .background(Color.secondaryColor)
+                                }
+                            }
+                            .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+                            .background(Color.secondaryColor)
+                            
+                            videoLayer
+                            
+                            
+                            
+                            
+                            //                            VStack{
+                            //                                HStack{
+                            //                                    Button {
+                            //                                        presentationMode.wrappedValue.dismiss()
+                            //                                    } label: {
+                            //                                        Image("arrow_back")
+                            //                                            .resizable()
+                            //                                            .frame(width: 30,height: 30)
+                            //                                    }
+                            //                                    if isSearch {
+                            //                                        TextField("", text: $searchText,onCommit: {
+                            //                                         let filterStreams = streams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+                            //                                            streams = filterStreams.count > 0 ? filterStreams : streams
+                            //
+                            //
+                            //                                            let filterSubStreams = subStreams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+                            //                                               subStreams = filterSubStreams.count > 0 ? filterSubStreams : subStreams
+                            //                                        })
+                            //                                            .foregroundColor(.white)
+                            //
+                            //
+                            //                                    }
+                            //                                    Button {
+                            //                                        isSearch.toggle()
+                            //                                    } label: {
+                            //                                        Image("search")
+                            //                                            .resizable()
+                            //                                            .frame(width: 30,height: 30)
+                            //                                    }
+                            //                                    Text("A-Z")
+                            //                                        .font(.carioRegular)
+                            //                                        .ContextMenu {
+                            //                                        Button("Default", action: {})
+                            //                                        Button("Recently Added", action: {})
+                            //                                        Button("A-Z", action: {
+                            //                                          streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                            //                                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                            //                                        })
+                            //                                        Button("Z-A", action: {
+                            //                                            streams  =  streams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                            //                                              subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                            //                                        })
+                            //                                    }
+                            //
+                            //
+                            ////                                    Menu("A-Z") {
+                            ////                                        Button("Default", action: {})
+                            ////                                        Button("Recently Added", action: {})
+                            ////                                        Button("A-Z", action: {
+                            ////                                          streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                            ////                                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                            ////                                        })
+                            ////                                        Button("Z-A", action: {
+                            ////                                            streams  =  streams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                            ////                                              subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                            ////                                        })
+                            ////                                    }
+                            //
+                            //                                    Button {
+                            //                                        fetchAllStreaming()
+                            //                                    } label: {
+                            //                                        Image("ic_update")
+                            //                                            .resizable()
+                            //                                            .frame(width: 30,height: 30)
+                            //                                    }
+                            //
+                            //
+                            //                                    Spacer()
+                            //
+                            //                                }
+                            //                                .padding()
+                            //
+                            //                                Button {
+                            //                                    isRemoveOverLay.toggle()
+                            //                                } label: {
+                            //                                    Text("")
+                            //                                        .frame(maxWidth: .infinity,maxHeight: .infinity)
+                            //                                }
+                            //                                //.frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+                            //                            }
+                            //                            .foregroundColor(.white)
+                            //                            .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+                            
+                        }
+                    }
+                }
                 
             } else {
                 // Fallback on earlier versions
             }
-//                .overlay(overLayView)
-            if !isRemoveOverLay {
-                ScrollView{
-                    overLayView
-                }
-                
-                    //.frame(maxWidth: .infinity,maxHeight: .infinity)
-            }
+            
+            
+            
+            
+            
+            
+            
+            //            if #available(tvOS 16.0, *) {
+            //                //https://onair7.xdevel.com/proxy/xautocloud_kpoh_1792?mp=/;1/
+            //                //http://1player.cc:80/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130.mp4
+            //                AVPlayerControllerRepresented(player: .init(url: .init(string: "http://1player.cc:80/live/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130")!))
+            //
+            ////                VLCAgent(id: $selectId)
+            ////                    .frame(maxWidth: .infinity,maxHeight: .infinity)
+            ////                    .onTapGesture {
+            ////                        isRemoveOverLay.toggle()
+            ////                    }
+            //
+            ////                AVPlayerControllerRepresented(player: .init(playerItem: .init(url: .init(string: "http://1player.cc:80/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27131")!)))
+            ////                    .frame(maxWidth: .infinity,maxHeight: .infinity)
+            ////                    .onTapGesture {
+            ////                        isRemoveOverLay.toggle()
+            ////                    }
+            //
+            //
+            //            } else {
+            //
+            //            }
+            //                .overlay(overLayView)
+            
             
         }.onAppear {
             fetchAllStreaming()
-
+            
         }
     }
     
@@ -156,196 +403,300 @@ struct LIveTVView: View {
         }.store(in: &vm.subscriptions)
     }
     
-    var overLayView:some View{
-        HStack{
-//            Spacer(minLength: 80)
+    //    var overLayView:some View{
+    //        return HStack{
+    ////            Spacer(minLength: 80)
+    //            HStack{
+    //                //MARK:- Streams List
+    //                ScrollView {
+    //                    LazyVStack {
+    //                        Button {
+    //                            selectId = 0
+    //                            self.streams.removeAll()
+    //                            fetchAllStreaming()
+    //                        } label: {
+    //                            Text("ALL")
+    //                                .frame(maxWidth:.infinity,alignment: .leading)
+    //                        }
+    //                        .padding()
+    //                        .foregroundColor(.white)
+    //                        //.background(selectId == 0 ? Color.yellow : Color.secondaryColor)
+    //                        .frame(maxWidth:.infinity,alignment: .leading)
+    //
+    //
+    //                        Button {
+    //                            selectId = -0
+    ////                            self.streams.removeAll()
+    ////                            fetchAllStreaming()
+    //                            self.subStreams = favLiveStreams.getLiveStreams()
+    //                        } label: {
+    //                            Text("Favourites")
+    //                                .frame(maxWidth:.infinity,alignment: .leading)
+    //                        }
+    //                        .padding()
+    //                        .foregroundColor(.white)
+    //                        //.background(selectId == -0 ? Color.yellow : Color.secondaryColor)
+    //                        .frame(maxWidth:.infinity,alignment: .leading)
+    //                        ForEach(streams) { stream in
+    //                            Button {
+    //                                //selectId = stream.categoryID
+    //                                fetchSubStreams(stream: stream)
+    //                            } label: {
+    //                                HStack(spacing: 10){
+    //                                    //                                    Image("play")
+    //                                    //                                        .resizable()
+    //                                    //                                        .frame(width: 30,height: 30)
+    //                                    //                                        .scaledToFit()
+    //                                    //                                        .clipped()
+    //                                    //                                        .foregroundColor(.green)
+    //                                    Text(stream.name)
+    //                                        .font(.carioRegular)
+    //                                        .foregroundColor(.white)
+    //                                        .padding()
+    //                                        .frame(maxWidth:.infinity,alignment: .leading)
+    //                                }
+    //                            }
+    //
+    //
+    //                        }
+    //                    }
+    //                    .background(Color.secondaryColor)
+    //                }
+    //
+    //                //MARK:- SubStreams List
+    //
+    //                ScrollView {
+    //                    LazyVStack {
+    //                        ForEach(subStreams) { stream in
+    //
+    //                            if selectId == stream.streamID {
+    //                                HStack(spacing: 10){
+    //                                    Image("play")
+    //                                        .resizable()
+    //                                        .frame(width: 20,height: 20)
+    //                                        .scaledToFit()
+    //                                        .clipped()
+    //                                        .foregroundColor(.green)
+    //                                    Text(stream.name)
+    //                                        .font(.carioRegular)
+    //                                        .foregroundColor(.white)
+    //                                        .padding()
+    //                                        .frame(maxWidth:.infinity,alignment: .leading)
+    //                                }
+    //                                .padding()
+    //                                .onTapGesture {
+    //                                    self.selectId = stream.streamID
+    //                                }
+    //                                .contextMenu {
+    //                                    Button {
+    //                                        favLiveStreams.saveMovies(model: stream)
+    //                                    } label: {
+    //                                        Label("Add to Favourite", systemImage: "suit.heart")
+    //                                    }
+    //
+    //                                }
+    //                            }
+    //                            else{
+    //                                Text(stream.name)
+    //                                    .font(.carioRegular)
+    //                                    .foregroundColor(.white)
+    //                                    .padding()
+    //                                    .frame(maxWidth:.infinity,alignment: .leading)
+    //                                    .onTapGesture {
+    //                                        self.selectId = stream.streamID
+    //                                    }
+    //                                    .contextMenu {
+    //                                        Button {
+    //                                            favLiveStreams.saveMovies(model: stream)
+    //                                        } label: {
+    //                                            Label("Add to Favourite", systemImage: "suit.heart")
+    //                                        }
+    //
+    //                                    }
+    //                            }
+    //
+    //                        }
+    //                    }
+    //                    .background(Color.secondaryColor)
+    //                }
+    //            }
+    //            .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+    //            .background(Color.secondaryColor)
+    //
+    //
+    //            VStack{
+    //                HStack{
+    //                    Button {
+    //                        presentationMode.wrappedValue.dismiss()
+    //                    } label: {
+    //                        Image("arrow_back")
+    //                            .resizable()
+    //                            .frame(width: 30,height: 30)
+    //                    }
+    //                    if isSearch {
+    //                        TextField("", text: $searchText,onCommit: {
+    //                         let filterStreams = streams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+    //                            streams = filterStreams.count > 0 ? filterStreams : streams
+    //
+    //
+    //                            let filterSubStreams = subStreams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+    //                               subStreams = filterSubStreams.count > 0 ? filterSubStreams : subStreams
+    //                        })
+    //                            .foregroundColor(.white)
+    //
+    //
+    //                    }
+    //                    Button {
+    //                        isSearch.toggle()
+    //                    } label: {
+    //                        Image("search")
+    //                            .resizable()
+    //                            .frame(width: 30,height: 30)
+    //                    }
+    //                    Menu("A-Z") {
+    //                        Button("Default", action: {})
+    //                        Button("Recently Added", action: {})
+    //                        Button("A-Z", action: {
+    //                          streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+    //                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+    //                        })
+    //                        Button("Z-A", action: {
+    //                            streams  =  streams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+    //                              subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+    //                        })
+    //                    }
+    //
+    //                    Button {
+    //                        fetchAllStreaming()
+    //                    } label: {
+    //                        Image("ic_update")
+    //                            .resizable()
+    //                            .frame(width: 30,height: 30)
+    //                    }
+    //
+    //
+    //                    Spacer()
+    //
+    //                }
+    //                .padding()
+    //
+    //                Button {
+    //                    isRemoveOverLay.toggle()
+    //                } label: {
+    //                    Text("")
+    //                        .frame(maxWidth: .infinity,maxHeight: .infinity)
+    //                }
+    //                //.frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+    //            }
+    //
+    //            .foregroundColor(.white)
+    //            .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+    //
+    //        }
+    //    }
+    
+    
+    var videoLayer:some View{
+        VStack{
             HStack{
-                //MARK:- Streams List
-                ScrollView {
-                    LazyVStack {
-                        Button {
-                            selectId = 0
-                            self.streams.removeAll()
-                            fetchAllStreaming()
-                        } label: {
-                            Text("ALL")
-                                .frame(maxWidth:.infinity,alignment: .leading)
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        //.background(selectId == 0 ? Color.yellow : Color.secondaryColor)
-                        .frame(maxWidth:.infinity,alignment: .leading)
-
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image("arrow_back")
+                        .resizable()
+                        .frame(width: 30,height: 30)
+                }
+                if isSearch {
+                    TextField("", text: $searchText,onCommit: {
+                        let filterStreams = streams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+                        streams = filterStreams.count > 0 ? filterStreams : streams
                         
-                        Button {
-                            selectId = -0
-//                            self.streams.removeAll()
-//                            fetchAllStreaming()
-                            self.subStreams = favLiveStreams.getLiveStreams()
-                        } label: {
-                            Text("Favourites")
-                                .frame(maxWidth:.infinity,alignment: .leading)
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        //.background(selectId == -0 ? Color.yellow : Color.secondaryColor)
-                        .frame(maxWidth:.infinity,alignment: .leading)
-                        ForEach(streams) { stream in
-                            Button {
-                                //selectId = stream.categoryID
-                                fetchSubStreams(stream: stream)
-                            } label: {
-                                HStack(spacing: 10){
-                                    //                                    Image("play")
-                                    //                                        .resizable()
-                                    //                                        .frame(width: 30,height: 30)
-                                    //                                        .scaledToFit()
-                                    //                                        .clipped()
-                                    //                                        .foregroundColor(.green)
-                                    Text(stream.name)
-                                        .font(.carioRegular)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .frame(maxWidth:.infinity,alignment: .leading)
-                                }
-                            }
-                            
-                            
-                        }
-                    }
-                    .background(Color.secondaryColor)
+                        
+                        let filterSubStreams = subStreams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+                        subStreams = filterSubStreams.count > 0 ? filterSubStreams : subStreams
+                    })
+                    .foregroundColor(.white)
+                    
+                    
+                }
+                Button {
+                    isSearch.toggle()
+                } label: {
+                    Image("search")
+                        .resizable()
+                        .frame(width: 30,height: 30)
                 }
                 
-                //MARK:- SubStreams List
+                #if os(tvOS)
+//                Picker("A-Z", selection: $selection) {
+//                    ForEach(tvOSOptions, id: \.self) { item in
+//                        Button {
+//                            //
+//                        } label: {
+//                            Text(item)
+//                                .font(.carioRegular)
+//                        }
+//
+//                    }
+//                }
+//                .pickerStyle(.inline)
                 
-                ScrollView {
-                    LazyVStack {
-                        ForEach(subStreams) { stream in
-                            
-                            if selectId == stream.streamID {
-                                HStack(spacing: 10){
-                                    Image("play")
-                                        .resizable()
-                                        .frame(width: 20,height: 20)
-                                        .scaledToFit()
-                                        .clipped()
-                                        .foregroundColor(.green)
-                                    Text(stream.name)
-                                        .font(.carioRegular)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .frame(maxWidth:.infinity,alignment: .leading)
-                                }
-                                .padding()
-                                .onTapGesture {
-                                    self.selectId = stream.streamID
-                                }
-                                .contextMenu {
-                                    Button {
-                                        favLiveStreams.saveMovies(model: stream)
-                                    } label: {
-                                        Label("Add to Favourite", systemImage: "suit.heart")
-                                    }
-
-                                }
-                            }
-                            else{
-                                Text(stream.name)
-                                    .font(.carioRegular)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(maxWidth:.infinity,alignment: .leading)
-                                    .onTapGesture {
-                                        self.selectId = stream.streamID
-                                    }
-                                    .contextMenu {
-                                        Button {
-                                            favLiveStreams.saveMovies(model: stream)
-                                        } label: {
-                                            Label("Add to Favourite", systemImage: "suit.heart")
-                                        }
-
-                                    }
-                            }
-                                
-                        }
-                    }
-                    .background(Color.secondaryColor)
-                }
-            }
-            .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
-            .background(Color.secondaryColor)
-            
-            
-            VStack{
-                HStack{
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Image("arrow_back")
-                            .resizable()
-                            .frame(width: 30,height: 30)
-                    }
-                    if isSearch {
-                        TextField("", text: $searchText,onCommit: {
-                         let filterStreams = streams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-                            streams = filterStreams.count > 0 ? filterStreams : streams
-                            
-                            
-                            let filterSubStreams = subStreams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-                               subStreams = filterSubStreams.count > 0 ? filterSubStreams : subStreams
-                        })
-                            .foregroundColor(.white)
-                            
-                        
-                    }
-                    Button {
-                        isSearch.toggle()
-                    } label: {
-                        Image("search")
-                            .resizable()
-                            .frame(width: 30,height: 30)
-                    }
-                    Menu("A-Z") {
+                #else
+                Text("A-Z")
+                    .font(.carioRegular)
+                    .contextMenu {
                         Button("Default", action: {})
                         Button("Recently Added", action: {})
                         Button("A-Z", action: {
-                          streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                            streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
                             subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
                         })
                         Button("Z-A", action: {
                             streams  =  streams.sorted { $0.name.lowercased() > $1.name.lowercased() }
-                              subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                            subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
                         })
                     }
-                    
-                    Button {
-                        fetchAllStreaming()
-                    } label: {
-                        Image("ic_update")
-                            .resizable()
-                            .frame(width: 30,height: 30)
-                    }
-
-                    
-                    Spacer()
-
-                }
-                .padding()
+                #endif
+                
+                
+                //                                    Menu("A-Z") {
+                //                                        Button("Default", action: {})
+                //                                        Button("Recently Added", action: {})
+                //                                        Button("A-Z", action: {
+                //                                          streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                //                                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                //                                        })
+                //                                        Button("Z-A", action: {
+                //                                            streams  =  streams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                //                                              subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                //                                        })
+                //                                    }
                 
                 Button {
-                    isRemoveOverLay.toggle()
+                    fetchAllStreaming()
                 } label: {
-                    Text("")
-                        .frame(maxWidth: .infinity,maxHeight: .infinity)
+                    Image("ic_update")
+                        .resizable()
+                        .frame(width: 30,height: 30)
                 }
-                //.frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+                
+                
+                Spacer()
+                
             }
+            .padding()
             
-            .foregroundColor(.white)
-            .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
+            Button {
+                isRemoveOverLay.toggle()
+            } label: {
+                Text("")
+                    .frame(maxWidth: .infinity,maxHeight: .infinity)
+            }
+            //.frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
             
         }
+        .foregroundColor(.white)
+        .frame(width:UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height)
     }
 }
 
@@ -355,46 +706,94 @@ struct LIveTVView_Previews: PreviewProvider {
     }
 }
 
-import MobileVLCKit
 
-struct VLCAgent:UIViewRepresentable{
+import IJKMediaFramework
+struct OneStorePlayer:UIViewRepresentable{
     
+    @Binding var id : Int
+    var type = "live"
+    @State var playerView  =  UIView()
+    func makeUIView(context: Context) -> UIView {
+        //private var player : TinyVideoPlayer
+        let view = UIView()
+        guard let url = URL(string:Networking.shared.getStreamingLink(id: id, type: type))
+        else {
+            return view
+        }
+        let player = IJKFFMoviePlayerController(contentURL: url, with: IJKFFOptions.byDefault())!
+        player.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        DispatchQueue.main.async {
+            view.frame = player.view.bounds
+            view.addSubview(player.view)
+        }
+        
+        //player?.shouldAutoplay = true
+        player.prepareToPlay()
+        player.play()
+        return view
+    }
+    
+    func updateUIView(_ uiView:UIView, context: Context) {
+        guard let url = URL(string:Networking.shared.getStreamingLink(id: id, type: type))
+        else {
+            return //UIView() as! TinyVideoProjectionView
+        }
+        let player = IJKFFMoviePlayerController(contentURL: url, with: IJKFFOptions.byDefault())!
+        player.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        DispatchQueue.main.async {
+            uiView.frame = player.view.bounds
+            uiView.addSubview(player.view)
+        }
+        
+        //player?.shouldAutoplay = true
+        player.prepareToPlay()
+        player.play()
+    }
     
     typealias UIViewType = UIView
     
     
-    let player = VLCMediaPlayer()
-    
-    @Binding var id : Int
-    var type = "live"
-    func makeUIView(context: Context) -> UIView {
-        let vlcView =  UIView()
-        guard let url = URL(string:Networking.shared.getStreamingLink(id: id, type: type))
-        else {
-            return UIView()
-        }
-        
-        player.media = VLCMedia(url: url)
-        player.drawable = vlcView
-        player.media?.addOption("-VV")
-        player.media?.addOption("--networking-caching==1000")
-        //player.media?.
-        return vlcView
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-        guard let url = URL(string: Networking.shared.getStreamingLink(id: id, type: "live"))
-        else {
-            return
-        }
-        player.media = VLCMedia(url: url)
-        player.drawable = uiView
-        //player.media?.addOption("-VV")
-        player.media?.addOption("--networking-caching==1000")
-        player.play()
-    }
-    
 }
+
+//import MobileVLCKit
+//struct VLCAgent:UIViewRepresentable{
+//
+//
+//    typealias UIViewType = UIView
+//
+//
+//    let player = VLCMediaPlayer()
+//
+//    @Binding var id : Int
+//    var type = "live"
+//    func makeUIView(context: Context) -> UIView {
+//        let vlcView =  UIView()
+//        guard let url = URL(string:Networking.shared.getStreamingLink(id: id, type: type))
+//        else {
+//            return UIView()
+//        }
+//
+//        player.media = VLCMedia(url: url)
+//        player.drawable = vlcView
+//        player.media?.addOption("-VV")
+//        player.media?.addOption("--networking-caching==1000")
+//        //player.media?.
+//        return vlcView
+//    }
+//
+//    func updateUIView(_ uiView: UIView, context: Context) {
+//        guard let url = URL(string: Networking.shared.getStreamingLink(id: id, type: "live"))
+//        else {
+//            return
+//        }
+//        player.media = VLCMedia(url: url)
+//        player.drawable = uiView
+//        //player.media?.addOption("-VV")
+//        player.media?.addOption("--networking-caching==1000")
+//        player.play()
+//    }
+//
+//}
 
 fileprivate struct AVPlayerControllerRepresented : UIViewControllerRepresentable {
     var player : AVPlayer
@@ -402,7 +801,7 @@ fileprivate struct AVPlayerControllerRepresented : UIViewControllerRepresentable
     func makeUIViewController(context: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
         controller.player = player
-      
+        
         controller.showsPlaybackControls = false
         return controller
     }

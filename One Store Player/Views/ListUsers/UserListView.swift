@@ -62,58 +62,62 @@ struct UserListView: View {
                     
                     ForEach(users) {
                         item in
-                        HStack{
-                            Image("user_avatar")
-                                .resizable()
-                                .frame(width:60,height: 60)
-                                .scaledToFill()
-                                .foregroundColor(.blue)
-                            Spacer()
-                            VStack{
-                                Text(item.name)
-                                    .font(.carioBold)
-                                    .foregroundColor(.black)
-                                Text("url:\(item.port)")
-                                    .font(.carioRegular)
-                                    .foregroundColor(.black)
-                                
-                                Text("username: \(item.username)")
-                                    .font(.carioRegular)
-                                    .foregroundColor(.black)
-                            }.frame(maxWidth: .infinity,alignment: .leading)
-                            Spacer()
+                        if #available(tvOS 16.0, *) {
                             HStack{
-                                Image("icon_delete")
+                                Image("user_avatar")
                                     .resizable()
-                                    .frame(width:40,height: 40)
+                                    .frame(width:60,height: 60)
                                     .scaledToFill()
-                                    .foregroundColor(.red)
-                                    .onTapGesture {
-                                        
-                                       UserDefaults.standard.removeObject(forKey: AppStorageKeys.userInfo.rawValue)
-                                        if users.count == 1 {
-                                            UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
+                                    .foregroundColor(.blue)
+                                Spacer()
+                                VStack{
+                                    Text(item.name)
+                                        .font(.carioBold)
+                                        .foregroundColor(.black)
+                                    Text("url:\(item.port)")
+                                        .font(.carioRegular)
+                                        .foregroundColor(.black)
+                                    
+                                    Text("username: \(item.username)")
+                                        .font(.carioRegular)
+                                        .foregroundColor(.black)
+                                }.frame(maxWidth: .infinity,alignment: .leading)
+                                Spacer()
+                                HStack{
+                                    Image("icon_delete")
+                                        .resizable()
+                                        .frame(width:40,height: 40)
+                                        .scaledToFill()
+                                        .foregroundColor(.red)
+                                        .onTapGesture {
                                             
-                                            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-                                                state.isLogin = false
+                                            UserDefaults.standard.removeObject(forKey: AppStorageKeys.userInfo.rawValue)
+                                            if users.count == 1 {
+                                                UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
+                                                
+                                                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                                    state.isLogin = false
+                                                }
                                             }
+                                            
                                         }
-                                        
-                                    }
-                                
-                                Image("ic_edit_user")
-                                    .resizable()
-                                    .frame(width:40,height: 40)
-                                    .scaledToFill()
-                                    .foregroundColor(.black)
+                                    
+                                    Image("ic_edit_user")
+                                        .resizable()
+                                        .frame(width:40,height: 40)
+                                        .scaledToFill()
+                                        .foregroundColor(.black)
+                                }
                             }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .background(Rectangle().fill(Color.white))
-                        .onTapGesture {
-                            UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
-                            let currentModel = try? JSONEncoder().encode(item)
-                            UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                            .frame(maxWidth: .infinity)
+                            .background(Rectangle().fill(Color.white))
+                            .onTapGesture {
+                                UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
+                                let currentModel = try? JSONEncoder().encode(item)
+                                UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                            }
+                        } else {
+                            // Fallback on earlier versions
                         }
                     }
                 }

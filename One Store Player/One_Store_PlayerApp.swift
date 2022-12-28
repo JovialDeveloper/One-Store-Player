@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import IQKeyboardManagerSwift
 @main
 struct One_Store_PlayerApp: App {
     @AppStorage(AppStorageKeys.language.rawValue) var lang = ""

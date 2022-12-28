@@ -43,9 +43,11 @@ final class Networking{
         if let info = getUserDetails() {
             if info.port.hasSuffix("/") {
                 let uri = "\(info.port)\(type)/\(info.username)/\(info.password)/\(id).\(format)"
+//                let uri = "\(info.port)\(type)/\(info.username)/\(info.password)/\(id)"
                 return uri
             }else{
                 let uri = "\(info.port)/\(type)/\(info.username)/\(info.password)/\(id).\(format)"
+//                let uri = "\(info.port)/\(type)/\(info.username)/\(info.password)/\(id)"
                 return uri
             }
             

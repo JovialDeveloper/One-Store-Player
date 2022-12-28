@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import AlertToast
+import ToastUI
 
 struct CatchUpView: View {
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
@@ -80,8 +80,9 @@ extension CatchUpView{
             .padding()
             .frame(maxWidth:.infinity,maxHeight: 60)
             .background(RoundedRectangle(cornerRadius: 2).fill(Color.secondaryColor))
-            .toast(isPresenting: $isToastToggle) {
-                AlertToast(type: .regular, title: "No Program Available")
+            .toast(isPresented: $isToastToggle) {
+                ToastView("No Program Available")
+                    .toastViewStyle(.failure)
             }
         }
     }

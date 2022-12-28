@@ -200,7 +200,12 @@ struct WatchView<T:Codable>: View {
             }
         })
         .sheet(isPresented: $isWatch) {
-            VLCAgent(id: $id,type: "movie")
+            //VLCAgent(id: $id,type: "movie")
+            ZStack{
+                OneStorePlayer(id: $id,type: "movie")
+                    .background(Color.primaryColor)
+            }.overlay(NavigationHeaderView(title: "Movie"),alignment: .top)
+            
             
         }
     }

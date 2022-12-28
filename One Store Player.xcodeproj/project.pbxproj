@@ -3,25 +3,24 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A5ED811C11F0CF67CE93A61 /* Pods_One_Store_Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB8D477EAEAF42B3F4EE2098 /* Pods_One_Store_Player.framework */; };
 		D003EB0E294CC06100D625B8 /* EPGLiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D003EB0D294CC06100D625B8 /* EPGLiveView.swift */; };
 		D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */ = {isa = PBXBuildFile; productRef = D003EB10294CC8B100D625B8 /* XMLMapper */; };
 		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
 		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
-		D023A035294202120026D604 /* MobileVLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D023A034294202110026D604 /* MobileVLCKit.xcframework */; };
-		D023A036294202120026D604 /* MobileVLCKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D023A034294202110026D604 /* MobileVLCKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D041377729362A2600EC4723 /* MovieCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377629362A2600EC4723 /* MovieCategoriesModel.swift */; };
 		D041377929362A9300EC4723 /* ModernLayoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */; };
 		D041377B29362DBA00EC4723 /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377A29362DBA00EC4723 /* MovieModel.swift */; };
+		D0424C932951F78200CC316A /* ToastUI in Frameworks */ = {isa = PBXBuildFile; productRef = D0424C922951F78200CC316A /* ToastUI */; };
 		D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339DF2930E54E00213D85 /* LIveTVView.swift */; };
 		D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339E1293139D700213D85 /* TVOS Settings.swift */; };
 		D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048C32029292AF4001B4DD0 /* WatchView.swift */; };
 		D064B7582950789200D7B0B6 /* CatchUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7572950789200D7B0B6 /* CatchUpView.swift */; };
 		D064B75A2950A31C00D7B0B6 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7592950A31C00D7B0B6 /* StartView.swift */; };
-		D078CC712949E244007CB65A /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D078CC702949E244007CB65A /* IQKeyboardManagerSwift */; };
 		D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */; };
 		D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82A291BFD4100EFEFFA /* CollectionView.swift */; };
 		D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */; };
@@ -39,7 +38,8 @@
 		D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFA291670F900465873 /* One_Store_PlayerApp.swift */; };
 		D084FFFD291670F900465873 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFC291670F900465873 /* ContentView.swift */; };
 		D084FFFF291670FB00465873 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D084FFFE291670FB00465873 /* Assets.xcassets */; };
-		D08632182948A0D70088142B /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = D08632172948A0D70088142B /* AlertToast */; };
+		D08583262959C150001A1B87 /* IJKController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08583242959C150001A1B87 /* IJKController.swift */; };
+		D08583272959C150001A1B87 /* IJKController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D08583252959C150001A1B87 /* IJKController.xib */; };
 		D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D086321A2948A1200088142B /* SDWebImageSwiftUI */; };
 		D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AA08D0293775B7009E9D55 /* SeriesView.swift */; };
 		D0AFD464293667910064F487 /* SeriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AFD463293667910064F487 /* SeriesModel.swift */; };
@@ -65,7 +65,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D023A036294202120026D604 /* MobileVLCKit.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -73,16 +72,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		518278E8058BA536750BD0A2 /* Pods-One Store Player.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-One Store Player.release.xcconfig"; path = "Target Support Files/Pods-One Store Player/Pods-One Store Player.release.xcconfig"; sourceTree = "<group>"; };
+		5C44411DDFA630FC91D74376 /* Pods-One Store Player.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-One Store Player.debug.xcconfig"; path = "Target Support Files/Pods-One Store Player/Pods-One Store Player.debug.xcconfig"; sourceTree = "<group>"; };
 		D003EB0D294CC06100D625B8 /* EPGLiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPGLiveView.swift; sourceTree = "<group>"; };
 		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
-		D023A034294202110026D604 /* MobileVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MobileVLCKit.xcframework; path = Carthage/Build/MobileVLCKit.xcframework; sourceTree = "<group>"; };
 		D041377629362A2600EC4723 /* MovieCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCategoriesModel.swift; sourceTree = "<group>"; };
 		D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutViewModel.swift; sourceTree = "<group>"; };
 		D041377A29362DBA00EC4723 /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
 		D04339DF2930E54E00213D85 /* LIveTVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIveTVView.swift; sourceTree = "<group>"; };
 		D04339E1293139D700213D85 /* TVOS Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TVOS Settings.swift"; sourceTree = "<group>"; };
 		D048C32029292AF4001B4DD0 /* WatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchView.swift; sourceTree = "<group>"; };
+		D05E9008295860C50073B23D /* MobileVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MobileVLCKit.xcframework; path = Carthage/Build/MobileVLCKit.xcframework; sourceTree = "<group>"; };
+		D05E900A295862150073B23D /* TVVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TVVLCKit.xcframework; path = Carthage/Build/TVVLCKit.xcframework; sourceTree = "<group>"; };
 		D064B7572950789200D7B0B6 /* CatchUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchUpView.swift; sourceTree = "<group>"; };
 		D064B7592950A31C00D7B0B6 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,8 @@
 		D084FFFA291670F900465873 /* One_Store_PlayerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = One_Store_PlayerApp.swift; sourceTree = "<group>"; };
 		D084FFFC291670F900465873 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D084FFFE291670FB00465873 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D08583242959C150001A1B87 /* IJKController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IJKController.swift; sourceTree = "<group>"; };
+		D08583252959C150001A1B87 /* IJKController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IJKController.xib; sourceTree = "<group>"; };
 		D0AA08D0293775B7009E9D55 /* SeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesView.swift; sourceTree = "<group>"; };
 		D0AFD463293667910064F487 /* SeriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesModel.swift; sourceTree = "<group>"; };
 		D0C6189C291917D000A9529A /* MoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesView.swift; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 		D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamingViewModel.swift; sourceTree = "<group>"; };
 		D0FB64EF2933D7E1009C55C4 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		D0FB64F12933DBDB009C55C4 /* LiveStreamingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamingsModel.swift; sourceTree = "<group>"; };
+		FB8D477EAEAF42B3F4EE2098 /* Pods_One_Store_Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_One_Store_Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,17 +133,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0424C932951F78200CC316A /* ToastUI in Frameworks */,
 				D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */,
 				D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */,
-				D078CC712949E244007CB65A /* IQKeyboardManagerSwift in Frameworks */,
-				D023A035294202120026D604 /* MobileVLCKit.xcframework in Frameworks */,
-				D08632182948A0D70088142B /* AlertToast in Frameworks */,
+				8A5ED811C11F0CF67CE93A61 /* Pods_One_Store_Player.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		56BC74BBCF857D3197855C14 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5C44411DDFA630FC91D74376 /* Pods-One Store Player.debug.xcconfig */,
+				518278E8058BA536750BD0A2 /* Pods-One Store Player.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		D003EB0C294CC01A00D625B8 /* EPGLive */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,7 +179,9 @@
 		D023A033294202110026D604 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D023A034294202110026D604 /* MobileVLCKit.xcframework */,
+				D05E900A295862150073B23D /* TVVLCKit.xcframework */,
+				D05E9008295860C50073B23D /* MobileVLCKit.xcframework */,
+				FB8D477EAEAF42B3F4EE2098 /* Pods_One_Store_Player.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -297,6 +312,7 @@
 				D084FFF9291670F900465873 /* One Store Player */,
 				D084FFF8291670F900465873 /* Products */,
 				D023A033294202110026D604 /* Frameworks */,
+				56BC74BBCF857D3197855C14 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -311,6 +327,7 @@
 		D084FFF9291670F900465873 /* One Store Player */ = {
 			isa = PBXGroup;
 			children = (
+				D08583232959C130001A1B87 /* UIKitControllers */,
 				D0F879F629324F2D00E5DD06 /* tvOS */,
 				D08400182916874500465873 /* One-Store-Player-Info.plist */,
 				D0840015291685A900465873 /* Utils */,
@@ -325,6 +342,15 @@
 				D0840001291670FB00465873 /* Preview Content */,
 			);
 			path = "One Store Player";
+			sourceTree = "<group>";
+		};
+		D08583232959C130001A1B87 /* UIKitControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D08583242959C150001A1B87 /* IJKController.swift */,
+				D08583252959C150001A1B87 /* IJKController.xib */,
+			);
+			path = UIKitControllers;
 			sourceTree = "<group>";
 		};
 		D0C6189B291917B700A9529A /* MoviesView */ = {
@@ -359,6 +385,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D0840006291670FB00465873 /* Build configuration list for PBXNativeTarget "One Store Player" */;
 			buildPhases = (
+				B46611BBF83B7ADD97E6A37D /* [CP] Check Pods Manifest.lock */,
 				D084FFF3291670F900465873 /* Sources */,
 				D084FFF4291670F900465873 /* Frameworks */,
 				D084FFF5291670F900465873 /* Resources */,
@@ -370,10 +397,9 @@
 			);
 			name = "One Store Player";
 			packageProductDependencies = (
-				D08632172948A0D70088142B /* AlertToast */,
 				D086321A2948A1200088142B /* SDWebImageSwiftUI */,
-				D078CC702949E244007CB65A /* IQKeyboardManagerSwift */,
 				D003EB10294CC8B100D625B8 /* XMLMapper */,
+				D0424C922951F78200CC316A /* ToastUI */,
 			);
 			productName = "One Store Player";
 			productReference = D084FFF7291670F900465873 /* One Store Player.app */;
@@ -395,7 +421,7 @@
 				};
 			};
 			buildConfigurationList = D084FFF2291670F900465873 /* Build configuration list for PBXProject "One Store Player" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -405,10 +431,9 @@
 			);
 			mainGroup = D084FFEE291670F900465873;
 			packageReferences = (
-				D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */,
 				D08632192948A1200088142B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
-				D078CC6F2949E244007CB65A /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				D003EB0F294CC8B100D625B8 /* XCRemoteSwiftPackageReference "XMLMapper" */,
+				D0424C912951F78200CC316A /* XCRemoteSwiftPackageReference "ToastUI" */,
 			);
 			productRefGroup = D084FFF8291670F900465873 /* Products */;
 			projectDirPath = "";
@@ -430,10 +455,36 @@
 				D07CF83B291C260800EFEFFA /* cairo_regular.ttf in Resources */,
 				D0840003291670FB00465873 /* Preview Assets.xcassets in Resources */,
 				D084FFFF291670FB00465873 /* Assets.xcassets in Resources */,
+				D08583272959C150001A1B87 /* IJKController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B46611BBF83B7ADD97E6A37D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-One Store Player-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D084FFF3291670F900465873 /* Sources */ = {
@@ -448,6 +499,7 @@
 				D0FB64EE2933D73C009C55C4 /* LiveStreamingViewModel.swift in Sources */,
 				D084FFFD291670F900465873 /* ContentView.swift in Sources */,
 				D00926012922B29D0093648A /* UserListView.swift in Sources */,
+				D08583262959C150001A1B87 /* IJKController.swift in Sources */,
 				D084001D29168B8D00465873 /* TextFieldView.swift in Sources */,
 				D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */,
 				D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */,
@@ -545,12 +597,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Debug;
 		};
@@ -598,16 +652,19 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Release;
 		};
 		D0840007291670FB00465873 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5C44411DDFA630FC91D74376 /* Pods-One Store Player.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -630,15 +687,14 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iOSAPP.One-Store-Player";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -650,6 +706,7 @@
 		};
 		D0840008291670FB00465873 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 518278E8058BA536750BD0A2 /* Pods-One Store Player.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -672,15 +729,14 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iOSAPP.One-Store-Player";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -722,20 +778,12 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		D078CC6F2949E244007CB65A /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+		D0424C912951F78200CC316A /* XCRemoteSwiftPackageReference "ToastUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			repositoryURL = "https://github.com/quanshousio/ToastUI.git";
 			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/elai950/AlertToast.git";
-			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
 			};
 		};
 		D08632192948A1200088142B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
@@ -754,15 +802,10 @@
 			package = D003EB0F294CC8B100D625B8 /* XCRemoteSwiftPackageReference "XMLMapper" */;
 			productName = XMLMapper;
 		};
-		D078CC702949E244007CB65A /* IQKeyboardManagerSwift */ = {
+		D0424C922951F78200CC316A /* ToastUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D078CC6F2949E244007CB65A /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
-		};
-		D08632172948A0D70088142B /* AlertToast */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D08632162948A0D70088142B /* XCRemoteSwiftPackageReference "AlertToast" */;
-			productName = AlertToast;
+			package = D0424C912951F78200CC316A /* XCRemoteSwiftPackageReference "ToastUI" */;
+			productName = ToastUI;
 		};
 		D086321A2948A1200088142B /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

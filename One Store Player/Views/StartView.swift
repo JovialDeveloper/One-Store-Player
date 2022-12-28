@@ -12,10 +12,15 @@ class AppState: ObservableObject {
 //    @Published var isAuthenticated = false
     
     @Published var isLogin = false
-    
+    @Published var isPaternalControlOn = false
     func checkSession(){
         if let _ = UserDefaults.standard.value(forKey: AppStorageKeys.currentUser.rawValue) as? Data {
-            isLogin = true
+            let econd = UserDefaults.standard.value(forKey: AppStorageKeys.paternalControl.rawValue) as? Data
+            if econd != nil {
+                isPaternalControlOn = true
+            }else {
+                isLogin = true
+            }
         }else {
             isLogin = false
         }
@@ -24,6 +29,7 @@ class AppState: ObservableObject {
 
 struct StartView: View {
     @ObservedObject var state = AppState()
+    var alertTitle = "Please enter your username and password."
     init() {
         state.checkSession()
     }
@@ -31,7 +37,17 @@ struct StartView: View {
         if state.isLogin {
             MainHomeView()
                 .environmentObject(state)
-        }else {
+        } else if state.isPaternalControlOn {
+            
+            AlertPCView(show: $state.isPaternalControlOn, title: "Paternal Control", message: alertTitle,isCheckPasswordScreen: true) { complete in
+                if complete {
+                    state.isLogin = true
+                }else {
+                    state.isLogin = false
+                }
+            }
+        }
+        else {
             LoginView()
                 .environmentObject(state)
         }

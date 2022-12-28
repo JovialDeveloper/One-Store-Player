@@ -72,3 +72,8 @@ class JSONNull: Codable, Hashable {
         try container.encodeNil()
     }
 }
+
+struct UserPaternalControl:Codable{
+    var userName:String
+    var password:String
+}

@@ -38,22 +38,26 @@ struct CollectionGridView:View{
             LazyVGrid(columns: columns, spacing: 0) {
                 if data != nil {
                     ForEach(data!, id: \.num) { item in
-                        MovieCell(width: width, height: height, data: item)
-                            .onTapGesture {
-                                recentlyWatchMovies.append(item)
-                                vm.selectItem = item
-                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                    isShowWatch.toggle()
+                        if #available(tvOS 16.0, *) {
+                            MovieCell(width: width, height: height, data: item)
+                                .onTapGesture {
+                                    recentlyWatchMovies.append(item)
+                                    vm.selectItem = item
+                                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                        isShowWatch.toggle()
+                                    }
                                 }
-                            }
-                            .contextMenu {
-                                Button {
-                                    favMovies.saveMovies(model: item)
-                                } label: {
-                                    Label("Add to Favourite", systemImage: "suit.heart")
+                                .contextMenu {
+                                    Button {
+                                        favMovies.saveMovies(model: item)
+                                    } label: {
+                                        Label("Add to Favourite", systemImage: "suit.heart")
+                                    }
+                                    
                                 }
-
-                            }
+                        } else {
+                            // Fallback on earlier versions
+                        }
                         
 //                        Button {
 //                           recentlyWatchMovies.append(item)
@@ -80,20 +84,24 @@ struct CollectionGridView:View{
                     }
                 }else{
                     ForEach(series ?? [], id: \.num) { item in
-                        MovieCell(width: width, height: height, data: item)
-                            .onTapGesture {
-                                vm.selectSeriesItem = item
-                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                    isShowWatch.toggle()
+                        if #available(tvOS 16.0, *) {
+                            MovieCell(width: width, height: height, data: item)
+                                .onTapGesture {
+                                    vm.selectSeriesItem = item
+                                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                        isShowWatch.toggle()
+                                    }
                                 }
-                            }
-                        .contextMenu {
-                            Button {
-                                favSeries.saveMovies(model: item)
-                            } label: {
-                                Label("Add to Favourite", systemImage: "suit.heart")
-                            }
-
+                                .contextMenu {
+                                    Button {
+                                        favSeries.saveMovies(model: item)
+                                    } label: {
+                                        Label("Add to Favourite", systemImage: "suit.heart")
+                                    }
+                                    
+                                }
+                        } else {
+                            // Fallback on earlier versions
                         }
                     }
                 }

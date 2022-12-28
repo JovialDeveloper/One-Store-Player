@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import AlertToast
+import ToastUI
 struct LoginView: View {
     @State private var isSecure = false
     @StateObject fileprivate var loginViewModel = LoginViewModel()
@@ -32,19 +32,25 @@ struct LoginView: View {
                 VStack{
                     Text("Login Details")
                         .font(.carioBold)
+                        .padding()
                     
                     
                     TextFieldView(text: $loginViewModel.name,placeHolder: "Any Name")
                     TextFieldView(text: $loginViewModel.userName,placeHolder: "User Name")
-                    HStack{
-                        ButtonView(action: {
-                            isSecure.toggle()
-                        },image: isSecure ? "eye-off" : "eye")
-                        .frame(width:46,height: 46)
-                        
-                        
-                        TextFieldView(text: $loginViewModel.password,placeHolder: "Password",isSecure: $isSecure)
-                    }
+                       #if os(tvOS)
+                       TextFieldView(text: $loginViewModel.password,placeHolder: "Password",isSecure: $isSecure)
+                       #else
+                        HStack{
+                            ButtonView(action: {
+                                isSecure.toggle()
+                            },image: isSecure ? "eye-off" : "eye")
+                            .frame(width:46,height: 46)
+                            
+                            
+                            TextFieldView(text: $loginViewModel.password,placeHolder: "Password",isSecure: $isSecure)
+                        }
+                       #endif
+                    
                     
                     TextFieldView(text: $loginViewModel.port,placeHolder: "url")
                     
@@ -93,9 +99,10 @@ struct LoginView: View {
                 //Spacer()
             }
             .foregroundColor(.black)
-            .toast(isPresenting: $loginViewModel.isError.0, alert: {
-                AlertToast(type: .regular, title:loginViewModel.isError.1)
-            })
+            .toast(isPresented: $loginViewModel.isError.0) {
+                ToastView(loginViewModel.isError.1)
+                    .toastViewStyle(.failure)
+            }
             
             
 //            if loginViewModel.isLogin {

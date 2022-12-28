@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import AlertToast
+import ToastUI
 class MoviesFavourite:ObservableObject
 {
     func saveMovies(model:MovieModel){
@@ -119,39 +119,41 @@ struct ModernLayoutView:View{
                             .overlay(Color.white)
                         LazyVStack{
                             ForEach(categories,id: \.categoryID) { category in
-                                VStack{
-                                    Text(category.categoryName)
-                                        .font(.carioRegular)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .frame(maxWidth:.infinity,alignment: .leading)
-                                    
-                                    Divider().frame(height:1)
-                                        .overlay(Color.white)
-                                    
-                                }.onTapGesture {
+                                Button {
                                     vm.fetchAllMoviesById(id: category.categoryID, type: subject.1)
-                                            .sink { subErrr in
+                                        .sink { subErrr in
+                                            vm.isLoading.toggle()
+                                            switch subErrr {
+                                            case .failure(let err):
+                                                debugPrint(err)
+                                            case .finished:
                                                 vm.isLoading.toggle()
-                                                switch subErrr {
-                                                case .failure(let err):
-                                                    debugPrint(err)
-                                                case .finished:
-                                                    vm.isLoading.toggle()
-                                                    break
-                                                }
-                                               debugPrint(subErrr)
-                                            } receiveValue: { movies in
-                                                debugPrint("M",movies)
-                                                vm.isLoading.toggle()
-                                                self.movies?.removeAll()
-                                                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-                                                    self.movies = movies
-                                                }
-                                                
-                                            }.store(in: &vm.subscriptions)
-
+                                                break
+                                            }
+                                            debugPrint(subErrr)
+                                        } receiveValue: { movies in
+                                            debugPrint("M",movies)
+                                            vm.isLoading.toggle()
+                                            self.movies?.removeAll()
+                                            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                                self.movies = movies
+                                            }
+                                            
+                                        }.store(in: &vm.subscriptions)
+                                } label: {
+                                    VStack{
+                                        Text(category.categoryName)
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(maxWidth:.infinity,alignment: .leading)
+                                        
+                                        Divider().frame(height:1)
+                                            .overlay(Color.white)
+                                        
                                     }
+                                }
+
                                     
                                     
                             }
@@ -159,7 +161,7 @@ struct ModernLayoutView:View{
                         }
                     }
                     .padding(.top,30)
-                    .frame(width:proxy.size.width * 0.3,height: UIScreen.main.bounds.height)
+                    .frame(width:proxy.size.width * 0.3,height: UIScreen.main.bounds.height,alignment: .leading)
                     Spacer()
                     // Moviews List
                     VStack{
@@ -199,8 +201,9 @@ struct ModernLayoutView:View{
                     
                 }
                 .frame(maxWidth:.infinity,maxHeight: .infinity)
-                .toast(isPresenting: $vm.isLoading) {
-                    AlertToast(displayMode: .alert, type: .loading)
+                .toast(isPresented: $vm.isLoading) {
+                    ToastView("Loading...")
+                            .toastViewStyle(.indeterminate)
                 }
             }
             

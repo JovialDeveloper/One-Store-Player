@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ToastUI
 enum SettingsKeys:String,CaseIterable{
     case layout
     case EPGTime
@@ -31,6 +32,8 @@ struct SettingsView: View {
     @State private var isAutomationOn = false
     @State private var isStreamOn = false
     @State private var selectButtonType : SettingsKeys?
+    
+    @State private var alertTitle = "Please enter your username and password."
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -82,11 +85,33 @@ struct SettingsView: View {
                                 if item == .streamFormat{
                                     isStreamOn.toggle()
                                 }
+                                if item == .parentalcontrol {
+                                    isParentalControlButtonOn.toggle()
+                                }
                                 
                             },image: item.rawValue)
-                            .frame(width:200,height: 180)
+                            //.frame(minWidth:200,minHeight: 180)
+                            .frame(maxWidth:200,maxHeight: 180)
                             .cornerRadius(10)
+//                            .sheet(isPresented: $isParentalControlButtonOn) {
+//                                AlertControl(show: $isParentalControlButtonOn, title: alertTitle, message: "")
+//                            }
+
                             
+//                            .alert("Paternal Control", isPresented: $isParentalControlButtonOn) {
+//                                        TextField("Username:", text: $paternalControlUserName)
+//                                        SecureField("Password", text: $paternalControlPassword)
+//
+//
+//                                        Button("OK", action: savePasswordInUserDefaults)
+//                                        Button("Cancel", role: .cancel) {
+//                                            isParentalControlButtonOn.toggle()
+//                                        }
+//
+//                                    } message: {
+//                                        Text("Please enter your username and password.")
+//                                    }
+                                    
                             #endif
                             
                         }
@@ -115,11 +140,106 @@ struct SettingsView: View {
             if isStreamOn {
                 StreamFormat(isClose: $isStreamOn)
             }
+            if isParentalControlButtonOn {
+                AlertPCView(show: $isParentalControlButtonOn, title: "Paternal Control", message: alertTitle)
+            }
             
             
         }
     }
     
+
+    
+}
+
+struct AlertPCView:View{
+    @Binding var show:Bool
+    
+    var title : String
+    var message:String
+    var isCheckPasswordScreen = false
+    var checkDidAuthicate : ((Bool)->Void)? = nil
+    
+    
+    @State private var paternalControlUserName = ""
+    @State private var paternalControlPassword = ""
+    var body: some View{
+        VStack(spacing:10){
+            Text(title)
+            
+                .font(.carioBold)
+            Text(message)
+                .font(.carioRegular)
+            
+            TextField("Username:", text: $paternalControlUserName)
+            Divider()
+            TextField("Password", text: $paternalControlPassword)
+            Divider()
+            
+            HStack(spacing:40){
+                
+                Button(action: {}) {
+                    Text("Cancel")
+                        .font(.carioRegular)
+                        .foregroundColor(.red)
+                }
+                
+                Button(action: {
+                    if isCheckPasswordScreen {
+                        // Check Password
+                        getPasswordFromDefaults()
+                    }else {
+                        savePasswordInUserDefaults()
+                    }
+                }) {
+                    Text("Ok")
+                        .font(.carioRegular)
+                }
+            }
+            
+        }
+        .padding()
+        .frame(width: UIScreen.main.bounds.width/2,height: UIScreen.main.bounds.height - 60)
+        .background(Color.white)
+    }
+    
+    func getPasswordFromDefaults(){
+        
+        if let decodeData = UserDefaults.standard.value(forKey: AppStorageKeys.paternalControl.rawValue) as? Data {
+            do {
+                let decodeModel = try JSONDecoder().decode(UserPaternalControl.self, from: decodeData)
+                if decodeModel.userName == paternalControlUserName && decodeModel.password == paternalControlPassword {
+                    // Correct Details
+                    checkDidAuthicate?(true)
+                }else {
+                    // Wrong Details
+                    checkDidAuthicate?(false)
+                }
+            }
+            catch {
+                debugPrint(error)
+            }
+           
+        }
+    }
+    
+    func savePasswordInUserDefaults(){
+        if !paternalControlUserName.isEmpty && !paternalControlPassword.isEmpty
+        {
+            let paternalModel = UserPaternalControl(userName: paternalControlUserName, password: paternalControlPassword)
+            let encoder = JSONEncoder()
+            do {
+                let encodeData = try encoder.encode(paternalModel)
+                UserDefaults.standard.set(encodeData, forKey: AppStorageKeys.paternalControl.rawValue)
+                show.toggle()
+            }
+            catch {
+                debugPrint("Encoder Error",error)
+            }
+        }
+        
+        
+    }
 }
 
 fileprivate struct LayoutDialoguView: View{
@@ -661,5 +781,47 @@ struct SettingsView_Previews: PreviewProvider {
         } else {
             // Fallback on earlier versions
         }
+    }
+}
+
+
+struct AlertControl: UIViewControllerRepresentable {
+    
+    typealias UIViewControllerType = UIAlertController
+    
+//    @Binding var textString: String
+    @Binding var show: Bool
+    var ok: (()->Void)?
+    
+    var title: String
+    var message: String
+    
+    func makeUIViewController(context: UIViewControllerRepresentableContext<AlertControl>) -> UIAlertController {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Username:"
+        }
+        alert.addTextField { textField in
+            textField.placeholder = "Password"
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (action) in
+            self.show = false
+        }
+        
+        let submitAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+            ok?()
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(submitAction)
+        
+        return alert
+    }
+    
+    func updateUIViewController(_ uiViewController: UIAlertController, context: UIViewControllerRepresentableContext<AlertControl>) {
+        
     }
 }

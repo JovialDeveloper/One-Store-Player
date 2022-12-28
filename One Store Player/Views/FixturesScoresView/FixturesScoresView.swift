@@ -73,23 +73,27 @@ struct FixturesScoresView: View {
                             
                            ForEach(datum ?? []) {
                                 itm in
-                               HStack{
-                                   WebImage(url: .init(string:itm.league?.logo ?? ""))
-                                        .resizable()
-                                        .frame(width:40,height:40)
-                                        .scaledToFill()
-                                        .clipped()
-                                   Spacer()
-                                   Text(itm.league?.name?.rawValue ?? "")
-                                       .frame(maxWidth: .infinity,alignment: .leading)
-
-                               }
-                               .foregroundColor(.white)
-                               .frame(width:proxy.size.width * 0.4,height:80)
-                               .background(Rectangle().fill(Color.secondaryColor))
+                               if #available(tvOS 16.0, *) {
+                                   HStack{
+                                       WebImage(url: .init(string:itm.league?.logo ?? ""))
+                                           .resizable()
+                                           .frame(width:40,height:40)
+                                           .scaledToFill()
+                                           .clipped()
+                                       Spacer()
+                                       Text(itm.league?.name?.rawValue ?? "")
+                                           .frame(maxWidth: .infinity,alignment: .leading)
+                                       
+                                   }
+                                   .foregroundColor(.white)
+                                   .frame(width:proxy.size.width * 0.4,height:80)
+                                   .background(Rectangle().fill(Color.secondaryColor))
                                    .onTapGesture {
                                        selectDatum = itm
                                    }
+                               } else {
+                                   // Fallback on earlier versions
+                               }
                                 
                                 
                             }
@@ -144,8 +148,12 @@ struct FixturesScoresView: View {
 struct FixturesScoresView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15.0, *) {
-            FixturesScoresView()
-                .previewInterfaceOrientation(.landscapeLeft)
+            if #available(tvOS 15.0, *) {
+                FixturesScoresView()
+                    .previewInterfaceOrientation(.landscapeLeft)
+            } else {
+                // Fallback on earlier versions
+            }
         } else {
             // Fallback on earlier versions
         }

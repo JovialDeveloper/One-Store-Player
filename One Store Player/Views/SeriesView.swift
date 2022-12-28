@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-import AlertToast
+import ToastUI
 import SDWebImageSwiftUI
 
 
@@ -148,42 +148,44 @@ extension SeriesView{
                             
                             LazyVStack{
                                 ForEach(categories,id: \.categoryID) { category in
-                                    VStack{
-                                        Text(category.categoryName)
-                                            .font(.carioRegular)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .frame(maxWidth:.infinity,alignment: .leading)
+                                    Button {
                                         
-                                        Divider().frame(height:1)
-                                            .overlay(Color.white)
+                                            vm.fetchAllSeriesById(id: category.categoryID, type: subject.1)
+                                                .sink { subError in
+                                                    
+                                                    switch subError {
+                                                    case .failure(let error):
+                                                        vm.isLoading = false
+                                                        debugPrint(error)
+                                                    case .finished:
+                                                        vm.isLoading = false
+                                                        break
+                                                    }
+                                                } receiveValue: { series in
+                                                    vm.isLoading = false
+                                                    self.series = series
+                                                }.store(in: &vm.subscriptions)
+                                            
                                         
-                                    }.onTapGesture {
-                                        vm.fetchAllSeriesById(id: category.categoryID, type: subject.1)
-                                            .sink { subError in
-                                                
-                                                switch subError {
-                                                case .failure(let error):
-                                                    vm.isLoading = false
-                                                    debugPrint(error)
-                                                case .finished:
-                                                    vm.isLoading = false
-                                                    break
-                                                }
-                                            } receiveValue: { series in
-                                                vm.isLoading = false
-                                                self.series = series
-                                            }.store(in: &vm.subscriptions)
-
+                                    } label: {
+                                        VStack{
+                                            Text(category.categoryName)
+                                                .font(.carioRegular)
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .frame(maxWidth:.infinity,alignment: .leading)
+                                            
+                                            Divider().frame(height:1)
+                                                .overlay(Color.white)
+                                            
+                                        }
                                     }
-                                    
-                                    
                                 }
                                 
                             }
                         }
                         .padding(.top,30)
-                        .frame(width:proxy.size.width * 0.3,height: proxy.size.height)
+                        .frame(width:proxy.size.width * 0.3,height: proxy.size.height,alignment: .leading)
                         Spacer()
                         
                         VStack{
@@ -194,8 +196,9 @@ extension SeriesView{
                         
                     }
                     .frame(maxWidth:.infinity,maxHeight: .infinity)
-                    .toast(isPresenting: $vm.isLoading) {
-                        AlertToast(displayMode: .alert, type: .loading)
+                    .toast(isPresented: $vm.isLoading) {
+                        ToastView("Loading...")
+                            .toastViewStyle(.indeterminate)
                     }
                 }
                 
@@ -278,19 +281,23 @@ extension SeriesView{
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(data, id: \.num) { item in
-                        SeriesCell(serie: item).onTapGesture {
-                            vm.selectItem = item
-                            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-                                self.isShowWatch.toggle()
+                        if #available(tvOS 16.0, *) {
+                            SeriesCell(serie: item).onTapGesture {
+                                vm.selectItem = item
+                                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                    self.isShowWatch.toggle()
+                                }
                             }
-                        }
-                        .contextMenu {
-                            Button {
-                                favSeries.saveMovies(model: item)
-                            } label: {
-                                Label("Add to Favourite", systemImage: "suit.heart")
+                            .contextMenu {
+                                Button {
+                                    favSeries.saveMovies(model: item)
+                                } label: {
+                                    Label("Add to Favourite", systemImage: "suit.heart")
+                                }
+                                
                             }
-
+                        } else {
+                            // Fallback on earlier versions
                         }
                         
 //                        Button {

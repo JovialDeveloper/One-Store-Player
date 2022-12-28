@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import AlertToast
+import ToastUI
 import Combine
 struct ClassicLayoutView: View {
     var subject : (String,ViewType)
@@ -62,16 +62,24 @@ struct ClassicListGridView:View{
     var body: some View{
         ScrollView {
             HStack{
-                RowCell(data: .init(categoryID: "", categoryName: "ALL", parentID: 0))
-                    .onTapGesture {
-                        selectItem = .init(categoryID: "", categoryName: "ALL", parentID: 0)
-                        vm.isLoading = true
-                    }
+                if #available(tvOS 16.0, *) {
+                    RowCell(data: .init(categoryID: "", categoryName: "ALL", parentID: 0))
+                        .onTapGesture {
+                            selectItem = .init(categoryID: "", categoryName: "ALL", parentID: 0)
+                            vm.isLoading = true
+                        }
+                } else {
+                    // Fallback on earlier versions
+                }
                 
-                RowCell(data: .init(categoryID: "", categoryName: "Favourites", parentID: 0))
-                    .onTapGesture {
-                        selectItem = .init(categoryID: "", categoryName: "Favourites", parentID: 0)
-                    }
+                if #available(tvOS 16.0, *) {
+                    RowCell(data: .init(categoryID: "", categoryName: "Favourites", parentID: 0))
+                        .onTapGesture {
+                            selectItem = .init(categoryID: "", categoryName: "Favourites", parentID: 0)
+                        }
+                } else {
+                    // Fallback on earlier versions
+                }
             }
             LazyVGrid(columns: columns, spacing: 10) {
                 
@@ -223,8 +231,9 @@ struct ClassicListGridView:View{
             }
             
         })
-        .toast(isPresenting: $vm.isLoading) {
-            AlertToast(displayMode: .alert, type: .loading)
+        .toast(isPresented: $vm.isLoading) {
+            ToastView("Loading...")
+                .toastViewStyle(.indeterminate)
         }
         .fullScreenCover(isPresented: $isSelectItem) {
             //
