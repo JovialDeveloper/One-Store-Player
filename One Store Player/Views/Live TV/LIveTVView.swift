@@ -80,7 +80,7 @@ struct LIveTVView: View {
     @State private var selectId = 0
     @State private var searchText = ""
     @State private var isSearch = false
-    @State private var selection  = 0
+    @State private var selection  : Int?
     @State private var tvOSOptions = ["Default","Recently Added","A-Z","Z-A"]
     @StateObject private var favLiveStreams = LiveStreamsFavourite()
     fileprivate func fetchAllStreaming() {
@@ -105,11 +105,13 @@ struct LIveTVView: View {
             Color.primaryColor.ignoresSafeArea()
             if #available(tvOS 16.0, *) {
 //                AVPlayerControllerRepresented(player: .init(url: .init(string: "http://1player.cc:80/live/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130")!))
+                if selectId > 0 {
+                    OneStorePlayer(id: $selectId)
+                        .onTapGesture {
+                            isRemoveOverLay.toggle()
+                        }
+                }
                 
-                OneStorePlayer(id: $selectId)
-                    .onTapGesture {
-                        isRemoveOverLay.toggle()
-                    }
                 
                 if !isRemoveOverLay {
                     ScrollView{
@@ -119,37 +121,45 @@ struct LIveTVView: View {
                                 //MARK:- Streams List
                                 ScrollView {
                                     LazyVStack {
-                                        Button {
-                                            selectId = 0
-                                            self.streams.removeAll()
-                                            fetchAllStreaming()
-                                        } label: {
-                                            Text("ALL")
+                                        VStack{
+                                            Button {
+                                                selectId = 0
+                                                self.streams.removeAll()
+                                                fetchAllStreaming()
+                                            } label: {
+                                                Text("ALL")
+                                                    .frame(maxWidth:.infinity,alignment: .leading)
+                                            }
+                                            .padding()
+                                            .foregroundColor(.white)
+                                            //.background(selectId == 0 ? Color.yellow : Color.secondaryColor)
+                                            .frame(maxWidth:.infinity,alignment: .leading)
+                                            
+                                            Divider()
+                                                .overlay(Color.white)
                                                 .frame(maxWidth:.infinity,alignment: .leading)
                                         }
-                                        .padding()
-                                        .foregroundColor(.white)
-                                        //.background(selectId == 0 ? Color.yellow : Color.secondaryColor)
-                                        .frame(maxWidth:.infinity,alignment: .leading)
                                         
-                                        Divider()
-                                            .overlay(Color.white)
-                                        Button {
-                                            selectId = -0
-                                            //                            self.streams.removeAll()
-                                            //                            fetchAllStreaming()
-                                            self.subStreams = favLiveStreams.getLiveStreams()
-                                        } label: {
-                                            Text("Favourites")
+                                        VStack{
+                                            Button {
+                                                selectId = -0
+                                                //                            self.streams.removeAll()
+                                                //                            fetchAllStreaming()
+                                                self.subStreams = favLiveStreams.getLiveStreams()
+                                            } label: {
+                                                Text("Favourites")
+                                                    .frame(maxWidth:.infinity,alignment: .leading)
+                                            }
+                                            .padding()
+                                            .foregroundColor(.white)
+                                            //.background(selectId == -0 ? Color.yellow : Color.secondaryColor)
+                                            .frame(maxWidth:.infinity,alignment: .leading)
+                                            
+                                            Divider()
+                                                .overlay(Color.white)
                                                 .frame(maxWidth:.infinity,alignment: .leading)
                                         }
-                                        .padding()
-                                        .foregroundColor(.white)
-                                        //.background(selectId == -0 ? Color.yellow : Color.secondaryColor)
-                                        .frame(maxWidth:.infinity,alignment: .leading)
                                         
-                                        Divider()
-                                            .overlay(Color.white)
                                         ForEach(streams) { stream in
                                             Button {
                                                 //selectId = stream.categoryID
@@ -195,7 +205,7 @@ struct LIveTVView: View {
                                                             Text(stream.name)
                                                                 .font(.carioRegular)
                                                                 .foregroundColor(.white)
-                                                                .padding()
+                                                
                                                                 .frame(maxWidth:.infinity,alignment: .leading)
                                                                 .lineLimit(0)
                                                                 .minimumScaleFactor(0.5)
@@ -204,7 +214,7 @@ struct LIveTVView: View {
                                                         Divider().frame(height:1)
                                                             .overlay(Color.white)
                                                     }
-                                                    .padding()
+                                                    
                                                 }
                                                 .contextMenu {
                                                     Button {
@@ -395,7 +405,7 @@ struct LIveTVView: View {
             }
         } receiveValue: { livestreams in
             self.subStreams.removeAll()
-            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
                 self.subStreams = livestreams
                 self.selectId = livestreams[0].streamID
             }
@@ -721,6 +731,7 @@ struct OneStorePlayer:UIViewRepresentable{
             return view
         }
         let player = IJKFFMoviePlayerController(contentURL: url, with: IJKFFOptions.byDefault())!
+        
         player.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         DispatchQueue.main.async {
             view.frame = player.view.bounds
@@ -748,6 +759,7 @@ struct OneStorePlayer:UIViewRepresentable{
         //player?.shouldAutoplay = true
         player.prepareToPlay()
         player.play()
+        player.playbackVolume = 1
     }
     
     typealias UIViewType = UIView
@@ -795,14 +807,20 @@ struct OneStorePlayer:UIViewRepresentable{
 //
 //}
 
-fileprivate struct AVPlayerControllerRepresented : UIViewControllerRepresentable {
-    var player : AVPlayer
+struct AVPlayerControllerRepresented : UIViewControllerRepresentable {
+    //var player : AVPlayer
     
+    @Binding var id : Int
+    var type = "live"
     func makeUIViewController(context: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
-        controller.player = player
+        guard let url = URL(string:Networking.shared.getStreamingLink(id: id, type: type))
+        else {
+            return controller
+        }
+        controller.player = AVPlayer(url: url)
         
-        controller.showsPlaybackControls = false
+        //controller.showsPlaybackControls = false
         return controller
     }
     

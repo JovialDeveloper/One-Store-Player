@@ -85,10 +85,12 @@ struct ModernLayoutView:View{
                 HStack{
                     ScrollView{
                         Button("ALL") {
+                            vm.isLoading.toggle()
                             vm.fetchAllMovies()
                                 .sink { subError in
-                                //
+                                    vm.isLoading = false
                             } receiveValue: { movies in
+                                vm.isLoading = false
                                 self.movies = movies
                                 
                             }.store(in: &vm.subscriptions)
@@ -172,24 +174,13 @@ struct ModernLayoutView:View{
                             
                             self.movies = filters?.count ?? 0 > 0 ? filters : movies
                         } moreAction: {
-                            vm.fetchAllMoviesById(id: self.categories[0].categoryID, type: subject.1)
-                                .sink { subErrr in
-                                    vm.isLoading.toggle()
-                                    switch subErrr {
-                                    case .failure(let err):
-                                        debugPrint(err)
-                                    case .finished:
-                                        vm.isLoading.toggle()
-                                        break
-                                    }
-                                   debugPrint(subErrr)
+                            vm.isLoading.toggle()
+                            vm.fetchAllMovies()
+                                .sink { subError in
+                                    vm.isLoading = false
                                 } receiveValue: { movies in
-                                    debugPrint("M",movies)
-                                    vm.isLoading.toggle()
-                                    self.movies?.removeAll()
-                                    DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-                                        self.movies = movies
-                                    }
+                                    vm.isLoading = false
+                                    self.movies = movies
                                     
                                 }.store(in: &vm.subscriptions)
                         }
@@ -223,10 +214,12 @@ struct ModernLayoutView:View{
         }
         
         .onChange(of: self.categories) { newValue in
+            vm.isLoading.toggle()
             vm.fetchAllMovies()
                 .sink { subError in
-                //
+                    vm.isLoading = false
             } receiveValue: { movies in
+                vm.isLoading = false
                 self.movies = movies
                 
             }.store(in: &vm.subscriptions)

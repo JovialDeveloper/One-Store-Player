@@ -200,11 +200,17 @@ struct WatchView<T:Codable>: View {
             }
         })
         .sheet(isPresented: $isWatch) {
-            //VLCAgent(id: $id,type: "movie")
-            ZStack{
-                OneStorePlayer(id: $id,type: "movie")
-                    .background(Color.primaryColor)
-            }.overlay(NavigationHeaderView(title: "Movie"),alignment: .top)
+            if data is MovieModel {
+                ZStack{
+                    VideoPlayer(player: AVPlayer(url: URL(string:Networking.shared.getStreamingLink(id: id, type: ViewType.movie.rawValue))!))
+                }
+            }else{
+                ZStack{
+                    VideoPlayer(player: AVPlayer(url: URL(string:Networking.shared.getStreamingLink(id: id, type: ViewType.series.rawValue))!))
+                }
+            }
+            
+
             
             
         }

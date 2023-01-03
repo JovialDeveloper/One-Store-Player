@@ -38,18 +38,29 @@ final class Networking{
             .eraseToAnyPublisher()
     }
     func getStreamingLink(id:Int,type:String)->String{
-        @AppStorage(AppStorageKeys.videoFormat.rawValue) var format = VideoFormats.ts.rawValue
+        @AppStorage(AppStorageKeys.videoFormat.rawValue) var format = VideoFormats.mp4.rawValue
         
         if let info = getUserDetails() {
-            if info.port.hasSuffix("/") {
-                let uri = "\(info.port)\(type)/\(info.username)/\(info.password)/\(id).\(format)"
-//                let uri = "\(info.port)\(type)/\(info.username)/\(info.password)/\(id)"
-                return uri
-            }else{
-                let uri = "\(info.port)/\(type)/\(info.username)/\(info.password)/\(id).\(format)"
-//                let uri = "\(info.port)/\(type)/\(info.username)/\(info.password)/\(id)"
-                return uri
+            if type == StreamType.live.rawValue{
+                if info.port.hasSuffix("/") {
+                    let uri = "\(info.port)/\(info.username)/\(info.password)/\(id)"
+                    return uri
+                }else{
+                    let uri = "\(info.port)/\(info.username)/\(info.password)/\(id)"
+                    return uri
+                }
+            }else {
+                if info.port.hasSuffix("/") {
+                    let uri = "\(info.port)\(type)/\(info.username)/\(info.password)/\(id).\(format)"
+    //                let uri = "\(info.port)\(type)/\(info.username)/\(info.password)/\(id)"
+                    return uri
+                }else{
+                    let uri = "\(info.port)/\(type)/\(info.username)/\(info.password)/\(id).\(format)"
+    //                let uri = "\(info.port)/\(type)/\(info.username)/\(info.password)/\(id)"
+                    return uri
+                }
             }
+            
             
         }
         return ""

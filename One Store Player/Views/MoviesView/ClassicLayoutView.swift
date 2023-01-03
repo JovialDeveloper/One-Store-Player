@@ -16,9 +16,7 @@ struct ClassicLayoutView: View {
         vm.fetchAllMoviewCategories(type: subject.1).sink { subError in
             //
         } receiveValue: { categories in
-            //                var tempCate = categories
-            //                tempCate.insert(.init(categoryID: "1", categoryName: "ALL", parentID: 1), at: 0)
-            //                tempCate.insert(.init(categoryID: "2", categoryName: "Favourites", parentID: 2), at: 1)
+            self.categories.removeAll()
             self.categories = categories
         }.store(in: &vm.subscriptions)
     }
@@ -53,12 +51,153 @@ struct ClassicListGridView:View{
     @Binding var data : [MovieCategoriesModel]
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     @State private var selectItem : MovieCategoriesModel?
+   
     @EnvironmentObject private var vm:ClassicViewModel
     @State private var series : [SeriesModel]?
     @State private var movies : [MovieModel]?
+    @State private var filterSeries : [SeriesModel]?
+    @State private var filterMovies : [MovieModel]?
     var subject : (String,ViewType)
     @EnvironmentObject var favMovies : MoviesFavourite
     @EnvironmentObject var favSeries : SeriesFavourite
+    fileprivate func fetchSeries(_ newValue: MovieCategoriesModel?) {
+        if newValue != nil {
+            
+            if newValue!.categoryName == "ALL" {
+                let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllData(type: .series)
+                responseType.sink { subErrr in
+                    vm.isLoading = false
+                    switch subErrr {
+                    case .failure(let err):
+                        debugPrint(err)
+                    case .finished:
+                        vm.isLoading = false
+                        break
+                    }
+                    debugPrint(subErrr)
+                } receiveValue: { movies in
+                    debugPrint("M",movies)
+                    vm.isLoading = false
+                    self.series?.removeAll()
+                    self.filterSeries?.removeAll()
+                    self.filterSeries = nil
+                    self.series = movies
+                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                        self.isSelectItem.toggle()
+                    }
+                    
+                }.store(in: &vm.subscriptions)
+                
+            }else if newValue!.categoryName == "Favourites" {
+                // Favourites
+                self.filterSeries?.removeAll()
+                self.filterSeries = nil
+                self.series = favSeries.getSeries()
+                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                    self.isSelectItem.toggle()
+                }
+                
+            }
+            else {
+                let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
+                
+                responseType.sink { subErrr in
+                    vm.isLoading.toggle()
+                    switch subErrr {
+                    case .failure(let err):
+                        debugPrint(err)
+                    case .finished:
+                        vm.isLoading.toggle()
+                        break
+                    }
+                    debugPrint(subErrr)
+                } receiveValue: { movies in
+                    debugPrint("M",movies)
+                    vm.isLoading.toggle()
+                    self.series?.removeAll()
+                    self.filterSeries?.removeAll()
+                    self.filterSeries = nil
+                    self.series = movies
+                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                        self.isSelectItem.toggle()
+                    }
+                    
+                }.store(in: &vm.subscriptions)
+            }
+            
+            
+            
+        }
+    }
+    
+    fileprivate func fetchMovies(_ newValue: MovieCategoriesModel?) {
+        if newValue != nil {
+            if newValue!.categoryName == "ALL" {
+                let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllData(type: .movie)
+                responseType.sink { subErrr in
+                    vm.isLoading = false
+                    switch subErrr {
+                    case .failure(let err):
+                        debugPrint(err)
+                    case .finished:
+                        vm.isLoading = false
+                        break
+                    }
+                    debugPrint(subErrr)
+                } receiveValue: { movies in
+                    debugPrint("M",movies)
+                    vm.isLoading = false
+                    self.movies?.removeAll()
+                    self.filterMovies?.removeAll()
+                    self.filterMovies = nil
+                    self.movies = movies
+                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                        self.isSelectItem.toggle()
+                    }
+                    
+                }.store(in: &vm.subscriptions)
+                
+            }
+            else if newValue!.categoryName == "Favourites" {
+                // Favourites
+                self.filterMovies?.removeAll()
+                self.filterMovies = nil
+                self.movies = favMovies.getMovies()
+                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                    self.isSelectItem.toggle()
+                }
+            }
+            else {
+                let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
+                
+                responseType.sink { subErrr in
+                    vm.isLoading.toggle()
+                    switch subErrr {
+                    case .failure(let err):
+                        debugPrint(err)
+                    case .finished:
+                        vm.isLoading.toggle()
+                        break
+                    }
+                    debugPrint(subErrr)
+                } receiveValue: { movies in
+                    debugPrint("M",movies)
+                    vm.isLoading.toggle()
+                    self.movies?.removeAll()
+                    self.filterMovies?.removeAll()
+                    self.filterMovies = nil
+                    self.movies = movies
+                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                        self.isSelectItem.toggle()
+                    }
+                    
+                }.store(in: &vm.subscriptions)
+            }
+            
+            
+        }
+    }
+    
     var body: some View{
         ScrollView {
             HStack{
@@ -66,6 +205,7 @@ struct ClassicListGridView:View{
                     RowCell(data: .init(categoryID: "", categoryName: "ALL", parentID: 0))
                         .onTapGesture {
                             selectItem = .init(categoryID: "", categoryName: "ALL", parentID: 0)
+//                            myItem = .init(categoryID: "", categoryName: "ALL", parentID: 0)
                             vm.isLoading = true
                         }
                 } else {
@@ -103,130 +243,10 @@ struct ClassicListGridView:View{
         .onChange(of: selectItem, perform: { newValue in
             selectItem = nil
             if subject.1 == .series {
-                if newValue != nil {
-                
-                    if newValue!.categoryName == "ALL" {
-                        let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllData(type: .series)
-                        responseType.sink { subErrr in
-                            vm.isLoading = false
-                                switch subErrr {
-                                case .failure(let err):
-                                    debugPrint(err)
-                                case .finished:
-                                    vm.isLoading = false
-                                    break
-                                }
-                                debugPrint(subErrr)
-                            } receiveValue: { movies in
-                                debugPrint("M",movies)
-                                vm.isLoading = false
-                                self.series?.removeAll()
-                                
-                                self.series = movies
-                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                    self.isSelectItem.toggle()
-                                }
-                                
-                            }.store(in: &vm.subscriptions)
-                        
-                    }else if newValue!.categoryName == "Favourites" {
-                       // Favourites
-                        self.series = favSeries.getSeries()
-                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                            self.isSelectItem.toggle()
-                        }
-                        
-                    }
-                    else {
-                        let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
-                        
-                        responseType.sink { subErrr in
-                                vm.isLoading.toggle()
-                                switch subErrr {
-                                case .failure(let err):
-                                    debugPrint(err)
-                                case .finished:
-                                    vm.isLoading.toggle()
-                                    break
-                                }
-                                debugPrint(subErrr)
-                            } receiveValue: { movies in
-                                debugPrint("M",movies)
-                                vm.isLoading.toggle()
-                                self.series?.removeAll()
-                                
-                                self.series = movies
-                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                    self.isSelectItem.toggle()
-                                }
-                                
-                            }.store(in: &vm.subscriptions)
-                    }
-                    
-                
-
-            }
+                fetchSeries(newValue)
                 
             }else{
-                if newValue != nil {
-                    if newValue!.categoryName == "ALL" {
-                        let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllData(type: .movie)
-                        responseType.sink { subErrr in
-                                vm.isLoading = false
-                                switch subErrr {
-                                case .failure(let err):
-                                    debugPrint(err)
-                                case .finished:
-                                    vm.isLoading = false
-                                    break
-                                }
-                               debugPrint(subErrr)
-                            } receiveValue: { movies in
-                                debugPrint("M",movies)
-                                vm.isLoading = false
-                                self.movies?.removeAll()
-                                self.movies = movies
-                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                    self.isSelectItem.toggle()
-                                }
-                                
-                            }.store(in: &vm.subscriptions)
-                        
-                    }
-                    else if newValue!.categoryName == "Favourites" {
-                       // Favourites
-                        self.movies = favMovies.getMovies()
-                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                            self.isSelectItem.toggle()
-                        }
-                    }
-                    else {
-                        let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
-                        
-                        responseType.sink { subErrr in
-                                vm.isLoading.toggle()
-                                switch subErrr {
-                                case .failure(let err):
-                                    debugPrint(err)
-                                case .finished:
-                                    vm.isLoading.toggle()
-                                    break
-                                }
-                               debugPrint(subErrr)
-                            } receiveValue: { movies in
-                                debugPrint("M",movies)
-                                vm.isLoading.toggle()
-                                self.movies?.removeAll()
-                                self.movies = movies
-                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                    self.isSelectItem.toggle()
-                                }
-                                
-                            }.store(in: &vm.subscriptions)
-                    }
-                   
-
-                }
+                fetchMovies(newValue)
                 
             }
             
@@ -236,30 +256,89 @@ struct ClassicListGridView:View{
                 .toastViewStyle(.indeterminate)
         }
         .fullScreenCover(isPresented: $isSelectItem) {
-            //
+           
+            
+            
             ZStack{
                 Color.primaryColor.ignoresSafeArea()
                 VStack{
+
+
                     NavigationHeaderView(title: subject.0) { text in
                         if movies != nil {
                             let filters = movies?.filter { $0.name!.localizedCaseInsensitiveContains(text)}
-                            
+
                             self.movies = filters?.count ?? 0 > 0 ? filters : movies
                         }else{
                             let filters = series?.filter { $0.name.localizedCaseInsensitiveContains(text)}
-                            
+
                             self.series = filters?.count ?? 0 > 0 ? filters : series
                         }
-                        
+
+                    } moreAction: {
+                        if movies != nil {
+                            fetchMovies(.init(categoryID: "", categoryName: "ALL", parentID: 0))
+//                            self.filterMovies?.removeAll()
+//                            self.filterMovies = nil
+//                            self.filterMovies = movies
+                        }else{
+                            //self.filterSeries = nil
+                            fetchSeries(.init(categoryID: "", categoryName: "ALL", parentID: 0))
+//                            self.filterSeries?.removeAll()
+//                            self.filterSeries = nil
+//                            self.filterSeries = series
+                        }
                     }
+
                     if series != nil {
-                        CollectionGridView(movies: nil, series: $series,width: .infinity)
+                        CollectionGridView(movies: nil, series:filterSeries != nil ? $filterSeries: $series,width: .infinity)
                     }else{
-                        CollectionGridView(movies: $movies, series: nil,width: .infinity)
-                        
+                        CollectionGridView(movies:filterMovies != nil ? $filterMovies : $movies, series: nil,width: .infinity)
+
                     }
-                   
+
                 }
+            }
+        }
+    }
+}
+
+struct ShowContainerView:View{
+    @Binding private var series : [SeriesModel]?
+    @Binding private var movies : [MovieModel]?
+    @Binding private var filterSeries : [SeriesModel]?
+    @Binding private var filterMovies : [MovieModel]?
+    @Binding private var selectItem : MovieCategoriesModel?
+    var subject : (String,ViewType)
+    var action: (()->Void)?
+    var body: some View{
+        ZStack{
+            Color.primaryColor.ignoresSafeArea()
+            VStack{
+                
+
+                NavigationHeaderView(title: subject.0) { text in
+                    if movies != nil {
+                        let filters = movies?.filter { $0.name!.localizedCaseInsensitiveContains(text)}
+                        
+                        self.movies = filters?.count ?? 0 > 0 ? filters : movies
+                    }else{
+                        let filters = series?.filter { $0.name.localizedCaseInsensitiveContains(text)}
+                        
+                        self.series = filters?.count ?? 0 > 0 ? filters : series
+                    }
+                    
+                } moreAction: {
+                    action?()
+                }
+        
+                if series != nil {
+                    CollectionGridView(movies: nil, series:filterSeries != nil ? $filterSeries: $series,width: .infinity)
+                }else{
+                    CollectionGridView(movies:filterMovies != nil ? $filterMovies : $movies, series: nil,width: .infinity)
+                    
+                }
+               
             }
         }
     }
