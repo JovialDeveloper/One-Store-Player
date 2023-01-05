@@ -103,6 +103,9 @@ struct FixturesScoresView: View {
                         }
                     }
                     .frame(width:proxy.size.width * 0.4,height:proxy.size.height)
+                    .onChange(of: datum ?? []) { newValue in
+                        selectDatum = newValue[0]
+                    }
                     
                     ScrollView{
                         if selectDatum != nil {

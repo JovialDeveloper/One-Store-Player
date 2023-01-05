@@ -106,7 +106,7 @@ struct LIveTVView: View {
             if #available(tvOS 16.0, *) {
 //                AVPlayerControllerRepresented(player: .init(url: .init(string: "http://1player.cc:80/live/ec1RxLkPaWiHVy/ULaH9AmLRXDmBy7/27130")!))
                 if selectId > 0 {
-                    OneStorePlayer(id: $selectId)
+                   OneStorePlayer(id: $selectId)
                         .onTapGesture {
                             isRemoveOverLay.toggle()
                         }
@@ -718,8 +718,27 @@ struct LIveTVView_Previews: PreviewProvider {
 
 
 import IJKMediaFramework
+//struct LivePlayerController:UIViewControllerRepresentable{
+//    @Binding var id : Int
+//    var type = "live"
+//    func makeUIViewController(context: Context) -> IJKController {
+//        let vc = IJKController(nibName: "IJKController", bundle: nil)
+//        vc.id = id
+//        return vc
+//    }
+//
+//    func updateUIViewController(_ uiViewController: IJKController, context: Context) {
+//        uiViewController.id = id
+//        uiViewController.updatePlayerId()
+//    }
+//
+//    typealias UIViewControllerType = IJKController
+//
+//
+//}
+
 struct OneStorePlayer:UIViewRepresentable{
-    
+
     @Binding var id : Int
     var type = "live"
     @State var playerView  =  UIView()
@@ -731,19 +750,19 @@ struct OneStorePlayer:UIViewRepresentable{
             return view
         }
         let player = IJKFFMoviePlayerController(contentURL: url, with: IJKFFOptions.byDefault())!
-        
+
         player.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         DispatchQueue.main.async {
             view.frame = player.view.bounds
             view.addSubview(player.view)
         }
-        
+
         //player?.shouldAutoplay = true
         player.prepareToPlay()
         player.play()
         return view
     }
-    
+
     func updateUIView(_ uiView:UIView, context: Context) {
         guard let url = URL(string:Networking.shared.getStreamingLink(id: id, type: type))
         else {
@@ -755,57 +774,19 @@ struct OneStorePlayer:UIViewRepresentable{
             uiView.frame = player.view.bounds
             uiView.addSubview(player.view)
         }
-        
+
         //player?.shouldAutoplay = true
         player.prepareToPlay()
         player.play()
         player.playbackVolume = 1
     }
-    
+
     typealias UIViewType = UIView
-    
-    
+
+
 }
 
-//import MobileVLCKit
-//struct VLCAgent:UIViewRepresentable{
-//
-//
-//    typealias UIViewType = UIView
-//
-//
-//    let player = VLCMediaPlayer()
-//
-//    @Binding var id : Int
-//    var type = "live"
-//    func makeUIView(context: Context) -> UIView {
-//        let vlcView =  UIView()
-//        guard let url = URL(string:Networking.shared.getStreamingLink(id: id, type: type))
-//        else {
-//            return UIView()
-//        }
-//
-//        player.media = VLCMedia(url: url)
-//        player.drawable = vlcView
-//        player.media?.addOption("-VV")
-//        player.media?.addOption("--networking-caching==1000")
-//        //player.media?.
-//        return vlcView
-//    }
-//
-//    func updateUIView(_ uiView: UIView, context: Context) {
-//        guard let url = URL(string: Networking.shared.getStreamingLink(id: id, type: "live"))
-//        else {
-//            return
-//        }
-//        player.media = VLCMedia(url: url)
-//        player.drawable = uiView
-//        //player.media?.addOption("-VV")
-//        player.media?.addOption("--networking-caching==1000")
-//        player.play()
-//    }
-//
-//}
+
 
 struct AVPlayerControllerRepresented : UIViewControllerRepresentable {
     //var player : AVPlayer

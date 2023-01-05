@@ -73,6 +73,15 @@ struct Datum: Codable,Identifiable{
     }
 }
 
+extension Datum:Equatable{
+    static func == (lhs: Datum, rhs: Datum) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    
+}
+
+
 enum DatumCreatedAt: String, Codable {
     case the20220912T230723000000Z = "2022-09-12T23:07:23.000000Z"
     case the20220912T230724000000Z = "2022-09-12T23:07:24.000000Z"

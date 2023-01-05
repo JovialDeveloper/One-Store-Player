@@ -38,7 +38,7 @@ struct SettingsView: View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
             VStack{
-                NavigationHeaderView(title:title)
+                NavigationHeaderView(title:title,isHideOptions: true)
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(data, id: \.self) { item in

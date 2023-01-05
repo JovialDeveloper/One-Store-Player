@@ -9,12 +9,24 @@ import UIKit
 import IJKMediaFramework
 class IJKController: UIViewController {
     var player:IJKFFMoviePlayerController!
-    var url:URL = .init(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4")!
-    
+    var id : Int!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        let url = URL(string: Networking.shared.getStreamingLink(id: id, type: "live"))!
+        play(url)
+        player.prepareToPlay()
+        player.play()
+    }
+    
+    func updatePlayerId(){
+        
+        player.stop()
+        
+        let url = URL(string: Networking.shared.getStreamingLink(id: id, type: "live"))!
+        
         play(url)
     }
 
