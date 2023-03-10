@@ -18,6 +18,7 @@ struct WatchView<T:Codable>: View {
     @State var seriesObject : SeriesResponse?
     @State var isWatch = false
     @State var id = 0
+    @State var duration = ""
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -59,7 +60,7 @@ struct WatchView<T:Codable>: View {
                     }
                     
                 }
-                .padding(.top,30)
+                .frame(height: 46)
                 .padding(.horizontal)
                 
                 ScrollView{
@@ -88,6 +89,8 @@ struct WatchView<T:Codable>: View {
                         Button {
                             // watch
                             id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
+                            duration =  data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? ""
+                            
                             
                         } label: {
                             Text("WATCH")
@@ -201,12 +204,44 @@ struct WatchView<T:Codable>: View {
         })
         .sheet(isPresented: $isWatch) {
             if data is MovieModel {
-                ZStack{
-                    VideoPlayer(player: AVPlayer(url: URL(string:Networking.shared.getStreamingLink(id: id, type: ViewType.movie.rawValue))!))
+                NavigationView{
+                    VLCView(link:Networking.shared.getStreamingLink(id: id, type: ViewType.movie.rawValue), isOvarLayHide: false)
+                        .ignoresSafeArea()
+                        .toolbar {
+                            ToolbarItem(placement:.navigationBarLeading) {
+                                Button {
+                                    isWatch.toggle()
+                                } label: {
+                                    Image("arrow_back")
+                                        .resizable()
+                                        .frame(width:46,height:46)
+                                        
+                                }
+                                .frame(width:46,height:46)
+                                .foregroundColor(Color.white)
+
+                            }
+                        }
                 }
             }else{
-                ZStack{
-                    VideoPlayer(player: AVPlayer(url: URL(string:Networking.shared.getStreamingLink(id: id, type: ViewType.series.rawValue))!))
+                NavigationView{
+                    VLCView(link: Networking.shared.getStreamingLink(id: id, type: ViewType.series.rawValue), isOvarLayHide: false)
+                        .ignoresSafeArea()
+                        .toolbar {
+                            ToolbarItem(placement:.navigationBarLeading) {
+                                Button {
+                                    isWatch.toggle()
+                                } label: {
+                                    Image("arrow_back")
+                                        .resizable()
+                                        .frame(width:46,height:46)
+                                }
+                                .frame(width:46,height:46)
+                                .foregroundColor(Color.white)
+
+                            }
+                        }
+        
                 }
             }
             
@@ -267,4 +302,5 @@ struct RatingView:View{
         }
     }
 }
-    
+
+

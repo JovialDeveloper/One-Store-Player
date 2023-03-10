@@ -43,7 +43,7 @@ final class Networking{
         if let info = getUserDetails() {
             if type == StreamType.live.rawValue{
                 if info.port.hasSuffix("/") {
-                    let uri = "\(info.port)/\(info.username)/\(info.password)/\(id)"
+                    let uri = "\(info.port)\(info.username)/\(info.password)/\(id)"
                     return uri
                 }else{
                     let uri = "\(info.port)/\(info.username)/\(info.password)/\(id)"

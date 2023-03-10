@@ -116,6 +116,7 @@ extension SeriesView{
         @State private var categories = [MovieCategoriesModel]()
         @State private var series = [SeriesModel]()
         @EnvironmentObject private var favSeries : SeriesFavourite
+        @State private var selectTitle = ""
         var body: some View {
             GeometryReader{ proxy in
                 ScrollView{
@@ -133,15 +134,18 @@ extension SeriesView{
                             .padding()
                             .foregroundColor(.white)
                             .frame(maxWidth:.infinity,alignment: .leading)
+                            .background(selectTitle == "ALL" ? Color.yellow : nil)
                             Divider().frame(height:1)
                                 .overlay(Color.white)
                             
                             Button("Favourites") {
+                                self.selectTitle = "Favourites"
                                 self.series = favSeries.getSeries()
                             }
                             .padding()
                             .foregroundColor(.white)
                             .frame(maxWidth:.infinity,alignment: .leading)
+                            .background(selectTitle == "Favourites" ? Color.yellow : nil)
                             
                             Divider().frame(height:1)
                                 .overlay(Color.white)
@@ -149,7 +153,7 @@ extension SeriesView{
                             LazyVStack{
                                 ForEach(categories,id: \.categoryID) { category in
                                     Button {
-                                        
+                                        self.selectTitle = category.categoryName
                                             vm.fetchAllSeriesById(id: category.categoryID, type: subject.1)
                                                 .sink { subError in
                                                     
@@ -180,6 +184,7 @@ extension SeriesView{
                                             
                                         }
                                     }
+                                    .background(selectTitle == category.categoryName ? Color.yellow : nil)
                                 }
                                 
                             }
@@ -208,6 +213,7 @@ extension SeriesView{
                         //
                     } receiveValue: { categories in
                         self.categories = categories
+                        self.selectTitle = "ALL"
                     }.store(in: &vm.subscriptions)
 
             }

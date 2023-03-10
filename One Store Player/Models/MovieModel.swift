@@ -45,9 +45,9 @@ struct MovieModelWatchResponse: Codable {
 
 // MARK: - Info
 struct Info: Codable {
-    let kinopoiskURL, tmdbID, name, oName: String?
+    let kinopoiskURL, name, oName: String?
     let coverBig, movieImage: String?
-    let releasedate, episodeRunTime, youtubeTrailer, director: String?
+    let releasedate, youtubeTrailer, director: String?
     let actors, cast, infoDescription, plot: String?
     let age, mpaaRating: String?
     let ratingCountKinopoisk: Int?
@@ -62,13 +62,13 @@ struct Info: Codable {
 
     enum CodingKeys: String, CodingKey {
         case kinopoiskURL = "kinopoisk_url"
-        case tmdbID = "tmdb_id"
+        //case tmdbID = "tmdb_id"
         case name
         case oName = "o_name"
         case coverBig = "cover_big"
         case movieImage = "movie_image"
         case releasedate
-        case episodeRunTime = "episode_run_time"
+        //case episodeRunTime = "episode_run_time"
         case youtubeTrailer = "youtube_trailer"
         case director, actors, cast
         case infoDescription = "description"

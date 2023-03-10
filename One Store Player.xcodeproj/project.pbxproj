@@ -38,8 +38,8 @@
 		D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFA291670F900465873 /* One_Store_PlayerApp.swift */; };
 		D084FFFD291670F900465873 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084FFFC291670F900465873 /* ContentView.swift */; };
 		D084FFFF291670FB00465873 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D084FFFE291670FB00465873 /* Assets.xcassets */; };
-		D08583262959C150001A1B87 /* IJKController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08583242959C150001A1B87 /* IJKController.swift */; };
-		D08583272959C150001A1B87 /* IJKController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D08583252959C150001A1B87 /* IJKController.xib */; };
+		D0854E3D2975A986009B113C /* ONVlcController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0854E3B2975A986009B113C /* ONVlcController.swift */; };
+		D0854E3E2975A986009B113C /* ONVlcController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0854E3C2975A986009B113C /* ONVlcController.xib */; };
 		D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D086321A2948A1200088142B /* SDWebImageSwiftUI */; };
 		D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AA08D0293775B7009E9D55 /* SeriesView.swift */; };
 		D0AFD464293667910064F487 /* SeriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AFD463293667910064F487 /* SeriesModel.swift */; };
@@ -107,8 +107,8 @@
 		D084FFFA291670F900465873 /* One_Store_PlayerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = One_Store_PlayerApp.swift; sourceTree = "<group>"; };
 		D084FFFC291670F900465873 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D084FFFE291670FB00465873 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D08583242959C150001A1B87 /* IJKController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IJKController.swift; sourceTree = "<group>"; };
-		D08583252959C150001A1B87 /* IJKController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IJKController.xib; sourceTree = "<group>"; };
+		D0854E3B2975A986009B113C /* ONVlcController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ONVlcController.swift; sourceTree = "<group>"; };
+		D0854E3C2975A986009B113C /* ONVlcController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ONVlcController.xib; sourceTree = "<group>"; };
 		D0AA08D0293775B7009E9D55 /* SeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesView.swift; sourceTree = "<group>"; };
 		D0AFD463293667910064F487 /* SeriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesModel.swift; sourceTree = "<group>"; };
 		D0C6189C291917D000A9529A /* MoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesView.swift; sourceTree = "<group>"; };
@@ -347,8 +347,8 @@
 		D08583232959C130001A1B87 /* UIKitControllers */ = {
 			isa = PBXGroup;
 			children = (
-				D08583242959C150001A1B87 /* IJKController.swift */,
-				D08583252959C150001A1B87 /* IJKController.xib */,
+				D0854E3B2975A986009B113C /* ONVlcController.swift */,
+				D0854E3C2975A986009B113C /* ONVlcController.xib */,
 			);
 			path = UIKitControllers;
 			sourceTree = "<group>";
@@ -390,6 +390,7 @@
 				D084FFF4291670F900465873 /* Frameworks */,
 				D084FFF5291670F900465873 /* Resources */,
 				D023A037294202120026D604 /* Embed Frameworks */,
+				31D9C62496BBF27813C1DCDE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -451,17 +452,34 @@
 			files = (
 				D07CF83C291C265C00EFEFFA /* cairo_bold.ttf in Resources */,
 				D0E65B25293B641B00DE3848 /* Localizable.strings in Resources */,
+				D0854E3E2975A986009B113C /* ONVlcController.xib in Resources */,
 				D07CF83A291C260800EFEFFA /* cairo_light.ttf in Resources */,
 				D07CF83B291C260800EFEFFA /* cairo_regular.ttf in Resources */,
 				D0840003291670FB00465873 /* Preview Assets.xcassets in Resources */,
 				D084FFFF291670FB00465873 /* Assets.xcassets in Resources */,
-				D08583272959C150001A1B87 /* IJKController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		31D9C62496BBF27813C1DCDE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-One Store Player/Pods-One Store Player-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-One Store Player/Pods-One Store Player-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-One Store Player/Pods-One Store Player-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B46611BBF83B7ADD97E6A37D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -499,7 +517,6 @@
 				D0FB64EE2933D73C009C55C4 /* LiveStreamingViewModel.swift in Sources */,
 				D084FFFD291670F900465873 /* ContentView.swift in Sources */,
 				D00926012922B29D0093648A /* UserListView.swift in Sources */,
-				D08583262959C150001A1B87 /* IJKController.swift in Sources */,
 				D084001D29168B8D00465873 /* TextFieldView.swift in Sources */,
 				D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */,
 				D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */,
@@ -516,6 +533,7 @@
 				D0C6189F2919186E00A9529A /* Constants.swift in Sources */,
 				D084001A291689AE00465873 /* Modifiers.swift in Sources */,
 				D0E65B2B293B98EC00DE3848 /* Fixtures&ScoresModel.swift in Sources */,
+				D0854E3D2975A986009B113C /* ONVlcController.swift in Sources */,
 				D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */,
 				D041377B29362DBA00EC4723 /* MovieModel.swift in Sources */,
 				D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */,
@@ -672,11 +690,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"One Store Player/Preview Content\"";
-				DEVELOPMENT_TEAM = 8TRWBBRCRY;
+				DEVELOPMENT_TEAM = 224T7P225Y;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "One-Store-Player-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "One Player";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -686,20 +706,21 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.iOSAPP.One-Store-Player";
+				PRODUCT_BUNDLE_IDENTIFIER = come.onestepstore.oneplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Debug;
@@ -714,11 +735,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"One Store Player/Preview Content\"";
-				DEVELOPMENT_TEAM = 8TRWBBRCRY;
+				DEVELOPMENT_TEAM = 224T7P225Y;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "One-Store-Player-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "One Player";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -728,20 +751,21 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.iOSAPP.One-Store-Player";
+				PRODUCT_BUNDLE_IDENTIFIER = come.onestepstore.oneplayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,3";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Release;

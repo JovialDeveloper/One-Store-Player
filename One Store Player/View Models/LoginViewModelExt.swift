@@ -12,10 +12,10 @@ extension LoginView {
         @Published var isLoading = false
         @Published var isLogin = false
         @Published var isError = (false,"")
-        @Published var name = "Ali"
-        @Published var password = "ULaH9AmLRXDmBy7"
-        @Published var port = "http://1player.cc:80/"
-        @Published var userName = "ec1RxLkPaWiHVy"
+        @Published var name = ""  //"Ali"
+        @Published var password = "" //"ULaH9AmLRXDmBy7"
+        @Published var port = "" //"http://1player.cc:80/"
+        @Published var userName = "" //"ec1RxLkPaWiHVy"
         @Published var successfullyLogin = false
         var subscriptions = [AnyCancellable]()
         func login() -> AnyPublisher<UserInfo, APIError> {

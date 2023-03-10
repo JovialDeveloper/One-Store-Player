@@ -79,6 +79,7 @@ struct ModernLayoutView:View{
     @State private var categories = [MovieCategoriesModel]()
     @State private var movies : [MovieModel]?
     @EnvironmentObject var favMovies : MoviesFavourite
+    @State private var selectTitle = ""
     var body: some View {
         GeometryReader{ proxy in
             ScrollView{
@@ -98,30 +99,36 @@ struct ModernLayoutView:View{
                         .padding()
                         .foregroundColor(.white)
                         .frame(maxWidth:.infinity,alignment: .leading)
+                        .background(selectTitle == "ALL" ? Color.yellow : nil)
                         
                         Divider().frame(height:1)
                             .overlay(Color.white)
                         
                         Button("Favourites") {
+                            self.selectTitle = "Favourites"
                             self.movies = favMovies.getMovies()
                         }
                         .padding()
                         .foregroundColor(.white)
                         .frame(maxWidth:.infinity,alignment: .leading)
+                        .background(selectTitle == "Favourites" ? Color.yellow : nil)
                         Divider().frame(height:1)
                             .overlay(Color.white)
                         Button("Recently Watch") {
                             debugPrint(recentlyWatchMovies)
+                            self.selectTitle = "Recently Watch"
                             self.movies = recentlyWatchMovies
                         }
                         .padding()
                         .foregroundColor(.white)
                         .frame(maxWidth:.infinity,alignment: .leading)
+                        .background(selectTitle == "Recently Watch" ? Color.yellow : nil)
                         Divider().frame(height:1)
                             .overlay(Color.white)
                         LazyVStack{
                             ForEach(categories,id: \.categoryID) { category in
                                 Button {
+                                    self.selectTitle = category.categoryName
                                     vm.fetchAllMoviesById(id: category.categoryID, type: subject.1)
                                         .sink { subErrr in
                                             vm.isLoading.toggle()
@@ -155,6 +162,7 @@ struct ModernLayoutView:View{
                                         
                                     }
                                 }
+                                .background(selectTitle == category.categoryName ? Color.yellow : nil)
 
                                     
                                     
@@ -206,6 +214,7 @@ struct ModernLayoutView:View{
                 //
             } receiveValue: { categories in
                 self.categories = categories
+                self.selectTitle = "ALL"
             }.store(in: &vm.subscriptions)
             
             

@@ -15,6 +15,7 @@ struct FixturesScoresView: View {
     @State private var datum : [Datum]?
     @Environment(\.presentationMode) var presentationMode
     @State private var selectDatum : Datum?
+    @State private var selectedDate = "Today"
     var body: some View {
         GeometryReader {
             proxy in
@@ -32,7 +33,7 @@ struct FixturesScoresView: View {
                     Text("Matches")
                         .font(.carioBold)
                     HStack{
-                        Text("Today")
+                        Text(selectedDate)
                             .font(.carioRegular)
                         
                         Spacer()
@@ -43,19 +44,19 @@ struct FixturesScoresView: View {
                     .background(Capsule().stroke(lineWidth: 2).fill(Color.white))
                     .contextMenu {
                         Button {
-                            //
+                            selectedDate = "Now"
                         } label: {
                             Label("Now", image: "")
                         }
                         
                         Button {
-                            //
+                            selectedDate = "Yesterday"
                         } label: {
                             Label("Yesterday", image: "")
                         }
                         
                         Button {
-                            //
+                            selectedDate = "Tomorrow"
                         } label: {
                             Label("Tomorrow", image: "")
                         }

@@ -65,3 +65,17 @@ enum VideoFormats:String{
     case mp4
     case m3u8
 }
+
+extension String {
+    func toFloat()->Float{
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.allowsFloats = true
+        let hour = self.split(separator: ":")
+        if let number = numberFormatter.number(from: "02,03,43") {
+            debugPrint("FFFFFF09")
+            return number.floatValue
+        }
+        return Float()
+    }
+}

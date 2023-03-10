@@ -13,19 +13,10 @@ struct One_Store_PlayerApp: App {
         WindowGroup {
             StartView()
                 .environment(\.locale, Locale(identifier: lang))
-            
-            //MoviesView()
-            //MainHomeView()
-              //.environment(\.locale, Locale(identifier: lang))
-//              .onAppear {
-//                  IQKeyboardManager.shared.enable = true
-//              }
-            
-              
-            
-            //LoginView()
-            //WatchView()
-            //FixturesScoresView()
+        
         }
     }
 }
+
+
+
