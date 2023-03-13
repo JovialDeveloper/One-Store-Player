@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-import SDWebImageSwiftUI
+import Kingfisher
 import _AVKit_SwiftUI
 struct WatchView<T:Codable>: View {
     @Environment(\.presentationMode) private var presentationMode
@@ -68,18 +68,20 @@ struct WatchView<T:Codable>: View {
                         HStack{
                             
                             VStack{
-                                WebImage(url: .init(string: data is MovieModel ? customObject?.info.movieImage ?? "" : seriesObject?.info?.cover ?? ""))
+                                KFImage(.init(string: data is MovieModel ? customObject?.info.movieImage ?? "" : seriesObject?.info?.cover ?? ""))
                                     .resizable()
                                     .frame(width:140,height: 240)
                                     .scaledToFill()
                                     .foregroundColor(.white)
                                 
-                                RatingView(rating: data is MovieModel ? Int(customObject?.info.rating ?? "0.0") ?? 5 : Int(seriesObject?.info?.rating ?? "0.0") ?? 5)
+                                RatingView(rating: data is MovieModel ? customObject?.info.rating ?? RatingsEnum.integer(5.0) : seriesObject?.info?.rating ?? RatingsEnum.integer(5.0))
                             }
                             
                             VStack(alignment: .leading, spacing:20){
                                 SubscriptionCell(title: "Directed By:", description: data is MovieModel ? customObject?.info.director ?? "" : seriesObject?.info?.director ?? "")
+                                
                                 SubscriptionCell(title: "Release Date:", description: data is MovieModel ? customObject?.info.releasedate ?? "" : seriesObject?.info?.releaseDate ?? "")
+                                
                                 SubscriptionCell(title: "Duration:", description: data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? "")
                                 SubscriptionCell(title: "Genre:", description: data is MovieModel ? customObject?.info.genre ?? "" : seriesObject?.info?.genre ?? "")
                                 SubscriptionCell(title: "Cast:", description: data is MovieModel ? customObject?.info.cast ?? "" : seriesObject?.info?.cast ?? "")
@@ -260,7 +262,7 @@ struct WatchView<T:Codable>: View {
 
 struct RatingView:View{
     
-    var rating: Int
+    var rating: RatingsEnum
 
     var label = ""
 
@@ -277,29 +279,53 @@ struct RatingView:View{
             if label.isEmpty == false {
                 Text(label)
             }
-            if Double(rating) > 5.0 {
-                ForEach(1..<maximumRating + 1, id: \.self) { number in
-                    onImage.foregroundColor(onColor)
+            switch rating{
+            case .integer(let value):
+                
+                if value > 5.0 {
+                    ForEach(1..<maximumRating + 1, id: \.self) { number in
+                        onImage.foregroundColor(onColor)
+                    }
+                }else{
+                    ForEach(1..<maximumRating + 1, id: \.self) { number in
+                        image(for: number)
+                            .foregroundColor(Double(number) > Double(value) ? offColor : onColor)
+                    }
                 }
-            }else{
-                ForEach(1..<maximumRating + 1, id: \.self) { number in
-                    image(for: number)
-                        .foregroundColor(number > rating ? offColor : onColor)
-    //                    .onTapGesture {
-    //                        rating = number
-    //                    }
+                ///
+            case .string(let value):
+                if Double(value) ?? 0.0 > 5.0 {
+                    ForEach(1..<maximumRating + 1, id: \.self) { number in
+                        onImage.foregroundColor(onColor)
+                    }
+                }else{
+                    ForEach(1..<maximumRating + 1, id: \.self) { number in
+                        image(for: number)
+                            .foregroundColor(Double(number) > Double(value) ?? 0.0 ? offColor : onColor)
+                    }
                 }
             }
+            
             
         }
     }
     
     func image(for number: Int) -> Image {
-        if number > rating {
-            return offImage ?? onImage
-        } else {
-            return onImage
+        switch rating {
+        case .integer(let value):
+            if Double(number) > value {
+                return offImage ?? onImage
+            } else {
+                return onImage
+            }
+        case .string(let value):
+            if Double(number) > Double(value) ?? 0.0 {
+                return offImage ?? onImage
+            } else {
+                return onImage
+            }
         }
+        
     }
 }
 

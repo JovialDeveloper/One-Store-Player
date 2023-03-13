@@ -54,8 +54,12 @@ let hour_12 = "hh:mm a"
 
 let hour_24 = "HH:mm a"
 // Languages
-let arbic = "ar"
-let englishLang = "en"
+enum SupportedLanguages:String{
+    case arbic = "ar"
+    case englishLang = "en"
+}
+//let arbic = "ar"
+//let englishLang = "en"
 
 
 let defualtDateFormatte = "MM/dd/yyyy"

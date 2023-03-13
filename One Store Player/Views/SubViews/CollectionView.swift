@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Kingfisher
 
 var recentlyWatchMovies = [MovieModel]()
 
@@ -15,7 +16,7 @@ class DataPassOb:ObservableObject {
     @Published var selectSeriesItem : SeriesModel?
 }
 struct CollectionGridView:View{
-
+    
     @Binding var data : [MovieModel]?
     @Binding var series : [SeriesModel]?
     let columns : [GridItem] = Array(repeating: .init(.flexible(),spacing: 20), count: 4)
@@ -37,7 +38,7 @@ struct CollectionGridView:View{
         ScrollView {
             LazyVGrid(columns: columns, spacing: 0) {
                 if data != nil {
-                    ForEach(data!, id: \.num) { item in
+                    ForEach(data!, id: \.id) { item in
                         if #available(tvOS 16.0, *) {
                             MovieCell(width: width, height: height, data: item)
                                 .onTapGesture {
@@ -59,31 +60,31 @@ struct CollectionGridView:View{
                             // Fallback on earlier versions
                         }
                         
-//                        Button {
-//                           recentlyWatchMovies.append(item)
-//                            vm.selectItem = item
-//                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-//                                isShowWatch.toggle()
-//                            }
-//
-////                            if selectItem != nil {
-////                                selectItem = nil
-////                                DispatchQueue.main.asyncAfter(deadline: .now()+0.8) {
-////                                    selectItem = item
-////                                }
-////
-////                            }else{
-////                                selectItem = item
-////                            }
-//
-//
-//                        } label: {
-//
-//
-//                        }
+                        //                        Button {
+                        //                           recentlyWatchMovies.append(item)
+                        //                            vm.selectItem = item
+                        //                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                        //                                isShowWatch.toggle()
+                        //                            }
+                        //
+                        ////                            if selectItem != nil {
+                        ////                                selectItem = nil
+                        ////                                DispatchQueue.main.asyncAfter(deadline: .now()+0.8) {
+                        ////                                    selectItem = item
+                        ////                                }
+                        ////
+                        ////                            }else{
+                        ////                                selectItem = item
+                        ////                            }
+                        //
+                        //
+                        //                        } label: {
+                        //
+                        //
+                        //                        }
                     }
                 }else{
-                    ForEach(series ?? [], id: \.num) { item in
+                    ForEach(series ?? [], id: \.id) { item in
                         if #available(tvOS 16.0, *) {
                             MovieCell(width: width, height: height, data: item)
                                 .onTapGesture {
@@ -140,7 +141,7 @@ struct MovieCell<T:Codable>:View{
     var body: some View{
 #if os(tvOS)
         return  ZStack{
-            WebImage(url: .init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover ?? ""))
+            KFImage(.init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover ?? ""))
                 .resizable()
                 .frame(minWidth: width,minHeight: height)
             //.frame(width:width,height: height)
@@ -153,15 +154,13 @@ struct MovieCell<T:Codable>:View{
         }.cornerRadius(5)
 #else
         return ZStack{
-            WebImage(url: .init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover))
+            
+            KFImage(.init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover))
                 .resizable()
-//                .frame(width:width,height: height)
                 .scaledToFill()
                 .clipped()
                 .overlay(imageOverLayView,alignment: .bottom)
                 .overlay(ratingView,alignment: .topLeading)
-            
-            //.frame(height: 130)
         }.cornerRadius(5)
 #endif
     }
@@ -187,11 +186,11 @@ struct MovieCell<T:Codable>:View{
                 .lineLimit(0)
                 .minimumScaleFactor(0.7)
             
-//            Text(movie. ?? "N/A")
-//                .font(.carioRegular)
-//                .lineLimit(0)
-//            //.minimumScaleFactor(0.7)
-//                .foregroundColor(.white)
+            //            Text(movie. ?? "N/A")
+            //                .font(.carioRegular)
+            //                .lineLimit(0)
+            //            //.minimumScaleFactor(0.7)
+            //                .foregroundColor(.white)
         }
         .padding()
         .frame(maxWidth:.infinity,maxHeight: 65)

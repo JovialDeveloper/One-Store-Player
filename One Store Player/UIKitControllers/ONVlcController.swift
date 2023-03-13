@@ -182,6 +182,8 @@ extension ONVlcController:VLCMediaPlayerDelegate{
         case .error:
             print("VLCMediaPlayerDelegate: ERROR")
             self.playPauseButton.isSelected = false
+            self.indicator.stopAnimating()
+            self.controls.isHidden = false
             
         case .buffering:
             print("VLCMediaPlayerDelegate: BUFFERING")

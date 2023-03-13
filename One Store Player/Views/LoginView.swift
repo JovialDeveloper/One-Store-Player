@@ -41,10 +41,14 @@ struct LoginView: View {
                     TextFieldView(text: $loginViewModel.password,placeHolder: "Password",isSecure: $isSecure)
 #else
                     HStack{
-                        ButtonView(action: {
+                        ButtonView(buttonData: .init(title: "", imageName: isSecure ? "eye-off" : "eye")) {
                             isSecure.toggle()
-                        },image: isSecure ? "eye-off" : "eye")
+                        }
                         .frame(width:46,height: 46)
+//                        ButtonView(action: {
+//                            isSecure.toggle()
+//                        },image: isSecure ? "eye-off" : "eye")
+                        
                         
                         
                         TextFieldView(text: $loginViewModel.password,placeHolder: "Password",isSecure: $isSecure)

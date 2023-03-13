@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 import ToastUI
-import SDWebImageSwiftUI
+import Kingfisher
 
 
 class SeriesFavourite:ObservableObject
@@ -337,7 +337,7 @@ extension SeriesView{
         var body: some View{
 #if os(tvOS)
             return  ZStack{
-                WebImage(url: .init(string:serie.cover))
+                KFImage(.init(string:serie.cover))
                     .resizable()
                     .frame(minWidth: width,minHeight: height)
                 //.frame(width:width,height: height)
@@ -350,7 +350,7 @@ extension SeriesView{
             }.cornerRadius(5)
 #else
             return ZStack{
-                WebImage(url: .init(string:serie.cover))
+                KFImage(.init(string:serie.cover))
                     .resizable()
                     .frame(width:width,height: height)
                     .scaledToFill()

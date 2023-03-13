@@ -26,7 +26,7 @@ struct MainHomeView: View {
     @State private var stateType : StateType?
     @State private var userInfo:UserInfo?
     @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = hour_12
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -111,9 +111,9 @@ struct MainHomeView: View {
                             } label: {
                                 Image("livetv")
                                     .resizable()
-    //                                .frame(maxWidth:.infinity,maxHeight: .infinity)
                                     .scaledToFit()
                                     .cornerRadius(20)
+                                    .overlay(MainClassButtonTextOvarly(title: "Live TV", lang: lang),alignment: .center)
                             }
                             .background(RoundedRectangle(cornerRadius: 20))
                             
@@ -124,9 +124,9 @@ struct MainHomeView: View {
                             } label: {
                                 Image("movies")
                                     .resizable()
-    //                                .frame(maxWidth:.infinity,maxHeight: .infinity)
                                     .scaledToFit()
                                     .cornerRadius(20)
+                                    .overlay(MainClassButtonTextOvarly(title: "Movies", lang: lang),alignment: .center)
                             }
                             .background(RoundedRectangle(cornerRadius: 20))
                             
@@ -137,9 +137,9 @@ struct MainHomeView: View {
                             } label: {
                                 Image("series")
                                     .resizable()
-    //                                .frame(maxWidth:.infinity,maxHeight: .infinity)
                                     .scaledToFit()
                                     .cornerRadius(20)
+                                    .overlay(MainClassButtonTextOvarly(title: "Series", lang: lang),alignment: .center)
                             }
                             .background(RoundedRectangle(cornerRadius: 20))
                             
@@ -150,9 +150,9 @@ struct MainHomeView: View {
                             } label: {
                                 Image("fixtures")
                                     .resizable()
-    //                                .frame(maxWidth:.infinity,maxHeight: .infinity)
                                     .scaledToFit()
                                     .cornerRadius(20)
+                                    .overlay(MainClassButtonTextOvarly(title: "Scores & Fixtures", lang: lang),alignment: .center)
                             }
                             .background(RoundedRectangle(cornerRadius: 20))
                         }
@@ -186,11 +186,11 @@ struct MainHomeView: View {
                     .padding()
                     
                     HStack{
-                        Text("\("Expiration ".localized(lang)) \(Date().description.getDateFormatted(format: defualtDateFormatte))")
+                        Text("\("Expiration ".localized(lang.rawValue)) \(Date().description.getDateFormatted(format: defualtDateFormatte))")
                         .font(.carioBold)
                         .font(.carioRegular)
                         Spacer()
-                        Text("\("Login In: ".localized(lang)) \(Text(userInfo?.name ?? "").font(.carioBold))")
+                        Text("\("Login In: ".localized(lang.rawValue)) \(Text(userInfo?.name ?? "").font(.carioBold))")
                             .font(.carioRegular)
                     }.padding()
                     
@@ -263,6 +263,23 @@ struct MainHomeView: View {
                 }
             }
         }
+    }
+    
+    
+    
+}
+
+fileprivate struct MainClassButtonTextOvarly:View{
+    var title:String
+    var lang:SupportedLanguages
+    var body: some View {
+        Text(title.localized(lang.rawValue))
+            .padding()
+            .font(.carioBold)
+            .lineLimit(1)
+            .minimumScaleFactor(0.6)
+            .foregroundColor(.black)
+            .offset(y:30)
     }
 }
 

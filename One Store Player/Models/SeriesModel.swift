@@ -15,6 +15,7 @@ import Foundation
 
 // MARK: - WelcomeElement
 struct SeriesModel: Codable {
+    var id = UUID().uuidString
     let num: Int
     let name: String
     let seriesID: Int
@@ -372,10 +373,11 @@ struct WelcomeInfo: Codable {
     let name: String?
     let cover: String?
     let plot, cast, director, genre: String?
-    let releaseDate, lastModified, rating: String?
+    let releaseDate, lastModified:String?
     let rating5Based: Double?
     let backdropPath: [String]?
     let youtubeTrailer, episodeRunTime, categoryID: String?
+    let rating: RatingsEnum?
 
     enum CodingKeys: String, CodingKey {
         case name, cover, plot, cast, director, genre, releaseDate

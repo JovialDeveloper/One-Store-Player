@@ -79,6 +79,7 @@ struct LIveTVView: View {
     @State private var subStreams = [LiveStreams]()
     @State private var selectId = 0
     @State private var searchText = ""
+    @State private var selectSortText = "A-Z"
     @State private var isSearch = false
     @State private var selection  : Int?
     @State private var tvOSOptions = ["Default","Recently Added","A-Z","Z-A"]
@@ -505,6 +506,8 @@ struct LIveTVView: View {
                         
                         let filterSubStreams = subStreams.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
                         subStreams = filterSubStreams.count > 0 ? filterSubStreams : subStreams
+                        
+                        isSearch.toggle()
                     })
                     .foregroundColor(.white)
                     
@@ -533,16 +536,24 @@ struct LIveTVView: View {
 //                .pickerStyle(.inline)
                 
                 #else
-                Text("A-Z")
+                Text(selectSortText)
                     .font(.carioRegular)
                     .contextMenu {
-                        Button("Default", action: {})
-                        Button("Recently Added", action: {})
+                        Button("Default", action: {
+                            selectSortText = "Default"
+                            self.fetchAllStreaming()
+                        })
+                        Button("Recently Added", action: {
+                            selectSortText = "Recently Added"
+                            self.fetchAllStreaming()
+                        })
                         Button("A-Z", action: {
+                            selectSortText = "A-Z"
                             streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
                             subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
                         })
                         Button("Z-A", action: {
+                            selectSortText = "Z-A"
                             streams  =  streams.sorted { $0.name.lowercased() > $1.name.lowercased() }
                             subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
                         })

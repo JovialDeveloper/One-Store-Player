@@ -16,14 +16,33 @@ enum SettingsKeys:String,CaseIterable{
     case time
     case automation1
 }
+
+struct SettingsButtonData:Identifiable{
+    var id = UUID().uuidString
+    let title:String
+    let imageName:String
+    
+    static func getAllData()-> [SettingsButtonData] {
+        return [
+            .init(title: "Views Format", imageName: "layout"),
+            .init(title: "EPG Time Shift", imageName: "EPGTime"),
+            .init(title: "Language", imageName: "lang"),
+            .init(title: "Parental Control", imageName: "parentalcontrol"),
+            .init(title: "Stream Format", imageName: "streamFormat"),
+            .init(title: "Time Format", imageName: "time"),
+            .init(title: "Automation", imageName: "automation1"),
+        ]
+    }
+}
 struct SettingsView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     //let data = ["layout","EPGTime","lang","parentalcontrol","stream format","time","automation1"]
-    fileprivate let data = SettingsKeys.allCases
+    fileprivate let data = SettingsButtonData.getAllData()
     
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     let title:String
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     @State private var isLayoutGuideOn = false
     @State private var isTimeFormatButtonOn = false
     @State private var isLanguageButtonOn = false
@@ -41,78 +60,68 @@ struct SettingsView: View {
                 NavigationHeaderView(title:title,isHideOptions: true)
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 10) {
-                        ForEach(data, id: \.self) { item in
-                           #if os(tvOS)
+                        ForEach(data, id: \.id) { item in
+#if os(tvOS)
                             
-                            ButtonView(action: {
-                                if item == .layout {
+                            ButtonView(buttonData: item, action: {
+                                if item.imageName == SettingsKeys.layout.rawValue {
                                     isLayoutGuideOn.toggle()
                                 }
-                                if item == .time {
+                                if item.imageName == SettingsKeys.time.rawValue {
                                     isTimeFormatButtonOn.toggle()
                                 }
-                                if item == .EPGTime{
+                                if item.imageName == SettingsKeys.EPGTime.rawValue{
                                     isEPGButtonOn.toggle()
                                 }
-                                if item == .lang{
+                                if item.imageName == SettingsKeys.lang.rawValue{
                                     isLanguageButtonOn.toggle()
                                 }
-                                if item == .automation1{
+                                if item.imageName == SettingsKeys.automation1.rawValue
+                                {
                                     isAutomationOn.toggle()
                                 }
-                                
-                            },image: item.rawValue)
-                            .frame(minWidth:200,minHeight: 180)
-                            .cornerRadius(10)
-                            
-                            #else
-                            ButtonView(action: {
-                                if item == .layout {
-                                    isLayoutGuideOn.toggle()
-                                }
-                                if item == .time {
-                                    isTimeFormatButtonOn.toggle()
-                                }
-                                if item == .EPGTime{
-                                    isEPGButtonOn.toggle()
-                                }
-                                if item == .lang{
-                                    isLanguageButtonOn.toggle()
-                                }
-                                if item == .automation1{
-                                    isAutomationOn.toggle()
-                                }
-                                if item == .streamFormat{
+                                if item.imageName == SettingsKeys.streamFormat.rawValue{
                                     isStreamOn.toggle()
                                 }
-                                if item == .parentalcontrol {
+                                if item.imageName == SettingsKeys.parentalcontrol.rawValue {
                                     isParentalControlButtonOn.toggle()
                                 }
                                 
-                            },image: item.rawValue)
-                            //.frame(minWidth:200,minHeight: 180)
-                            .frame(maxWidth:200,maxHeight: 180)
+                            })
+                            .frame(minWidth:200,minHeight: 180)
                             .cornerRadius(10)
-//                            .sheet(isPresented: $isParentalControlButtonOn) {
-//                                AlertControl(show: $isParentalControlButtonOn, title: alertTitle, message: "")
-//                            }
-
                             
-//                            .alert("Paternal Control", isPresented: $isParentalControlButtonOn) {
-//                                        TextField("Username:", text: $paternalControlUserName)
-//                                        SecureField("Password", text: $paternalControlPassword)
-//
-//
-//                                        Button("OK", action: savePasswordInUserDefaults)
-//                                        Button("Cancel", role: .cancel) {
-//                                            isParentalControlButtonOn.toggle()
-//                                        }
-//
-//                                    } message: {
-//                                        Text("Please enter your username and password.")
-//                                    }
-                                    
-                            #endif
+#else
+                            ButtonView(buttonData: item, action: {
+                                if item.imageName == SettingsKeys.layout.rawValue {
+                                    isLayoutGuideOn.toggle()
+                                }
+                                if item.imageName == SettingsKeys.time.rawValue {
+                                    isTimeFormatButtonOn.toggle()
+                                }
+                                if item.imageName == SettingsKeys.EPGTime.rawValue{
+                                    isEPGButtonOn.toggle()
+                                }
+                                if item.imageName == SettingsKeys.lang.rawValue{
+                                    isLanguageButtonOn.toggle()
+                                }
+                                if item.imageName == SettingsKeys.automation1.rawValue
+                                {
+                                    isAutomationOn.toggle()
+                                }
+                                if item.imageName == SettingsKeys.streamFormat.rawValue{
+                                    isStreamOn.toggle()
+                                }
+                                if item.imageName == SettingsKeys.parentalcontrol.rawValue {
+                                    isParentalControlButtonOn.toggle()
+                                }
+                                
+                            })
+                            //.frame(minWidth:200,minHeight: 180)
+                            .frame(maxWidth:180,maxHeight: 140)
+                            .cornerRadius(10)
+                            
+#endif
                             
                         }
                     }
@@ -148,7 +157,7 @@ struct SettingsView: View {
         }
     }
     
-
+    
     
 }
 
@@ -178,7 +187,9 @@ struct AlertPCView:View{
             
             HStack(spacing:40){
                 
-                Button(action: {}) {
+                Button(action: {
+                    show.toggle()
+                }) {
                     Text("Cancel")
                         .font(.carioRegular)
                         .foregroundColor(.red)
@@ -219,7 +230,7 @@ struct AlertPCView:View{
             catch {
                 debugPrint(error)
             }
-           
+            
         }
     }
     
@@ -249,10 +260,10 @@ fileprivate struct LayoutDialoguView: View{
     
     @Binding var isClose : Bool
     @AppStorage(AppStorageKeys.layout.rawValue) private var layout: AppKeys.RawValue =  AppKeys.modern.rawValue
-    
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View{
         VStack{
-            Text("View Formatt")
+            Text("Views Format".localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -303,7 +314,7 @@ fileprivate struct LayoutDialoguView: View{
                 }
                 
             } label: {
-                Text("Save")
+                Text("Save".localized(lang))
                     .font(.carioRegular)
                     .foregroundColor(.white)
             }.frame(width:100,height:50)
@@ -335,7 +346,7 @@ fileprivate struct TimeDialoguView: View{
     @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View{
         VStack{
-            Text("Time Formatt")
+            Text("Time Format".localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -424,11 +435,11 @@ struct EPGView: View{
     @State fileprivate var selection = 0
     
     @Binding var isClose : Bool
-    
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     
     var body: some View{
         VStack{
-            Text("EPG Settings")
+            Text("EPG Settings".localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -451,7 +462,7 @@ struct EPGView: View{
                     //Save
                     isClose.toggle()
                 } label: {
-                    Text("Save")
+                    Text("Save".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -463,7 +474,7 @@ struct EPGView: View{
                     epg = selection
                     isClose.toggle()
                 } label: {
-                    Text("Cancel")
+                    Text("Cancel".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -486,13 +497,13 @@ fileprivate struct AutomationView: View{
     var buttons = ["No","Yes"]
     @AppStorage(AppStorageKeys.automate.rawValue) var udpate = ""
     @State var buttonSelected: Int = 0
-    
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     @Binding var isClose : Bool
     
     
     var body: some View{
         VStack{
-            Text("Auto-Update Channels and Movies Daily")
+            Text("Auto-Update Channels and Movies Daily".localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -535,7 +546,7 @@ fileprivate struct AutomationView: View{
                     //Save
                     isClose.toggle()
                 } label: {
-                    Text("Save")
+                    Text("Save".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -547,7 +558,7 @@ fileprivate struct AutomationView: View{
                     udpate = buttons[buttonSelected]
                     isClose.toggle()
                 } label: {
-                    Text("Cancel")
+                    Text("Cancel".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -581,7 +592,7 @@ fileprivate struct LangaugeSelectView: View{
     
     var body: some View{
         VStack{
-            Text("Select Language")
+            Text("Select Language".localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -628,13 +639,13 @@ fileprivate struct LangaugeSelectView: View{
                 isClose.toggle()
                 
                 if buttonSelected == 0 {
-                    lang = arbic
+                    lang = SupportedLanguages.arbic.rawValue
                 }else{
-                    lang = englishLang
+                    lang = SupportedLanguages.englishLang.rawValue
                 }
                 
             } label: {
-                Text("Submit")
+                Text("Submit".localized(lang))
                     .font(.carioRegular)
                     .foregroundColor(.white)
             }.frame(width:200,height:50)
@@ -646,7 +657,7 @@ fileprivate struct LangaugeSelectView: View{
         .frame(width: 300,height: UIScreen.main.bounds.height - 60)
         .background(Color.white)
         .onAppear {
-            if lang == arbic {
+            if lang == SupportedLanguages.arbic.rawValue {
                 buttonSelected = 0
             }else{
                 buttonSelected = 1
@@ -663,10 +674,10 @@ fileprivate struct StreamFormat: View{
     
     @Binding var isClose : Bool
     @AppStorage(AppStorageKeys.videoFormat.rawValue) var streamFormatte = ""
-    
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View{
         VStack{
-            Text("Stream Formatt")
+            Text("Stream Format".localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -721,7 +732,7 @@ fileprivate struct StreamFormat: View{
                 }
                 
             } label: {
-                Text("Submit")
+                Text("Submit".localized(lang))
                     .font(.carioRegular)
                     .foregroundColor(.white)
             }.frame(width:200,height:50)
@@ -789,7 +800,7 @@ struct AlertControl: UIViewControllerRepresentable {
     
     typealias UIViewControllerType = UIAlertController
     
-//    @Binding var textString: String
+    //    @Binding var textString: String
     @Binding var show: Bool
     var ok: (()->Void)?
     

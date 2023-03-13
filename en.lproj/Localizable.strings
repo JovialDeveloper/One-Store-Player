@@ -10,6 +10,13 @@
 "Movies" = "Movies";
 "Series" = "Series";
 "Settings" = "Settings";
+"Parental Control" = "Parental Control";
+"Stream Format" = "Stream Format";
+"EPG Time Shift" = "EPG Time Shift";
+"Language" = "Language";
+"Automation" = "Automation";
+"Time Format" = "Time Format";
+"Views Format" = "Views Format";
 "Subscription Info" = "Subscription Info";
 "Username:" = "Username:";
 "Account status:" = "Account status:";
@@ -21,15 +28,14 @@
 "ALL" = "ALL";
 "Favourites" = "Favourites";
 "Recently Watch" = "Recently Watch";
-
-
-"Time Formatt" = "Time Formatt";
-"View Formatt" = "View Formatt";
+"Live TV" = "Live TV";
+"Select Language" = "Select Language";
+"Auto-Update Channels and Movies Daily" = "Auto-Update Channels and Movies Daily";
+"EPG Settings" = "EPG Settings";
 "Save" = "Save";
 "Cancel" = "Cancel";
 "Password" = "Password";
 "OK" = "OK";
-"Cancel" = "Cancel";
-"Paternal Control" = "Paternal Control";
-
 "Please enter your username and password." = "Please enter your username and password.";
+"Scores & Fixtures" = "Scores & Fixtures";
+

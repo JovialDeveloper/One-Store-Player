@@ -8,23 +8,35 @@
 import SwiftUI
 
 struct ButtonView: View {
-    var buttonTitle = ""
+    
+    var buttonData:SettingsButtonData
     var action : (()->Void)
-    var image : String = ""
     var body: some View {
         Button {
             action()
         } label: {
-            if image.isEmpty{
-                Text(buttonTitle)
+            VStack{
+                Image(buttonData.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.black)
+                    
+                Text(buttonData.title)
                     .font(.carioRegular)
                     .foregroundColor(.black)
                     .frame(maxWidth: .infinity,maxHeight: 46)
-            }else{
-                Image(image)
-                    .resizable()
-                    .frame(maxWidth: .infinity)
             }
+            
+//            if image.isEmpty{
+//                Text(buttonTitle)
+//                    .font(.carioRegular)
+//                    .foregroundColor(.black)
+//                    .frame(maxWidth: .infinity,maxHeight: 46)
+//            }else{
+//                Image(image)
+//                    .resizable()
+//                    .frame(maxWidth: .infinity)
+//            }
             
         }
         .background(RoundedRectangle(cornerRadius: 8).fill(Color.white))

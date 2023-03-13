@@ -6,7 +6,8 @@
 //
 
 import Foundation
-struct MovieModel: Codable {
+struct MovieModel: Codable,Identifiable{
+    var id = UUID().uuidString
     let num: Int
     let name, streamType: String?
     let streamID: Int
@@ -55,10 +56,10 @@ struct Info: Codable {
     let backdropPath: [String]?
     let durationSecs: Int?
     let duration: String?
-    let video: Video?
-    let audio: Audio?
+    //let video: Video?
+    //let audio: Audio?
     let bitrate: Int?
-    let rating: String?
+    let rating: RatingsEnum?
 
     enum CodingKeys: String, CodingKey {
         case kinopoiskURL = "kinopoisk_url"
@@ -78,7 +79,9 @@ struct Info: Codable {
         case country, genre
         case backdropPath = "backdrop_path"
         case durationSecs = "duration_secs"
-        case duration, video, audio, bitrate, rating
+        case duration, bitrate, rating
+        
+        //video, audio
     }
 }
 
@@ -124,6 +127,36 @@ struct Audio: Codable {
         case maxBitRate = "max_bit_rate"
         case nbFrames = "nb_frames"
         case disposition, tags
+    }
+}
+
+//MARK:- Rating Enum
+
+enum RatingsEnum: Codable {
+    case integer(Double)
+    case string(String)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let x = try? container.decode(Double.self) {
+            self = .integer(x)
+            return
+        }
+        if let x = try? container.decode(String.self) {
+            self = .string(x)
+            return
+        }
+        throw DecodingError.typeMismatch(RatingsEnum.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for Value"))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .integer(let x):
+            try container.encode(x)
+        case .string(let x):
+            try container.encode(x)
+        }
     }
 }
 
