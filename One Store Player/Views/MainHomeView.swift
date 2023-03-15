@@ -40,15 +40,7 @@ struct MainHomeView: View {
                             .frame(width:40,height: 40)
                             .scaledToFill()
                         Spacer()
-                        // Today Date
-//                        if #available(iOS 15.0,tvOS 15.0, *) {
-//                            Text("\(Date().formatted())")
-//                                .font(.carioRegular)
-//                        } else {
-//                            Text(Date().description)
-//                                .font(.carioRegular)
-//                        }
-                        
+
                         if #available(iOS 15.0, *) {
                             Text("\(Date().description.getDateFormatted(format:defualtDateFormatte)) \(Date().getTime(format: formatte))")
                                 .font(.carioRegular)
@@ -186,7 +178,7 @@ struct MainHomeView: View {
                     .padding()
                     
                     HStack{
-                        Text("\("Expiration ".localized(lang.rawValue)) \(Date().description.getDateFormatted(format: defualtDateFormatte))")
+                        Text("\("Expiration ".localized(lang.rawValue)) \(userInfo?.expDate?.getDate() ?? "")")
                         .font(.carioBold)
                         .font(.carioRegular)
                         Spacer()

@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
-
+import MbSwiftUIFirstResponder
 struct NavigationHeaderView: View {
     var title:String
+    var isHideOptions = false
     @State private var isSeachFieldHide = true
     @State private var searchText = ""
     var searchAction : ((String)->Void)? = nil
     var moreAction : (()->Void)? = nil
-    var isHideOptions = false
+    
     @Environment(\.presentationMode) var presentationMode
     @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    
     var body: some View {
         HStack{
             // Logo
@@ -34,25 +36,15 @@ struct NavigationHeaderView: View {
             Spacer()
             if !isSeachFieldHide {
                 
-                
-                TextField("Search", text: $searchText) {
-                    isSeachFieldHide.toggle()
-                    searchAction?(searchText)
+                VStack{
+                    
+                    
+                    CustomTextField(searchText: $searchText, isSeachFieldHide: $isSeachFieldHide,searchAction: searchAction)
+                    Rectangle()
+                        .foregroundColor(.gray)
+                        .frame(height:1.5)
                 }
-                .foregroundColor(.white)
-
                 
-//                .toolbar {
-////                    if #available(iOS 15.0, *) {
-////                        ToolbarItemGroup(placement: .keyboard) {
-////                            HStack{}
-////                        }
-////                    } else {
-////                        // Fallback on earlier versions
-////
-////
-////                    }
-//                }
 
             }
             Text(title.localized(lang))
@@ -74,25 +66,38 @@ struct NavigationHeaderView: View {
                             .foregroundColor(.white)
                     }
                     .frame(width:40,height: 40)
-                    
-                    // Users Button
-                    Image("more")
-                        .resizable()
-                        .frame(width:40,height: 40)
-                        .scaledToFill()
-                        .foregroundColor(.white)
-                        .contextMenu {
-                            Button {
-                                moreAction?()
-                            } label: {
-                                Label("Reload", image: "ic_update")
-                            }
-
-                        }
-                    
                 }
                 .ignoresSafeArea(.container,edges: .bottom)
             }
+            // Users Button
+            Menu {
+                Button {
+                    moreAction?()
+                } label: {
+                    Label("Reload", image: "ic_update")
+                }
+            } label: {
+                Image("more")
+                    .resizable()
+                    .frame(width:40,height: 40)
+                    .scaledToFill()
+                    .foregroundColor(.white)
+            }
+
+//            
+//            Image("more")
+//                .resizable()
+//                .frame(width:40,height: 40)
+//                .scaledToFill()
+//                .foregroundColor(.white)
+//                .contextMenu {
+//                    Button {
+//                        moreAction?()
+//                    } label: {
+//                        Label("Reload", image: "ic_update")
+//                    }
+//
+//                }
             
             //Spacer()
             
@@ -124,4 +129,28 @@ struct InputAccessory: UIViewRepresentable  {
     }
     func updateUIView(_ uiView: UITextField, context: Context) {
     }
+}
+
+struct CustomTextField:View{
+    @Binding var searchText:String
+    @Binding var isSeachFieldHide : Bool
+    var searchAction : ((String)->Void)? = nil
+    enum FirstResponders: Int {
+        case name
+        case email
+        case notes
+    }
+    @State var firstResponder: FirstResponders? = nil
+    var body: some View {
+        TextField("", text: $searchText) {
+            isSeachFieldHide.toggle()
+            searchAction?(searchText)
+        }
+        .firstResponder(id: FirstResponders.name, firstResponder: $firstResponder, resignableUserOperations: .all)
+        .placeholder(when: searchText.isEmpty) {
+                Text("Search").foregroundColor(.gray)
+        }
+        .foregroundColor(.white)
+    }
+    
 }

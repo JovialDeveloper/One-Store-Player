@@ -5,6 +5,9 @@
   Created by MacBook Pro on 03/12/2022.
   
 */
+
+"save" = "Save";
+"cl" = "Cancel";
 "Expiration " = "Expiration ";
 "Login In: " = "Login In: ";
 "Movies" = "Movies";
@@ -29,13 +32,15 @@
 "Favourites" = "Favourites";
 "Recently Watch" = "Recently Watch";
 "Live TV" = "Live TV";
+"dr" = "Duration";
+"pl_ay" = "PLAY";
+"epi" = "EPISODES";
+"cast" = "CAST";
 "Select Language" = "Select Language";
-"Auto-Update Channels and Movies Daily" = "Auto-Update Channels and Movies Daily";
 "EPG Settings" = "EPG Settings";
-"Save" = "Save";
-"Cancel" = "Cancel";
 "Password" = "Password";
-"OK" = "OK";
+"ad" = "Auto-Update Channels and Movies Daily";
+"oK" = "OK";
 "Please enter your username and password." = "Please enter your username and password.";
 "Scores & Fixtures" = "Scores & Fixtures";
 

@@ -5,6 +5,9 @@
   Created by MacBook Pro on 03/12/2022.
   
 */
+
+"save" = "يحفظ";
+"cl" = "يلغي";
 "Expiration " = "انتهاء الصلاحية";
 "Login In: " = "تسجيل الدخول:";
 "Movies" = "أفلام";
@@ -30,15 +33,21 @@
 "Favourites" = "المفضلة";
 "Recently Watch" = "شاهد مؤخرًا";
 "Live TV" = "بث تلفزيوني مباشر";
+"dr" = "دوراتون";
+"pl_ay" = "يلعب";
+"epi" = "الحلقات";
+"cast" = "يقذف";
 "Matches" = "اعواد الكبريت";
 "Today" = "اليوم";
 "Yesterday" = "في الامس";
 "Now" = "الآن";
 "Select Language" = "اختار اللغة";
-;"القنوات والأفلام التحديث التلقائي يوميا" = "Auto-Update Channels and Movies Daily"
+"Password" = "كلمة المرور";
+;"القنوات والأفلام التحديث التلقائي يوميا"="ad"
+"oK" = "نعم";
 "EPG Settings" = "إعدادات EPG";
-"Save" = "يحفظ";
-"Cancel" = "يلغي";
+
+
 
 
 

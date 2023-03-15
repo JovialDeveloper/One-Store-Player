@@ -113,6 +113,7 @@ struct The1: Codable {
 
 enum ContainerExtension: String, Codable {
     case mp4 = "mp4"
+    case mkv = "mkv"
 }
 
 // MARK: - The1_Info
@@ -125,7 +126,7 @@ struct The1_Info: Codable {
     //let video: SVideo?
     //let audio: SAudio?
     let bitrate: Int?
-    //let rating: String?
+    let rating: RatingsEnum?
     let season: String?
 
     enum CodingKeys: String, CodingKey {
@@ -135,6 +136,7 @@ struct The1_Info: Codable {
         case duration
         case movieImage = "movie_image"
         case bitrate, season
+        case rating
         
         //video, audio
         //rating

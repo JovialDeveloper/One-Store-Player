@@ -14,7 +14,8 @@ struct MovieModel: Codable,Identifiable{
     let streamIcon: String?
     //let rating: String?
     let rating5Based: Double?
-    let added, categoryID, containerExtension, customSid: String?
+    let added, categoryID, customSid: String?
+    let containerExtension:ContainerExtension?
     let directSource: String?
 
     enum CodingKeys: String, CodingKey {

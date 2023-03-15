@@ -12,6 +12,7 @@
 		D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */ = {isa = PBXBuildFile; productRef = D003EB10294CC8B100D625B8 /* XMLMapper */; };
 		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
 		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
+		D035A57829C084A50046308B /* LiveClassicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035A57729C084A50046308B /* LiveClassicView.swift */; };
 		D041377729362A2600EC4723 /* MovieCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377629362A2600EC4723 /* MovieCategoriesModel.swift */; };
 		D041377929362A9300EC4723 /* ModernLayoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */; };
 		D041377B29362DBA00EC4723 /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377A29362DBA00EC4723 /* MovieModel.swift */; };
@@ -21,6 +22,8 @@
 		D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048C32029292AF4001B4DD0 /* WatchView.swift */; };
 		D064B7582950789200D7B0B6 /* CatchUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7572950789200D7B0B6 /* CatchUpView.swift */; };
 		D064B75A2950A31C00D7B0B6 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7592950A31C00D7B0B6 /* StartView.swift */; };
+		D06BBDD629C1DCDF008EA936 /* MbSwiftUIFirstResponder in Frameworks */ = {isa = PBXBuildFile; productRef = D06BBDD529C1DCDF008EA936 /* MbSwiftUIFirstResponder */; };
+		D06BBDD829C1EBA7008EA936 /* SeasonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BBDD729C1EBA7008EA936 /* SeasonsView.swift */; };
 		D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */; };
 		D07CF82B291BFD4100EFEFFA /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82A291BFD4100EFEFFA /* CollectionView.swift */; };
 		D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */; };
@@ -78,6 +81,7 @@
 		D003EB0D294CC06100D625B8 /* EPGLiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPGLiveView.swift; sourceTree = "<group>"; };
 		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
+		D035A57729C084A50046308B /* LiveClassicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveClassicView.swift; sourceTree = "<group>"; };
 		D041377629362A2600EC4723 /* MovieCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCategoriesModel.swift; sourceTree = "<group>"; };
 		D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutViewModel.swift; sourceTree = "<group>"; };
 		D041377A29362DBA00EC4723 /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
@@ -88,6 +92,7 @@
 		D05E900A295862150073B23D /* TVVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TVVLCKit.xcframework; path = Carthage/Build/TVVLCKit.xcframework; sourceTree = "<group>"; };
 		D064B7572950789200D7B0B6 /* CatchUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchUpView.swift; sourceTree = "<group>"; };
 		D064B7592950A31C00D7B0B6 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		D06BBDD729C1EBA7008EA936 /* SeasonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonsView.swift; sourceTree = "<group>"; };
 		D07CF828291BFCBF00EFEFFA /* ModernLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutView.swift; sourceTree = "<group>"; };
 		D07CF82A291BFD4100EFEFFA /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		D07CF82C291BFDB000EFEFFA /* ClassicLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicLayoutView.swift; sourceTree = "<group>"; };
@@ -135,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0424C932951F78200CC316A /* ToastUI in Frameworks */,
+				D06BBDD629C1DCDF008EA936 /* MbSwiftUIFirstResponder in Frameworks */,
 				D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */,
 				D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */,
 				8A5ED811C11F0CF67CE93A61 /* Pods_One_Store_Player.framework in Frameworks */,
@@ -192,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				D04339DF2930E54E00213D85 /* LIveTVView.swift */,
+				D035A57729C084A50046308B /* LiveClassicView.swift */,
 			);
 			path = "Live TV";
 			sourceTree = "<group>";
@@ -200,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				D048C32029292AF4001B4DD0 /* WatchView.swift */,
+				D06BBDD729C1EBA7008EA936 /* SeasonsView.swift */,
 			);
 			path = WatchView;
 			sourceTree = "<group>";
@@ -404,6 +412,7 @@
 				D003EB10294CC8B100D625B8 /* XMLMapper */,
 				D0424C922951F78200CC316A /* ToastUI */,
 				D08D430F29BF672A005D7ED1 /* Kingfisher */,
+				D06BBDD529C1DCDF008EA936 /* MbSwiftUIFirstResponder */,
 			);
 			productName = "One Store Player";
 			productReference = D084FFF7291670F900465873 /* One Store Player.app */;
@@ -439,6 +448,7 @@
 				D003EB0F294CC8B100D625B8 /* XCRemoteSwiftPackageReference "XMLMapper" */,
 				D0424C912951F78200CC316A /* XCRemoteSwiftPackageReference "ToastUI" */,
 				D08D430E29BF672A005D7ED1 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				D06BBDD429C1DCDF008EA936 /* XCRemoteSwiftPackageReference "MbSwiftUIFirstResponder" */,
 			);
 			productRefGroup = D084FFF8291670F900465873 /* Products */;
 			projectDirPath = "";
@@ -516,6 +526,7 @@
 				D084000D291684E400465873 /* LoginView.swift in Sources */,
 				D07CF832291C055E00EFEFFA /* NavigationHeaderView.swift in Sources */,
 				D0F879F829324F5E00E5DD06 /* IptvView.swift in Sources */,
+				D035A57829C084A50046308B /* LiveClassicView.swift in Sources */,
 				D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */,
 				D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */,
 				D0FB64EE2933D73C009C55C4 /* LiveStreamingViewModel.swift in Sources */,
@@ -546,6 +557,7 @@
 				D0EF924B2916DE8E003225F0 /* MainHomeView.swift in Sources */,
 				D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */,
 				D003EB0E294CC06100D625B8 /* EPGLiveView.swift in Sources */,
+				D06BBDD829C1EBA7008EA936 /* SeasonsView.swift in Sources */,
 				D064B75A2950A31C00D7B0B6 /* StartView.swift in Sources */,
 				D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */,
 				D0C6189D291917D000A9529A /* MoviesView.swift in Sources */,
@@ -814,6 +826,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		D06BBDD429C1DCDF008EA936 /* XCRemoteSwiftPackageReference "MbSwiftUIFirstResponder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mobilinked/MbSwiftUIFirstResponder.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		D08632192948A1200088142B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -842,6 +862,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D0424C912951F78200CC316A /* XCRemoteSwiftPackageReference "ToastUI" */;
 			productName = ToastUI;
+		};
+		D06BBDD529C1DCDF008EA936 /* MbSwiftUIFirstResponder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D06BBDD429C1DCDF008EA936 /* XCRemoteSwiftPackageReference "MbSwiftUIFirstResponder" */;
+			productName = MbSwiftUIFirstResponder;
 		};
 		D086321A2948A1200088142B /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

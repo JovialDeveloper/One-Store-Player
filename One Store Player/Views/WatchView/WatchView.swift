@@ -11,14 +11,18 @@ import Kingfisher
 import _AVKit_SwiftUI
 struct WatchView<T:Codable>: View {
     @Environment(\.presentationMode) private var presentationMode
+    @AppStorage(AppStorageKeys.language.rawValue) private var lang = ""
     @State var rating = 5
     var data : T
     @State var cancelable = [AnyCancellable]()
     @State var customObject : MovieModelWatchResponse?
     @State var seriesObject : SeriesResponse?
+    @State var selectedEpisode:The1?
     @State var isWatch = false
     @State var id = 0
     @State var duration = ""
+    @State private var currentSeason = "SEASON-1"
+    @State private var selectedIndex = 0
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -84,33 +88,135 @@ struct WatchView<T:Codable>: View {
                                 
                                 SubscriptionCell(title: "Duration:", description: data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? "")
                                 SubscriptionCell(title: "Genre:", description: data is MovieModel ? customObject?.info.genre ?? "" : seriesObject?.info?.genre ?? "")
-                                SubscriptionCell(title: "Cast:", description: data is MovieModel ? customObject?.info.cast ?? "" : seriesObject?.info?.cast ?? "")
+                                if data is SeriesModel {
+                                    SubscriptionCell(title: "Plot:", description:seriesObject?.info?.plot ?? "")
+                                }else {
+                                    SubscriptionCell(title: "Cast:", description: data is MovieModel ? customObject?.info.cast ?? "" : seriesObject?.info?.cast ?? "")
+                                }
+
                             }
                         }
-                        
-                        Button {
-                            // watch
-                            id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
-                            duration =  data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? ""
+                    
+                        if data is SeriesModel, let episodes = seriesObject?.episodes{
+                            HStack {
+                                Button {
+                                    // watch
+                                    id = Int(episodes.the1?[0].id ?? "") ?? 0
+                                    duration =  episodes.the1?[0].info?.duration ?? ""
+
+                                } label: {
+                                    HStack{
+                                        Text("pl_ay".localized(lang))
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            //.frame(width: 140,height: 46)
+
+                                        Text("\(episodes.the1?[0].episodeNum ?? 0)")
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            //.frame(width: 140,height: 46)
+                                    }.frame(width: 140,height: 46)
+
+//
+                                }.background(Rectangle().fill(Color.blue))
+
+
+                                Menu {
+                                    ForEach(seriesObject?.seasons ?? [],id:\.id) {
+                                        item in
+                                        Button {
+                                            currentSeason = item.name ?? ""
+                                        } label: {
+                                            Text(item.name ?? "")
+                                        }
+
+                                    
+                                    }
+                                } label: {
+                                    Button {
+    //                                    // watch
+    //                                    id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
+    //                                    duration =  data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? ""
+
+
+                                    } label: {
+                                        Text(currentSeason)
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(width: 140,height: 46)
+                                    }.background(Rectangle().fill(Color.secondaryColor))
+                                }
+
+                            }
                             
+                            // Tab Section
+                            HStack{
+                                HStack{
+                                    VStack{
+                                        Text("epi".localized(lang))
+                                        Rectangle()
+                                            .foregroundColor(selectedIndex == 0 ? Color.blue : Color.clear)
+                                            .frame(height:1)
+                                    }
+                                    .onTapGesture {
+                                        selectedIndex = 0
+                                    }
+                                    
+                                    VStack{
+                                        Text("cast".localized(lang))
+                                        Rectangle()
+                                            .foregroundColor(selectedIndex == 1 ? Color.blue : Color.clear)
+                                            .frame(height:1)
+                                    }.onTapGesture {
+                                        selectedIndex = 1
+                                    }
+                                }
+                                .foregroundColor(.white)
+                                .frame(width:UIScreen.main.bounds.width * 0.3,height: 46)
+                                .background(Rectangle().foregroundColor(Color.secondaryColor))
+                                
+                                Spacer()
                             
-                        } label: {
-                            Text("WATCH")
+                            }
+                            if selectedIndex == 0 {
+                                SeasonsView(episode: episodes, id: $id,selectedEpisode: $selectedEpisode)
+                                    .frame(maxHeight:.infinity)
+                                    
+                            }
+                            else {
+                                Text(seriesObject?.info?.cast ?? "")
+                                    .font(.carioRegular)
+                                    .foregroundColor(.white)
+                            }
+                            
+                        }else {
+                            Button {
+                                // watch
+                                id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
+                                duration =  data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? ""
+                                
+                                
+                            } label: {
+                                Text("WATCH")
+                                    .font(.carioRegular)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(width: 140,height: 46)
+                            }.background(Rectangle().fill(Color.blue))
+
+                            
+                            Text((data is MovieModel ? customObject?.info.infoDescription ?? "" : seriesObject?.info?.plot) ?? "")
                                 .font(.carioRegular)
                                 .foregroundColor(.white)
                                 .padding()
-                                .frame(width: 140,height: 46)
-                        }.background(Rectangle().fill(Color.blue))
-
-                        
-                        Text((data is MovieModel ? customObject?.info.infoDescription ?? "" : seriesObject?.info?.plot) ?? "")
-                            .font(.carioRegular)
-                            .foregroundColor(.white)
-                            .padding()
-                        
+                        }
                     }
                     
                 }
+          
             }
             .padding()
         }
@@ -226,25 +332,28 @@ struct WatchView<T:Codable>: View {
                         }
                 }
             }else{
-                NavigationView{
-                    VLCView(link: Networking.shared.getStreamingLink(id: id, type: ViewType.series.rawValue), isOvarLayHide: false)
-                        .ignoresSafeArea()
-                        .toolbar {
-                            ToolbarItem(placement:.navigationBarLeading) {
-                                Button {
-                                    isWatch.toggle()
-                                } label: {
-                                    Image("arrow_back")
-                                        .resizable()
-                                        .frame(width:46,height:46)
-                                }
-                                .frame(width:46,height:46)
-                                .foregroundColor(Color.white)
+                if let epi = selectedEpisode {
+                    NavigationView{
+                        VLCView(link: Networking.shared.getStreamingLink(id: id, type: ViewType.series.rawValue,format: epi.containerExtension ?? .mp4), isOvarLayHide: false)
+                            .ignoresSafeArea()
+                            .toolbar {
+                                ToolbarItem(placement:.navigationBarLeading) {
+                                    Button {
+                                        isWatch.toggle()
+                                    } label: {
+                                        Image("arrow_back")
+                                            .resizable()
+                                            .frame(width:46,height:46)
+                                    }
+                                    .frame(width:46,height:46)
+                                    .foregroundColor(Color.white)
 
+                                }
                             }
-                        }
-        
+            
+                    }
                 }
+               
             }
             
 

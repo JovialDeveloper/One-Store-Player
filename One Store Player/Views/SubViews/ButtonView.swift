@@ -11,6 +11,7 @@ struct ButtonView: View {
     
     var buttonData:SettingsButtonData
     var action : (()->Void)
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     var body: some View {
         Button {
             action()
@@ -21,7 +22,7 @@ struct ButtonView: View {
                     .scaledToFit()
                     .foregroundColor(.black)
                     
-                Text(buttonData.title)
+                Text(buttonData.title.localized(lang))
                     .font(.carioRegular)
                     .foregroundColor(.black)
                     .frame(maxWidth: .infinity,maxHeight: 46)

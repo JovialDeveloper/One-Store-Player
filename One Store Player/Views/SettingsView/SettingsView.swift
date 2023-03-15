@@ -314,7 +314,7 @@ fileprivate struct LayoutDialoguView: View{
                 }
                 
             } label: {
-                Text("Save".localized(lang))
+                Text("save".localized(lang))
                     .font(.carioRegular)
                     .foregroundColor(.white)
             }.frame(width:100,height:50)
@@ -394,7 +394,7 @@ fileprivate struct TimeDialoguView: View{
                         formatte = hour_12
                     }
                 } label: {
-                    Text("Save".localized(lang))
+                    Text("save".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -405,7 +405,7 @@ fileprivate struct TimeDialoguView: View{
                     //Save
                     isClose.toggle()
                 } label: {
-                    Text("Cancel".localized(lang))
+                    Text("cancel".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -462,7 +462,7 @@ struct EPGView: View{
                     //Save
                     isClose.toggle()
                 } label: {
-                    Text("Save".localized(lang))
+                    Text("save".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -474,7 +474,7 @@ struct EPGView: View{
                     epg = selection
                     isClose.toggle()
                 } label: {
-                    Text("Cancel".localized(lang))
+                    Text("cl".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -503,7 +503,7 @@ fileprivate struct AutomationView: View{
     
     var body: some View{
         VStack{
-            Text("Auto-Update Channels and Movies Daily".localized(lang))
+            Text("ad".localized(lang))
                 .font(.carioBold)
                 .foregroundColor(.black)
                 .padding()
@@ -546,7 +546,7 @@ fileprivate struct AutomationView: View{
                     //Save
                     isClose.toggle()
                 } label: {
-                    Text("Save".localized(lang))
+                    Text("save".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -558,7 +558,7 @@ fileprivate struct AutomationView: View{
                     udpate = buttons[buttonSelected]
                     isClose.toggle()
                 } label: {
-                    Text("Cancel".localized(lang))
+                    Text("cl".localized(lang))
                         .font(.carioRegular)
                         .foregroundColor(.white)
                 }.frame(width:100,height:50)
@@ -717,8 +717,6 @@ fileprivate struct StreamFormat: View{
                 
                 
             }
-            
-            Spacer()
             Button {
                 //Save
                 isClose.toggle()
@@ -732,12 +730,12 @@ fileprivate struct StreamFormat: View{
                 }
                 
             } label: {
-                Text("Submit".localized(lang))
+                Text("save".localized(lang))
                     .font(.carioRegular)
                     .foregroundColor(.white)
-            }.frame(width:200,height:50)
+            }
+            .frame(width:200,height:36)
                 .background(RoundedRectangle(cornerRadius: 5).fill(Color(UIColor.systemBlue)))
-                .padding()
             
         }
         
@@ -797,7 +795,7 @@ struct SettingsView_Previews: PreviewProvider {
 
 
 struct AlertControl: UIViewControllerRepresentable {
-    
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
     typealias UIViewControllerType = UIAlertController
     
     //    @Binding var textString: String
@@ -818,11 +816,11 @@ struct AlertControl: UIViewControllerRepresentable {
             textField.placeholder = "Password"
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (action) in
+        let cancelAction = UIAlertAction(title: "cancel", style: .destructive) { (action) in
             self.show = false
         }
         
-        let submitAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+        let submitAction = UIAlertAction(title: "ok", style: .default) { (action) in
             ok?()
         }
         

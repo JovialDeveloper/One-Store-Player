@@ -7,6 +7,11 @@
 
 import Foundation
 
+
+extension Notification.Name{
+    static let resumePlaying = Notification.Name("resumePlaying")
+}
+
 enum AppStorageKeys:String{
     typealias RawValue = String
     case layout
@@ -32,18 +37,19 @@ enum ViewType:String{
     typealias RawValue = String
     case movie
     case series
+    case liveTV
 }
 enum APIError: Error, LocalizedError {
-case unknown, apiError(reason: String), credientialsWrong
-var errorDescription: String? {
-switch self {
-case .unknown:
-    
-return "Unknown error"
-case .apiError(let reason):
-return reason
-case .credientialsWrong:
-    return "UserName or Password wrong"
+    case unknown, apiError(reason: String), credientialsWrong
+    var errorDescription: String? {
+        switch self {
+        case .unknown:
+            
+            return "Unknown error"
+        case .apiError(let reason):
+            return reason
+        case .credientialsWrong:
+            return "UserName or Password wrong"
         }
     }
 }
@@ -68,6 +74,7 @@ enum VideoFormats:String{
     case ts
     case mp4
     case m3u8
+    case mkv
 }
 
 extension String {
@@ -81,5 +88,29 @@ extension String {
             return number.floatValue
         }
         return Float()
+    }
+    
+    func getDate()->String{
+        if let timeInterval = TimeInterval(self) {
+            let date = Date(timeIntervalSinceReferenceDate: timeInterval)
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            return formatter.string(from: date)
+        }
+        return "--"
+    }
+}
+
+import SwiftUI
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content) -> some View {
+
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 }

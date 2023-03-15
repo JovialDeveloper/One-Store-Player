@@ -82,6 +82,7 @@ struct SubscriptionCell:View{
                 Text(description.localized(lang))
                     .font(.carioRegular)
                     .foregroundColor(.white)
+                    .lineLimit(2)
                     //.frame(maxWidth: .infinity,alignment: .leading)
                 
                 Spacer()
