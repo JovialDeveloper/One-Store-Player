@@ -10,6 +10,7 @@ import Foundation
 
 extension Notification.Name{
     static let resumePlaying = Notification.Name("resumePlaying")
+    static let addNewUser = Notification.Name("addNewUser")
 }
 
 enum AppStorageKeys:String{
@@ -92,12 +93,21 @@ extension String {
     
     func getDate()->String{
         if let timeInterval = TimeInterval(self) {
-            let date = Date(timeIntervalSinceReferenceDate: timeInterval)
+            let date = Date(timeIntervalSince1970: timeInterval)
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             return formatter.string(from: date)
         }
         return "--"
+    }
+    
+    func getFormattedDates(value:Int)->String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        if let date = Calendar.current.date(byAdding: .day, value: value, to: Date()) {
+            return formatter.string(from: date)
+        }
+        return ""
     }
 }
 

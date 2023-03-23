@@ -92,7 +92,7 @@ struct LIveTVView: View {
     @State private var selectTitle = ""
     @State private var sLink : String?
     private var playerViewModel = VLCMediaPlayer()
-    @AppStorage(AppStorageKeys.layout.rawValue) var layout: AppKeys.RawValue = AppKeys.modern.rawValue
+    @AppStorage(AppStorageKeys.layout.rawValue) var layout: AppKeys.RawValue = AppKeys.classic.rawValue
     fileprivate func fetchAllStreaming() {
         vm.isLoading.toggle()
         vm.fetchAllLiveStreaming().sink { SubscriberError in
@@ -149,7 +149,7 @@ struct LIveTVView: View {
                                             .foregroundColor(.white)
 
                                             .frame(maxWidth:.infinity,alignment: .leading)
-                                            .background(selectTitle == "ALL" ? Color.yellow : nil)
+                                            .background(selectTitle == "ALL" ? Color.selectedColor : nil)
 
                                             Divider()
                                                 .overlay(Color.white)
@@ -169,7 +169,7 @@ struct LIveTVView: View {
                                             .foregroundColor(.white)
 
                                             .frame(maxWidth:.infinity,alignment: .leading)
-                                            .background(selectTitle == "Favourites" ? Color.yellow : nil)
+                                            .background(selectTitle == "Favourites" ? Color.selectedColor : nil)
 
                                             Divider()
                                                 .overlay(Color.white)
@@ -194,12 +194,12 @@ struct LIveTVView: View {
                                                         .overlay(Color.white)
                                                 }
                                             }
-                                            .background(selectTitle == stream.name ? Color.yellow : nil)
+                                            .background(selectTitle == stream.name ? Color.selectedColor : nil)
 
 
                                         }
                                     }
-                                    .background(Color.secondaryColor)
+                                    .background(Color.black.opacity(0.5))
                                 }
 
                                 //MARK:- SubStreams List
@@ -235,7 +235,7 @@ struct LIveTVView: View {
 
                                                 }
                                                 .padding()
-                                                .background(selectTitle == stream.name ? Color.yellow : nil)
+                                                .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                                 .contextMenu {
                                                     Button {
                                                         favLiveStreams.saveMovies(model: stream)
@@ -264,7 +264,7 @@ struct LIveTVView: View {
                                                     }
 
                                                 }
-                                                .background(selectTitle == stream.name ? Color.yellow : nil)
+                                                .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                                 .contextMenu {
                                                     Button {
                                                         favLiveStreams.saveMovies(model: stream)
@@ -278,14 +278,14 @@ struct LIveTVView: View {
 
                                         }
                                     }
-                                    .background(Color.secondaryColor)
+                                    .background(Color.black.opacity(0.5))
                                 }
                             }
                             .frame(width:proxy.size.width * 0.5,height: proxy.size.height)
-                            .background(Color.secondaryColor)
+                            .background(Color.black.opacity(0.5))
                             .onChange(of: selectId) { newValue in
                                 sLink = linkLive(id: selectId, type: "live")
-                                debugPrint("Live Link",sLink)
+                                
                             }
 
                             videoLayer
@@ -340,7 +340,7 @@ struct LIveTVView: View {
                                     .foregroundColor(.white)
                                     
                                     .frame(maxWidth:.infinity,alignment: .leading)
-                                    .background(selectTitle == "ALL" ? Color.yellow : nil)
+                                    .background(selectTitle == "ALL" ? Color.selectedColor : nil)
                                     
                                     Divider()
                                         .overlay(Color.white)
@@ -360,7 +360,7 @@ struct LIveTVView: View {
                                     .foregroundColor(.white)
                                  
                                     .frame(maxWidth:.infinity,alignment: .leading)
-                                    .background(selectTitle == "Favourites" ? Color.yellow : nil)
+                                    .background(selectTitle == "Favourites" ? Color.selectedColor : nil)
                                     
                                     Divider()
                                         .overlay(Color.white)
@@ -385,12 +385,12 @@ struct LIveTVView: View {
                                                 .overlay(Color.white)
                                         }
                                     }
-                                    .background(selectTitle == stream.name ? Color.yellow : nil)
+                                    .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                     
                                     
                                 }
                             }
-                            .background(Color.secondaryColor)
+                            .background(Color.black.opacity(0.5))
                         }
                         
                         //MARK:- SubStreams List
@@ -427,7 +427,7 @@ struct LIveTVView: View {
                                             
                                         }
                                         .padding()
-                                        .background(selectTitle == stream.name ? Color.yellow : nil)
+                                        .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                         .contextMenu {
                                             Button {
                                                 favLiveStreams.saveMovies(model: stream)
@@ -456,7 +456,7 @@ struct LIveTVView: View {
                                             }
                                             
                                         }
-                                        .background(selectTitle == stream.name ? Color.yellow : nil)
+                                        .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                         .contextMenu {
                                             Button {
                                                 favLiveStreams.saveMovies(model: stream)
@@ -470,11 +470,11 @@ struct LIveTVView: View {
                                     
                                 }
                             }
-                            .background(Color.secondaryColor)
+                            .background(Color.black.opacity(0.5))
                         }
                     }
                     .frame(width:proxy.size.width * 0.5,height: proxy.size.height)
-                    .background(Color.secondaryColor)
+                    .background(Color.black.opacity(0.5))
                     .onChange(of: selectId) { newValue in
                         sLink = linkLive(id: selectId, type: "live")
                         debugPrint("Live Link",sLink)

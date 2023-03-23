@@ -10,27 +10,30 @@ import ToastUI
 struct LoginView: View {
     @State private var isSecure = false
     @StateObject fileprivate var loginViewModel = LoginViewModel()
-    var isGoBackToMain = true
+    var isGoBackToMain = false
+    var isUserUpdate = false
+    var updateUser : UserInfo? = nil
     @EnvironmentObject var state : AppState
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         ZStack{
             LinearGradient.bgGradient.ignoresSafeArea()
             HStack{
+                Spacer()
                 VStack(spacing:20) {
                     Spacer()
                     Image("Icon")
                         .resizable()
                         .frame(width:140,height: 140)
                         .scaledToFill()
-                    
                     Spacer()
-                    //                        Text("To order contact use whatsapp +971551761973")
                 }
                 
                 Spacer()
                 
                 VStack{
                     Text("Login Details")
+                        .foregroundColor(.white)
                         .font(.carioBold)
                         .padding()
                     
@@ -41,15 +44,18 @@ struct LoginView: View {
                     TextFieldView(text: $loginViewModel.password,placeHolder: "Password",isSecure: $isSecure)
 #else
                     HStack{
-                        ButtonView(buttonData: .init(title: "", imageName: isSecure ? "eye-off" : "eye")) {
+                        Button {
                             isSecure.toggle()
+                        } label: {
+                            Image(isSecure ? "eye-off" : "eye")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.black)
                         }
                         .frame(width:46,height: 46)
-//                        ButtonView(action: {
-//                            isSecure.toggle()
-//                        },image: isSecure ? "eye-off" : "eye")
-                        
-                        
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color.white))
+
+
                         
                         TextFieldView(text: $loginViewModel.password,placeHolder: "Password",isSecure: $isSecure)
                     }
@@ -61,30 +67,61 @@ struct LoginView: View {
                     HStack{
                         Spacer().frame(width:30)
                         Button {
-                            loginViewModel.login()
-                            
-                                .sink { error in
-                                    
-                                    switch error {
-                                    case .failure(let error):
-                                        loginViewModel.isLoading = false
+                            if isUserUpdate {
+                                loginViewModel.isUserUpdate = true
+                                loginViewModel.login()
+                                
+                                    .sink { error in
                                         
-                                        loginViewModel.isError = (true,error.localizedDescription)
-                                    case .finished:
-                                        break
-                                    }
-                                    
-                                } receiveValue: { data in
-                                    state.isLogin = true
-                                    debugPrint(data)
-                                }.store(in: &loginViewModel.subscriptions)
+                                        switch error {
+                                        case .failure(let error):
+                                            loginViewModel.isLoading = false
+                                            
+                                            loginViewModel.isError = (true,error.localizedDescription)
+                                        case .finished:
+                                            break
+                                        }
+                                        
+                                    } receiveValue: { data in
+                                        state.isLogin = true
+                                        if isGoBackToMain {
+                                            presentationMode.wrappedValue.dismiss()
+                                            NotificationCenter.default.post(name: .addNewUser, object: self)
+                                        }
+                                        debugPrint(data)
+                                    }.store(in: &loginViewModel.subscriptions)
+                            }
+                            else{
+                                loginViewModel.login()
+                                
+                                    .sink { error in
+                                        
+                                        switch error {
+                                        case .failure(let error):
+                                            loginViewModel.isLoading = false
+                                            
+                                            loginViewModel.isError = (true,error.localizedDescription)
+                                        case .finished:
+                                            break
+                                        }
+                                        
+                                    } receiveValue: { data in
+                                        state.isLogin = true
+                                        if isGoBackToMain {
+                                            presentationMode.wrappedValue.dismiss()
+                                            NotificationCenter.default.post(name: .addNewUser, object: self)
+                                        }
+                                        debugPrint(data)
+                                    }.store(in: &loginViewModel.subscriptions)
+                            }
+                           
                             
                         } label: {
                             if loginViewModel.isLoading {
                                 ProgressView().progressViewStyle(CircularProgressViewStyle())
                                     .frame(maxWidth:.infinity)
                             }else{
-                                Text("ADD NEW USER")
+                                Text(isUserUpdate ? "Update User":"ADD NEW USER")
                                     .font(.carioRegular)
                                     .frame(maxWidth:.infinity)
                             }
@@ -97,11 +134,22 @@ struct LoginView: View {
                     
                     
                 }
+                
                 .frame(width:UIScreen.main.bounds.width/2.2)
                 .padding()
                 
                 //Spacer()
             }
+            .onAppear(perform: {
+                
+                if isUserUpdate, updateUser != nil {
+                    loginViewModel.selectUser = updateUser
+                    loginViewModel.name = updateUser!.name
+                    loginViewModel.userName = updateUser!.username
+                    loginViewModel.password = updateUser!.password
+                    loginViewModel.port = updateUser!.port
+                }
+            })
             .foregroundColor(.black)
             .toast(isPresented: $loginViewModel.isError.0) {
                 

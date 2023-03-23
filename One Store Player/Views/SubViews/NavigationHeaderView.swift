@@ -10,13 +10,14 @@ import MbSwiftUIFirstResponder
 struct NavigationHeaderView: View {
     var title:String
     var isHideOptions = false
+    var isHideReload = false
     @State private var isSeachFieldHide = true
     @State private var searchText = ""
     var searchAction : ((String)->Void)? = nil
     var moreAction : (()->Void)? = nil
     
     @Environment(\.presentationMode) var presentationMode
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     
     var body: some View {
         HStack{
@@ -69,20 +70,23 @@ struct NavigationHeaderView: View {
                 }
                 .ignoresSafeArea(.container,edges: .bottom)
             }
-            // Users Button
-            Menu {
-                Button {
-                    moreAction?()
+            if !isHideReload {
+                Menu {
+                    Button {
+                        moreAction?()
+                    } label: {
+                        Label("Reload", image: "ic_update")
+                    }
                 } label: {
-                    Label("Reload", image: "ic_update")
+                    Image("more")
+                        .resizable()
+                        .frame(width:40,height: 40)
+                        .scaledToFill()
+                        .foregroundColor(.white)
                 }
-            } label: {
-                Image("more")
-                    .resizable()
-                    .frame(width:40,height: 40)
-                    .scaledToFill()
-                    .foregroundColor(.white)
             }
+            // Users Button
+            
 
 //            
 //            Image("more")

@@ -48,6 +48,7 @@ struct ClassicLayoutView: View {
 
 struct ClassicListGridView:View{
     @State private var isSelectItem = false
+    @State private var isLoadedTapped = false
     @Binding var data : [MovieCategoriesModel]
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     @State private var selectItem : MovieCategoriesModel?
@@ -102,18 +103,18 @@ struct ClassicListGridView:View{
                 let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
                 
                 responseType.sink { subErrr in
-                    vm.isLoading.toggle()
+                    vm.isLoading = false
                     switch subErrr {
                     case .failure(let err):
                         debugPrint(err)
                     case .finished:
-                        vm.isLoading.toggle()
+                        vm.isLoading = false
                         break
                     }
                     debugPrint(subErrr)
                 } receiveValue: { movies in
                     debugPrint("M",movies)
-                    vm.isLoading.toggle()
+                    vm.isLoading = false
                     self.series?.removeAll()
                     self.filterSeries?.removeAll()
                     self.filterSeries = nil
@@ -155,6 +156,7 @@ struct ClassicListGridView:View{
                         self.isSelectItem.toggle()
                     }
                     
+                    
                 }.store(in: &vm.subscriptions)
                 
             }
@@ -171,18 +173,18 @@ struct ClassicListGridView:View{
                 let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllMoviesById(id: newValue!.categoryID, type:subject.1)
                 
                 responseType.sink { subErrr in
-                    vm.isLoading.toggle()
+                    vm.isLoading = false
                     switch subErrr {
                     case .failure(let err):
                         debugPrint(err)
                     case .finished:
-                        vm.isLoading.toggle()
+                        vm.isLoading = false
                         break
                     }
                     debugPrint(subErrr)
                 } receiveValue: { movies in
                     debugPrint("M",movies)
-                    vm.isLoading.toggle()
+                    vm.isLoading = false
                     self.movies?.removeAll()
                     self.filterMovies?.removeAll()
                     self.filterMovies = nil
@@ -205,8 +207,7 @@ struct ClassicListGridView:View{
                     RowCell(data: .init(categoryID: "", categoryName: "ALL", parentID: 0))
                         .onTapGesture {
                             selectItem = .init(categoryID: "", categoryName: "ALL", parentID: 0)
-//                            myItem = .init(categoryID: "", categoryName: "ALL", parentID: 0)
-                            vm.isLoading = true
+
                         }
                 } else {
                     // Fallback on earlier versions
@@ -251,66 +252,75 @@ struct ClassicListGridView:View{
             }
             
         })
-        .toast(isPresented: $vm.isLoading) {
-            ToastView("Loading...")
-                .toastViewStyle(.indeterminate)
-        }
+//        .toast(isPresented: $vm.isLoading) {
+//            ToastView("Loading...")
+//                .toastViewStyle(.indeterminate)
+//        }
         .fullScreenCover(isPresented: $isSelectItem) {
+            if movies != nil {
+                
+                ShowContainerView(series: .constant(nil), movies: $movies, selectItem: $selectItem, subject: subject)
+                
+            }else {
+                
+                ShowContainerView(series: $series, movies: .constant(nil), selectItem: $selectItem, subject: subject)
+            }
            
             
             
-            ZStack{
-                Color.primaryColor.ignoresSafeArea()
-                VStack{
-
-
-                    NavigationHeaderView(title: subject.0) { text in
-                        if movies != nil {
-                            let filters = movies?.filter { $0.name!.localizedCaseInsensitiveContains(text)}
-
-                            self.movies = filters?.count ?? 0 > 0 ? filters : movies
-                        }else{
-                            let filters = series?.filter { $0.name.localizedCaseInsensitiveContains(text)}
-
-                            self.series = filters?.count ?? 0 > 0 ? filters : series
-                        }
-
-                    } moreAction: {
-                        if movies != nil {
-                            fetchMovies(.init(categoryID: "", categoryName: "ALL", parentID: 0))
-//                            self.filterMovies?.removeAll()
-//                            self.filterMovies = nil
-//                            self.filterMovies = movies
-                        }else{
-                            //self.filterSeries = nil
-                            fetchSeries(.init(categoryID: "", categoryName: "ALL", parentID: 0))
-//                            self.filterSeries?.removeAll()
-//                            self.filterSeries = nil
-//                            self.filterSeries = series
-                        }
-                    }
-
-                    if series != nil {
-                        CollectionGridView(movies: nil, series:filterSeries != nil ? $filterSeries: $series,width: .infinity)
-                    }else{
-                        CollectionGridView(movies:filterMovies != nil ? $filterMovies : $movies, series: nil,width: .infinity)
-
-                    }
-
-                }
-            }
+//            ZStack{
+//                Color.primaryColor.ignoresSafeArea()
+//                VStack{
+//
+//
+//                    NavigationHeaderView(title: subject.0) { text in
+//                        if movies != nil {
+//                            let filters = movies?.filter { $0.name!.localizedCaseInsensitiveContains(text)}
+//
+//                            self.movies = filters?.count ?? 0 > 0 ? filters : movies
+//                        }else{
+//                            let filters = series?.filter { $0.name.localizedCaseInsensitiveContains(text)}
+//
+//                            self.series = filters?.count ?? 0 > 0 ? filters : series
+//                        }
+//
+//                    } moreAction: {
+//                        isLoadedTapped = true
+//                        if movies != nil {
+//                            fetchMovies(.init(categoryID: "", categoryName: "ALL", parentID: 0))
+////                            self.filterMovies?.removeAll()
+////                            self.filterMovies = nil
+////                            self.filterMovies = movies
+//                        }else{
+//                            //self.filterSeries = nil
+//                            fetchSeries(.init(categoryID: "", categoryName: "ALL", parentID: 0))
+////                            self.filterSeries?.removeAll()
+////                            self.filterSeries = nil
+////                            self.filterSeries = series
+//                        }
+//                    }
+//
+//                    if series != nil {
+//                        CollectionGridView(movies: nil, series:filterSeries != nil ? $filterSeries: $series,width: .infinity)
+//                    }else{
+//                        CollectionGridView(movies:filterMovies != nil ? $filterMovies : $movies, series: nil,width: .infinity)
+//
+//                    }
+//
+//                }
+//            }
         }
     }
 }
 
 struct ShowContainerView:View{
-    @Binding private var series : [SeriesModel]?
-    @Binding private var movies : [MovieModel]?
-    @Binding private var filterSeries : [SeriesModel]?
-    @Binding private var filterMovies : [MovieModel]?
-    @Binding private var selectItem : MovieCategoriesModel?
+    @Binding var series : [SeriesModel]?
+    @Binding var movies : [MovieModel]?
+    @State private var filterSeries : [SeriesModel]?
+    @State private var filterMovies : [MovieModel]?
+    @Binding var selectItem : MovieCategoriesModel?
     var subject : (String,ViewType)
-    var action: (()->Void)?
+    //var action: (()->Void)?
     var body: some View{
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -319,17 +329,32 @@ struct ShowContainerView:View{
 
                 NavigationHeaderView(title: subject.0) { text in
                     if movies != nil {
-                        let filters = movies?.filter { $0.name!.localizedCaseInsensitiveContains(text)}
+                        let filters = movies?.filter {
+                            $0.name!.range(of: text,options: .caseInsensitive) != nil
+                            
+                        }
                         
-                        self.movies = filters?.count ?? 0 > 0 ? filters : movies
+                        
+                        filterMovies = filters?.count ?? 0 > 0 ? filters : nil
                     }else{
-                        let filters = series?.filter { $0.name.localizedCaseInsensitiveContains(text)}
+                        let filters = series?.filter {
+                            $0.name.range(of: text,options: .caseInsensitive) != nil
+                            
+                        }
                         
-                        self.series = filters?.count ?? 0 > 0 ? filters : series
+                        filterSeries = filters?.count ?? 0 > 0 ? filters : nil
                     }
                     
                 } moreAction: {
-                    action?()
+                    if series != nil {
+                        self.filterSeries = nil
+                        self.series = series
+                        
+                    }else{
+                        self.filterMovies = nil
+                        self.movies = movies
+                        
+                    }
                 }
         
                 if series != nil {

@@ -12,11 +12,13 @@ extension LoginView {
         @Published var isLoading = false
         @Published var isLogin = false
         @Published var isError = (false,"")
-        @Published var name = "Ali"
-        @Published var password = "ULaH9AmLRXDmBy7"
-        @Published var port = "http://1player.cc:80/"
-        @Published var userName = "ec1RxLkPaWiHVy"
+        @Published var name = "" //"Ali"
+        @Published var password =  "" //"ULaH9AmLRXDmBy7"
+        @Published var port = ""  //"http://1player.cc:80/"
+        @Published var userName = "" //"ec1RxLkPaWiHVy"
         @Published var successfullyLogin = false
+        @Published var isUserUpdate = false
+        var selectUser:UserInfo?
         var subscriptions = [AnyCancellable]()
         func login() -> AnyPublisher<UserInfo, APIError> {
             guard !userName.isEmpty,
@@ -49,7 +51,10 @@ extension LoginView {
             isLoading.toggle()
             return URLSession.DataTaskPublisher(request: request, session: .shared)
                 .receive(on: DispatchQueue.main)
-                .tryMap { data, response in
+                .tryMap { [weak self] data, response in
+                    guard let self = self else {
+                        throw APIError.apiError(reason: "Deallocate")
+                    }
                     guard let httpResponse = response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
                         
                         throw APIError.credientialsWrong
@@ -65,22 +70,33 @@ extension LoginView {
                         if let data = UserDefaults.standard.value(forKey: AppStorageKeys.userInfo.rawValue) as? Data {
                             do {
                                 // Create JSON Decoder
-                                let decoder = JSONDecoder()
-                                
-                                // Decode Note
-                                var usersinfo = try decoder.decode([UserInfo].self, from: data)
-                                usersinfo.append(model)
-                                
-                                let encoder = JSONEncoder()
-                                    // Encode Note
-                                let modelData = try encoder.encode(usersinfo)
+                                if self.isUserUpdate, self.selectUser != nil {
+                                    let Mooo = UserInfo(id:self.selectUser!.id,name: self.name, port: self.port, data: userinfo)
+                                    let updatedUser = self.userUpdate(user: Mooo)
+                                    let modelData = try JSONEncoder().encode(updatedUser)
+                                    UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
+                                    self.isUserUpdate = false
+                                    
+                                } else{
+                                    let decoder = JSONDecoder()
+                                    
+                                    // Decode Note
+                                    var usersinfo = try decoder.decode([UserInfo].self, from: data)
+                                    usersinfo.append(model)
+                                    
+                                    let encoder = JSONEncoder()
+                                        // Encode Note
+                                    let modelData = try encoder.encode(usersinfo)
 
-                                UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
-                                let currentModel = try encoder.encode(model)
+                                    UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
+                                    let currentModel = try encoder.encode(model)
+                                    
+                                    UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                                    
+                                    //return model
+                                }
                                 
-                                UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
                                 
-                                //return model
                                 
                             } catch {
                                 print("Unable to Decode Note (\(error))")
@@ -89,12 +105,11 @@ extension LoginView {
                         }
                         else{
                             let encoder = JSONEncoder()
-                                // Encode Note
-                            
                             let modelData = try encoder.encode([model])
                             UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
                             let currentModel = try encoder.encode(model)
                             UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                            
                             //return model
                         }
                         return model
@@ -112,6 +127,35 @@ extension LoginView {
                     }
                 }
                 .eraseToAnyPublisher()
+        }
+        
+        func userUpdate(user:UserInfo)->[UserInfo]{
+            if !getLocalUsers().isEmpty {
+                var users = getLocalUsers()
+                if let index = users.firstIndex(where: {$0.id == user.id}) {
+                    users.remove(at: index)
+                    users.insert(user, at: index)
+                    return users
+                }
+            }
+            return getLocalUsers()
+        }
+        
+        private func getLocalUsers() -> [UserInfo] {
+            if let data = UserDefaults.standard.value(forKey: AppStorageKeys.userInfo.rawValue) as? Data {
+                do {
+                    // Create JSON Decoder
+                    let decoder = JSONDecoder()
+                    // Decode Note
+                    let userinfo = try decoder.decode([UserInfo].self, from: data)
+                    return userinfo
+                } catch {
+                    print("Unable to Decode Note (\(error))")
+                }
+            }else {
+                print("Error")
+            }
+            return []
         }
         
     }

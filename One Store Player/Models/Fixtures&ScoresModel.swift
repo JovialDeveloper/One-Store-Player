@@ -43,7 +43,8 @@ struct Datum: Codable,Identifiable{
     var id = UUID().uuidString
     let uniqueID, apiID: String?
     let referee: String?
-    let timezone: Timezone?
+    let timezone:String?
+    //Timezone?
     let dateTime: String?
     let timestamp, numGoalsHome, numGoalsAway: String?
     //let createdAt: DatumCreatedAt?
@@ -160,7 +161,8 @@ struct Score: Codable {
 // MARK: - League
 struct League: Codable {
     let uniqueID, apiID: String?
-    let name: LeagueName?
+    let name:String?
+    //LeagueName?
     //let nameAr: LeagueNameAr?
     let type: LeagueType?
     let logo: String?
@@ -190,10 +192,13 @@ struct League: Codable {
 // MARK: - Country
 struct Country: Codable {
     let uniqueID: String?
-    let name: CountryName?
+    let name:String?
+    //CountryName?
     //let nameAr: CountryNameAr?
     let flag: String?
-    let code: Code?
+    let code:String?
+    
+    //Code?
     let rank: String?
     //let createdAt, updatedAt: AtedAt?
 
@@ -242,6 +247,7 @@ enum LeagueCreatedAt: String, Codable {
 }
 
 enum LeagueName: String, Codable {
+    case premierLeague = "Premier League"
     case championship = "Championship"
     case proLeague = "Pro League"
     case qatarStarsLeague = "Qatar Stars League"
@@ -280,8 +286,11 @@ enum UpdatedAt: String, Codable {
 // MARK: - Status
 struct Status: Codable {
     let uniqueID: String?
-    let longName: LongName?
-    let shortName: ShortName?
+    let longName:String?
+    
+    //LongName?
+    let shortName:String?
+    //ShortName?
     let elapsedTime: String?
     //let createdAt: DatumCreatedAt?
     let updatedAt: String?

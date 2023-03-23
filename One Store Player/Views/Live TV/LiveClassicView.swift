@@ -12,7 +12,9 @@ struct LiveClassicView: View {
     var subject : (String,ViewType)
     @StateObject private var vm = LiveStreamingViewModel()
     @State private var streams = [LiveStreams]()
+    @State private var favStreams = [LiveStreams]()
     @State private var filterStreams : [LiveStreams]?
+    @StateObject private var favLiveStreams = LiveStreamsFavourite()
     @State private var isSelectItem = false
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     fileprivate func fetchLiveStreams() {
@@ -34,7 +36,7 @@ struct LiveClassicView: View {
         ZStack {
             Color.primaryColor.ignoresSafeArea()
             VStack{
-                NavigationHeaderView(title: subject.0) { text in
+                NavigationHeaderView(title: subject.0,isHideOptions: true) { text in
                       
                     filterStreams = streams.filter { $0.name.localizedCaseInsensitiveContains(text)
                         
@@ -42,20 +44,127 @@ struct LiveClassicView: View {
                 } moreAction: {
                     self.fetchLiveStreams()
                 }
-                ScrollView{
-                    LazyVGrid(columns: columns, spacing: 10) {
-                        ForEach(filterStreams != nil ? filterStreams! : streams) { item in
-                            LiveRowCell(data: item)
-                                .onTapGesture {
-                                    vm.selectStream = item
-                                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
-                                        self.isSelectItem.toggle()
+                
+                if !streams.isEmpty {
+                    ScrollView{
+                        HStack{
+                            HStack{
+                                // Logo
+                                Image("tv")
+                                    .resizable()
+                                    .frame(width:40,height: 40)
+                                    .scaledToFill()
+                                    .foregroundColor(.white)
+                                Spacer()
+                                
+                                Text("ALL")
+                                    .font(.carioBold)
+                                    .padding()
+                                    .frame(maxWidth:.infinity,alignment: .leading)
+                                    .foregroundColor(.white)
+                                Spacer()
+                                
+                                
+                                
+                                Spacer()
+                                // Users Catalog
+                                Text("")
+                                    .font(.carioBold)
+                                    .foregroundColor(.white)
+                                
+                                HStack{
+                                    Button {
+                                        vm.selectStream = streams[0]
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                            self.isSelectItem.toggle()
+                                        }
+                                    } label: {
+                                        Image("arrow_right")
+                                            .resizable()
+                                            .frame(width:30,height: 30)
+                                            .scaledToFill()
+                                            .foregroundColor(.white)
                                     }
+                                    .frame(width:40,height: 40)
                                 }
+                                
+                            }
+                            .padding()
+                            .frame(maxWidth:.infinity,maxHeight: 60)
+                            .background(RoundedRectangle(cornerRadius: 2).fill(Color.secondaryColor))
+                           
+                            
+                            HStack{
+                                // Logo
+                                Image("tv")
+                                    .resizable()
+                                    .frame(width:40,height: 40)
+                                    .scaledToFill()
+                                    .foregroundColor(.white)
+                                Spacer()
+                                
+                                Text("Favourites")
+                                    .font(.carioBold)
+                                    .padding()
+                                    .frame(maxWidth:.infinity,alignment: .leading)
+                                    .foregroundColor(.white)
+                                Spacer()
+                                
+                                
+                                
+                                Spacer()
+                                // Users Catalog
+                                Text("")
+                                    .font(.carioBold)
+                                    .foregroundColor(.white)
+                                
+                                HStack{
+                                    Button {
+                                        if favLiveStreams.getLiveStreams().count > 0 {
+                                            favStreams = favLiveStreams.getLiveStreams()
+                                            if !favStreams.isEmpty {
+                                                vm.selectStream = favStreams[0]
+                                                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                                    self.isSelectItem.toggle()
+                                                }
+                                            }
+                                        }
+                                        
+                                    } label: {
+                                        Image("arrow_right")
+                                            .resizable()
+                                            .frame(width:30,height: 30)
+                                            .scaledToFill()
+                                            .foregroundColor(.white)
+                                    }
+                                    .frame(width:40,height: 40)
+                                }
+                                
+                            }
+                            .padding()
+                            .frame(maxWidth:.infinity,maxHeight: 60)
+                            .background(RoundedRectangle(cornerRadius: 2).fill(Color.secondaryColor))
+                           
                         }
-                        
+                        LazyVGrid(columns: columns, spacing: 10) {
+                            
+                            ForEach(filterStreams != nil ? filterStreams! : streams) { item in
+                                LiveRowCell(data: item)
+                                    .onTapGesture {
+                                        vm.selectStream = item
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                            self.isSelectItem.toggle()
+                                        }
+                                    }
+                            }
+                            
+                        }
                     }
+                }else{
+                    Spacer()
                 }
+                
+                
                 
                
             }
@@ -68,7 +177,12 @@ struct LiveClassicView: View {
         }
         .fullScreenCover(isPresented: $isSelectItem) {
             if let item = vm.selectStream {
-                LiveTVDetailView(selectedStream: item, streams: streams, model: vm)
+                if favStreams.count > 0 {
+                    LiveTVDetailView(selectedStream: item, streams: favStreams, model: vm)
+                }else{
+                    LiveTVDetailView(selectedStream: item, streams: streams, model: vm)
+                }
+                
             }
             
         }
@@ -131,16 +245,26 @@ struct LiveTVDetailView:View {
                             // Streams List
                             ScrollView {
                                 ForEach(subFilterStreams != nil ? subFilterStreams! : subStreams) { stream in
-                                    HStack(spacing:10){
-                                        Image("pause_exo")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .foregroundColor(.green)
-                                        Spacer()
+                                    HStack{
+                                        if selectedStream.id == stream.id {
+                                            Image("pause_exo")
+                                                .resizable()
+                                                .frame(width:40)
+                                                .scaledToFill()
+                                                .foregroundColor(.green)
+                                                
+                                        }else{
+                                            Spacer().frame(width:40)
+                                        }
                                         
-                                        Text(stream.streamType.rawValue)
+                                        Text("\(stream.streamID)".replacingOccurrences(of: ",", with: ""))
+                                            .frame(width:80)
                                             .font(.carioRegular)
-                                        Spacer()
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.5)
+                                        
+                                        Spacer().frame(width:20)
+                                        
                                         if let url = URL.init(string: stream.streamIcon) {
                                             KFImage(url)
                                                 .placeholder {
@@ -149,19 +273,23 @@ struct LiveTVDetailView:View {
                                                         .scaledToFit()
                                                 }
                                                 .resizable()
-                                                .frame(width:50,height: 50)
+                                                .frame(width:80,height: 50)
                                                 .scaledToFill()
+                                                //.clipShape(Rectangle().fill())
                                         }
                                         
+                                        Spacer().frame(width:20)
                                             //.clipped()
                                         Text(stream.name)
+                                            //.frame(width:80)
                                             .font(.carioRegular)
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.5)
                                         
                                         Spacer()
                                     }
-                                    .padding()
-                                    .frame(width:proxy.size.width * 0.4,height:70)
-                                    .background(Color.secondaryColor)
+                                    .frame(width:proxy.size.width * 0.5,height:70)
+                                    .background(selectedStream.streamID == stream.streamID ? Color.selectedColor : Color.secondaryColor)
                                     .onTapGesture {
                                         selectedStream = stream
                                     }
@@ -223,6 +351,7 @@ struct LiveTVDetailView:View {
                         Image("arrow_back")
                             .resizable()
                             .foregroundColor(.white)
+                            //.padding()
                     }
                 }
                 
@@ -232,7 +361,7 @@ struct LiveTVDetailView:View {
                             Text(Date().formatted(date: .numeric, time: .shortened))
                                 .foregroundColor(.white)
                             if isSearch {
-                                TextField("", text: $selectSearchText,onCommit: {
+                                TextField("Search", text: $selectSearchText,onCommit: {
                                     let filterStreams = subStreams.filter { $0.name.localizedCaseInsensitiveContains(selectSearchText) }
                                     subStreams = filterStreams.count > 0 ? filterStreams : subStreams
                                     isSearch.toggle()

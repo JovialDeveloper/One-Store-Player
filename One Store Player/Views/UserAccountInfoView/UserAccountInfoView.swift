@@ -70,7 +70,7 @@ struct UserAccountInfoView: View {
 struct SubscriptionCell:View{
     var title:String
     var description:String
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     var body: some View{
         ZStack{
             HStack(spacing: 20){

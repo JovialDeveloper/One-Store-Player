@@ -8,7 +8,7 @@
 import SwiftUI
 @main
 struct One_Store_PlayerApp: App {
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     var body: some Scene {
         WindowGroup {
             StartView()

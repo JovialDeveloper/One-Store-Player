@@ -41,6 +41,8 @@ extension Color {
     static let secondaryColor = Color("SecondaryBColor")
     static let oneColor = Color("1")
     static let secondColor = Color("2")
+    static let selectedColor = Color("SelectedColor")
+    
 }
 extension LinearGradient {
     static let bgGradient = LinearGradient(colors: [Color.oneColor,Color.secondaryColor], startPoint:UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: .greatestFiniteMagnitude, y: .greatestFiniteMagnitude))
@@ -96,9 +98,10 @@ extension String {
         return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
     }
     
-    func getDateFormatted(format:String)->String{
+    func getDateFormatted(givenFormat:String = "yyyy-MM-dd HH:mm:ssZ",format:String)->String{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ssZ"
+        dateFormatter.dateFormat = givenFormat
+        
         
         guard let date = dateFormatter.date(from: self)
         else {

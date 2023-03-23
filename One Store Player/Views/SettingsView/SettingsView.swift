@@ -42,7 +42,7 @@ struct SettingsView: View {
     
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     let title:String
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     @State private var isLayoutGuideOn = false
     @State private var isTimeFormatButtonOn = false
     @State private var isLanguageButtonOn = false
@@ -57,7 +57,7 @@ struct SettingsView: View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
             VStack{
-                NavigationHeaderView(title:title,isHideOptions: true)
+                NavigationHeaderView(title:title,isHideOptions: true,isHideReload: true)
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(data, id: \.id) { item in
@@ -259,8 +259,8 @@ fileprivate struct LayoutDialoguView: View{
     @State var buttonSelected: Int = 0
     
     @Binding var isClose : Bool
-    @AppStorage(AppStorageKeys.layout.rawValue) private var layout: AppKeys.RawValue =  AppKeys.modern.rawValue
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.layout.rawValue) private var layout: AppKeys.RawValue =  AppKeys.classic.rawValue
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     var body: some View{
         VStack{
             Text("Views Format".localized(lang))
@@ -343,7 +343,7 @@ fileprivate struct TimeDialoguView: View{
     @Binding var isClose : Bool
     
     @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = ""
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     var body: some View{
         VStack{
             Text("Time Format".localized(lang))
@@ -435,7 +435,7 @@ struct EPGView: View{
     @State fileprivate var selection = 0
     
     @Binding var isClose : Bool
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     
     var body: some View{
         VStack{
@@ -497,7 +497,7 @@ fileprivate struct AutomationView: View{
     var buttons = ["No","Yes"]
     @AppStorage(AppStorageKeys.automate.rawValue) var udpate = ""
     @State var buttonSelected: Int = 0
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     @Binding var isClose : Bool
     
     
@@ -588,7 +588,7 @@ fileprivate struct LangaugeSelectView: View{
     @State var buttonSelected: Int = 0
     
     @Binding var isClose : Bool
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     
     var body: some View{
         VStack{
@@ -674,7 +674,7 @@ fileprivate struct StreamFormat: View{
     
     @Binding var isClose : Bool
     @AppStorage(AppStorageKeys.videoFormat.rawValue) var streamFormatte = ""
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     var body: some View{
         VStack{
             Text("Stream Format".localized(lang))
@@ -795,7 +795,7 @@ struct SettingsView_Previews: PreviewProvider {
 
 
 struct AlertControl: UIViewControllerRepresentable {
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     typealias UIViewControllerType = UIAlertController
     
     //    @Binding var textString: String

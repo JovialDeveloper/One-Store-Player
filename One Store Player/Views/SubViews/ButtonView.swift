@@ -11,7 +11,7 @@ struct ButtonView: View {
     
     var buttonData:SettingsButtonData
     var action : (()->Void)
-    @AppStorage(AppStorageKeys.language.rawValue) var lang = ""
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
     var body: some View {
         Button {
             action()

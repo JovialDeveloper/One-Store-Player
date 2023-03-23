@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - UserInfo
 struct UserInfo: Codable,Identifiable{
-    var id = UUID().uuidString
+    var id : String
     let name,username, password, message: String
     let auth: Int
     let status: String
@@ -18,7 +18,8 @@ struct UserInfo: Codable,Identifiable{
     let expDate: String?
     let isTrial, activeCons, createdAt, maxConnections: String
     
-    init(name:String,port:String,data:[String:Any]) {
+    init(id: String = UUID().uuidString,name:String,port:String,data:[String:Any]) {
+        self.id = id
         self.name = name
         self.username = data[CodingKeys.username.rawValue] as! String
         self.password = data[CodingKeys.password.rawValue] as! String
@@ -34,7 +35,7 @@ struct UserInfo: Codable,Identifiable{
     }
     
     enum CodingKeys: String, CodingKey {
-        case name,username,port,password, message, auth, status
+        case id,name,username,port,password, message, auth, status
         case expDate = "exp_date"
         case isTrial = "is_trial"
         case activeCons = "active_cons"
@@ -48,3 +49,5 @@ struct UserPaternalControl:Codable{
     var userName:String
     var password:String
 }
+
+extension UserInfo:Equatable{}

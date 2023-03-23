@@ -35,10 +35,13 @@ struct MainHomeView: View {
                     // Top Header View
                     HStack{
                         // Logo
+                        Spacer()
+                        
                         Image("Icon")
                             .resizable()
-                            .frame(width:40,height: 40)
+                            .frame(width:60,height: 60)
                             .scaledToFill()
+                        
                         Spacer()
 
                         if #available(iOS 15.0, *) {
@@ -131,6 +134,7 @@ struct MainHomeView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .cornerRadius(20)
+                                    //.rotationEffect(Angle(degrees: 90))
                                     .overlay(MainClassButtonTextOvarly(title: "Series", lang: lang),alignment: .center)
                             }
                             .background(RoundedRectangle(cornerRadius: 20))
@@ -175,7 +179,7 @@ struct MainHomeView: View {
                         }
                         
                     }
-                    .padding()
+//                    .padding()
                     
                     HStack{
                         Text("\("Expiration ".localized(lang.rawValue)) \(userInfo?.expDate?.getDate() ?? "")")
@@ -268,10 +272,10 @@ fileprivate struct MainClassButtonTextOvarly:View{
         Text(title.localized(lang.rawValue))
             .padding()
             .font(.carioBold)
-            .lineLimit(1)
-            .minimumScaleFactor(0.6)
+            .lineLimit(2)
+            .minimumScaleFactor(0.5)
             .foregroundColor(.black)
-            .offset(y:30)
+            .offset(y:35)
     }
 }
 

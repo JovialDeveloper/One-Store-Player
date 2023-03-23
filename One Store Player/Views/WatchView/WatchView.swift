@@ -23,6 +23,10 @@ struct WatchView<T:Codable>: View {
     @State var duration = ""
     @State private var currentSeason = "SEASON-1"
     @State private var selectedIndex = 0
+    @EnvironmentObject var favMovies : MoviesFavourite
+    @EnvironmentObject var favSeries : SeriesFavourite
+    @State private var isFavourite = false
+    @State private var moreText = false
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -51,13 +55,19 @@ struct WatchView<T:Codable>: View {
                     // Users Catalog
                     HStack{
                         Button {
-                            //
+                            if data is MovieModel {
+                                isFavourite = true
+                                favMovies.saveMovies(model: data as! MovieModel)
+                            }else{
+                                isFavourite = true
+                                favSeries.saveMovies(model: data as! SeriesModel)
+                            }
                         } label: {
-                            Image("icon")
+                            Image("heart")
                                 .resizable()
                                 .frame(width:40,height: 40)
                                 .scaledToFill()
-                                .foregroundColor(.white)
+                                .foregroundColor(isFavourite ? Color.red : Color.white)
                         }
                         .frame(width:40,height: 40)
                         
@@ -89,7 +99,39 @@ struct WatchView<T:Codable>: View {
                                 SubscriptionCell(title: "Duration:", description: data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? "")
                                 SubscriptionCell(title: "Genre:", description: data is MovieModel ? customObject?.info.genre ?? "" : seriesObject?.info?.genre ?? "")
                                 if data is SeriesModel {
-                                    SubscriptionCell(title: "Plot:", description:seriesObject?.info?.plot ?? "")
+//                                    SubscriptionCell(title: "Plot:", description:seriesObject?.info?.plot ?? "")
+                                    
+                                    ZStack{
+                                        HStack(spacing: 20){
+                                            Text("Plot:".localized(lang))
+                                                .font(.carioBold)
+                                                .foregroundColor(.white)
+                                                //.frame(maxWidth: .infinity,alignment: .leading)
+                                            
+                                            Group {
+                                                VStack{
+                                                    Text(seriesObject?.info?.plot?.localized(lang) ?? "")
+                                                        .font(.carioRegular)
+                                                        .foregroundColor(.white)
+                                                        .frame(width: 300)
+                                                        .lineLimit(moreText ? 15: 2)
+                                                    
+                                                    Button(action: {
+                                                        self.moreText.toggle()
+                                                        
+                                                    } ) {
+                                                        Text(moreText ? "Read less" : "Read more")
+                                                            .foregroundColor(.red)
+                                                        
+                                                    }
+                                                    
+                                                }
+                                                
+                                            }
+                                            
+                                            Spacer()
+                                        }
+                                    }
                                 }else {
                                     SubscriptionCell(title: "Cast:", description: data is MovieModel ? customObject?.info.cast ?? "" : seriesObject?.info?.cast ?? "")
                                 }
@@ -101,8 +143,10 @@ struct WatchView<T:Codable>: View {
                             HStack {
                                 Button {
                                     // watch
-                                    id = Int(episodes.the1?[0].id ?? "") ?? 0
                                     duration =  episodes.the1?[0].info?.duration ?? ""
+                                    selectedEpisode = episodes.the1?[0]
+                                    id = Int(episodes.the1?[0].id ?? "") ?? 0
+                                    
 
                                 } label: {
                                     HStack{
@@ -222,6 +266,7 @@ struct WatchView<T:Codable>: View {
         }
         .onAppear {
             if data is MovieModel {
+                
                 guard let userInfo =  Networking.shared.getUserDetails()
                 else {
                     return 
@@ -311,6 +356,7 @@ struct WatchView<T:Codable>: View {
             }
         })
         .sheet(isPresented: $isWatch) {
+            
             if data is MovieModel {
                 NavigationView{
                     VLCView(link:Networking.shared.getStreamingLink(id: id, type: ViewType.movie.rawValue), isOvarLayHide: false)
@@ -380,8 +426,8 @@ struct RatingView:View{
     var offImage: Image?
     var onImage = Image(systemName: "star.fill")
 
-    var offColor = Color.gray
-    var onColor = Color.yellow
+    var offColor = Color.white
+    var onColor = Color.selectedColor
     
     var body: some View{
         HStack {

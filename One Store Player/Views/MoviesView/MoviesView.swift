@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MoviesView: View {
-    @AppStorage(AppStorageKeys.layout.rawValue) var layout: AppKeys.RawValue = AppKeys.modern.rawValue
+    @AppStorage(AppStorageKeys.layout.rawValue) var layout: AppKeys.RawValue = AppKeys.classic.rawValue
     @Environment(\.presentationMode) var presentationMode
     var title : String
     var type:ViewType

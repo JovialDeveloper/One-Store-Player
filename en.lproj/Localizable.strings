@@ -36,6 +36,10 @@
 "pl_ay" = "PLAY";
 "epi" = "EPISODES";
 "cast" = "CAST";
+"Matches" = "Matches";
+"today" = "Today";
+"Yesterday" = "Yesterday";
+"Now" = "Now";
 "Select Language" = "Select Language";
 "EPG Settings" = "EPG Settings";
 "Password" = "Password";
