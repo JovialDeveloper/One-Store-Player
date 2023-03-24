@@ -25,7 +25,7 @@ struct ClassicLayoutView: View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
             VStack{
-                NavigationHeaderView(title: subject.0) { text in
+                NavigationHeaderView(title: subject.0,isHideOptions: true) { text in
                     let filters = categories.filter { $0.categoryName.localizedCaseInsensitiveContains(text)}
                     
                     self.categories = filters.count > 0 ? filters : categories
@@ -52,13 +52,13 @@ struct ClassicListGridView:View{
     @Binding var data : [MovieCategoriesModel]
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     @State private var selectItem : MovieCategoriesModel?
-   
+    
     @EnvironmentObject private var vm:ClassicViewModel
     @State private var series : [SeriesModel]?
     @State private var movies : [MovieModel]?
     @State private var filterSeries : [SeriesModel]?
     @State private var filterMovies : [MovieModel]?
-    var subject : (String,ViewType)
+    @State var subject : (String,ViewType)
     @EnvironmentObject var favMovies : MoviesFavourite
     @EnvironmentObject var favSeries : SeriesFavourite
     fileprivate func fetchSeries(_ newValue: MovieCategoriesModel?) {
@@ -94,6 +94,7 @@ struct ClassicListGridView:View{
                 self.filterSeries?.removeAll()
                 self.filterSeries = nil
                 self.series = favSeries.getSeries()
+                
                 DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                     self.isSelectItem.toggle()
                 }
@@ -165,6 +166,7 @@ struct ClassicListGridView:View{
                 self.filterMovies?.removeAll()
                 self.filterMovies = nil
                 self.movies = favMovies.getMovies()
+                
                 DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                     self.isSelectItem.toggle()
                 }
@@ -217,6 +219,7 @@ struct ClassicListGridView:View{
                     RowCell(data: .init(categoryID: "", categoryName: "Favourites", parentID: 0))
                         .onTapGesture {
                             selectItem = .init(categoryID: "", categoryName: "Favourites", parentID: 0)
+                            self.subject = ("Favourites",ViewType.favourite)
                         }
                 } else {
                     // Fallback on earlier versions
@@ -244,10 +247,14 @@ struct ClassicListGridView:View{
         .onChange(of: selectItem, perform: { newValue in
             selectItem = nil
             if subject.1 == .series {
+                self.subject = ("",ViewType.series)
                 fetchSeries(newValue)
                 
+                
             }else{
+                self.subject = ("",ViewType.movie)
                 fetchMovies(newValue)
+                
                 
             }
             
@@ -358,9 +365,9 @@ struct ShowContainerView:View{
                 }
         
                 if series != nil {
-                    CollectionGridView(movies: nil, series:filterSeries != nil ? $filterSeries: $series,width: .infinity)
+                    CollectionGridView(movies: nil, series:filterSeries != nil ? $filterSeries: $series,width: .infinity,view: subject.1)
                 }else{
-                    CollectionGridView(movies:filterMovies != nil ? $filterMovies : $movies, series: nil,width: .infinity)
+                    CollectionGridView(movies:filterMovies != nil ? $filterMovies : $movies, series: nil,width: .infinity,view: subject.1)
                     
                 }
                

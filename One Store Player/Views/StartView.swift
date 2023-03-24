@@ -33,10 +33,14 @@ struct StartView: View {
     init() {
         state.checkSession()
     }
+    @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang
+    
     var body: some View {
         if state.isLogin {
             MainHomeView()
+                .environment(\.layoutDirection,lang == SupportedLanguages.arbic ? .rightToLeft : .leftToRight)
                 .environmentObject(state)
+            
         } else if state.isPaternalControlOn {
             
             AlertPCView(show: $state.isPaternalControlOn, title: "Paternal Control", message: alertTitle,isCheckPasswordScreen: true) { complete in

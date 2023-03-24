@@ -6,21 +6,23 @@
   
 */
 
-"save" = "يحفظ";
-"cl" = "يلغي";
-"Expiration " = "تاريخ انتهاء الصلاحية";
-"Login In: " = "تسجيل دخول";
+"save" = "حفظ";
+"cl" = "إلغاء";
+"Reload" = "تحديث";
+"Remove from Favourite" = "تم حذف الفيلم من اللائحة";
+"Expiration " = "إنتهاء الإشتراك:";
+"Login In: " = "المستخدم الحالي:";
 "Movies" = "أفلام";
-"Series" = "مسلسلات تلفزيونية";
+"Series" = "مسلسلات";
 "Settings" = "الإعدادات";
-"Time Format" = "تنسيق الوقت";
-"Views Format" = "مشاهدة تنسيق";
+"Time Format" = "طريقة عرض الوقت";
+"Views Format" = "طريقة عرض اللايف";
 "Scores & Fixtures" = "النتائج والمباريات";
-"Parental Control" = "مراقبة اهلية";
+"Parental Control" = "حماية الحساب";
 "Stream Format" = "تنسيق الدفق";
-"EPG Time Shift" = "نظام EPG Time Shift";
-"Language" = "لغة";
-"Automation" = "أتمتة";
+"EPG Time Shift" = "EPG Time Shift";
+"Language" = "إعدادات اللغة";
+"Automation" = "Automation";
 "Subscription Info" = "معلومات الاشتراك";
 "Username:" = "اسم المستخدم";
 "Account status:" = "حالة الحساب";
@@ -32,20 +34,22 @@
 "ALL" = "الكل";
 "Favourites" = "المفضلة";
 "Recently Watch" = "شاهد مؤخرًا";
-"Live TV" = "بث تلفزيوني مباشر";
+"Live TV" = "مباشر";
 "dr" = "دوراتون";
-"pl_ay" = "يلعب";
+"pl_ay" = "مشاهدة";
 "epi" = "الحلقات";
-"cast" = "يقذف";
-"Matches" = "اعواد الكبريت";
+"cast" = "الممثلين";
+"Matches" = "جدول المباريات";
 "today" = "اليوم";
-"Yesterday" = "في الامس";
+"Yesterday" = "أمس";
+"Tomorrow" = "غداً";
 "Now" = "الآن";
 "Select Language" = "اختار اللغة";
 "Password" = "كلمة المرور";
-;"القنوات والأفلام التحديث التلقائي يوميا"="ad"
+;"تحديث لائحة القنوات يوميا?"="ad"
 "oK" = "نعم";
-"EPG Settings" = "إعدادات EPG";
+"EPG Settings" = "EPG";
+
 
 
 

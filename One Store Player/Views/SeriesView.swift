@@ -55,6 +55,46 @@ class SeriesFavourite:ObservableObject
             //return model
         }
     }
+    func deleteSeries(model:SeriesModel){
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favSeries.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                var favSeries = try decoder.decode([SeriesModel].self, from: data)
+                
+                if favSeries.contains(where: {$0.seriesID == model.seriesID}) {
+                    if let index = favSeries.firstIndex(where: {$0.seriesID == model.seriesID}) {
+                        favSeries.remove(at: index)
+                        let encoder = JSONEncoder()
+                            // Encode Note
+                        let modelData = try encoder.encode(favSeries)
+
+                        UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favSeries.rawValue)
+                    }
+                }
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
+        }
+        else{
+            do{
+                let encoder = JSONEncoder()
+                    // Encode Note
+                
+                let modelData = try encoder.encode([model])
+                UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favSeries.rawValue)
+            }
+            catch {
+                debugPrint(error)
+            }
+            
+            //return model
+        }
+    }
     
     func getSeries()->[SeriesModel]{
         if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favSeries.rawValue) as? Data {
@@ -111,7 +151,7 @@ struct SeriesView: View {
 extension SeriesView{
     struct ModernLayoutView:View{
         @Environment(\.presentationMode) var presentationMode
-        var subject : (String,ViewType)
+        @State var subject : (String,ViewType)
         @StateObject private var vm = SeriesModernLayoutViewModel()
         @State private var categories = [MovieCategoriesModel]()
         @State private var series = [SeriesModel]()
@@ -141,6 +181,7 @@ extension SeriesView{
                             Button("Favourites") {
                                 self.selectTitle = "Favourites"
                                 self.series = favSeries.getSeries()
+                                self.subject = ("Favourites",.favourite)
                             }
                             .padding()
                             .foregroundColor(.white)
@@ -167,7 +208,9 @@ extension SeriesView{
                                                     }
                                                 } receiveValue: { series in
                                                     vm.isLoading = false
+                                                    
                                                     self.series = series
+                                                    self.subject = ("Series",.series)
                                                 }.store(in: &vm.subscriptions)
                                             
                                         
@@ -195,16 +238,16 @@ extension SeriesView{
                         
                         VStack{
                             NavigationHeaderView(title: subject.0)
-                            SeriesGridView(data: $series)
+                            SeriesGridView(data: $series, viewType: subject.1)
                         }
                         .frame(width:proxy.size.width * 0.7,height: proxy.size.height)
                         
                     }
                     .frame(maxWidth:.infinity,maxHeight: .infinity)
-                    .toast(isPresented: $vm.isLoading) {
-                        ToastView("Loading...")
-                            .toastViewStyle(.indeterminate)
-                    }
+//                    .toast(isPresented: $vm.isLoading) {
+//                        ToastView("Loading...")
+//                            .toastViewStyle(.indeterminate)
+//                    }
                 }
                 
             }.onAppear {
@@ -277,6 +320,7 @@ extension SeriesView{
     }
     struct SeriesGridView:View{
         @Binding var data : [SeriesModel]
+        var viewType:ViewType
         @StateObject var vm = DataPassOb()
         let columns : [GridItem] = Array(repeating: .init(.flexible(),spacing: 10), count: 4)
         //        @ObservedObject fileprivate var viewModel = MediaViewModel()
@@ -296,9 +340,22 @@ extension SeriesView{
                             }
                             .contextMenu {
                                 Button {
-                                    favSeries.saveMovies(model: item)
+                                    if viewType == .favourite {
+                                        favSeries.deleteSeries(model: item)
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+                                            data = favSeries.getSeries()
+                                        }
+                                    }
+                                    else{
+                                        favSeries.saveMovies(model: item)
+                                    }
+                                    
                                 } label: {
-                                    Label("Add to Favourite", systemImage: "suit.heart")
+                                    if viewType == .favourite {
+                                        Label("Remove from Favourite", systemImage: "")
+                                    }else{
+                                        Label("Add to Favourite", systemImage: "")
+                                    }
                                 }
                                 
                             }
@@ -339,6 +396,12 @@ extension SeriesView{
             return  ZStack{
                 KFImage(.init(string:serie.cover))
                     .resizable()
+                    .placeholder({
+                        Image("NoImage")
+                            .frame(minWidth: width,minHeight: height)
+                            .scaledToFill()
+                        
+                    })
                     .frame(minWidth: width,minHeight: height)
                 //.frame(width:width,height: height)
                     .scaledToFill()
@@ -352,6 +415,12 @@ extension SeriesView{
             return ZStack{
                 KFImage(.init(string:serie.cover))
                     .resizable()
+                    .placeholder({
+                        Image("NoImage")
+                            .frame(minWidth: width,minHeight: height)
+                            .scaledToFill()
+                        
+                    })
                     .frame(width:width,height: height)
                     .scaledToFill()
                 //.clipped()

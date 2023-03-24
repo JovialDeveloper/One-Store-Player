@@ -28,11 +28,13 @@ struct CollectionGridView:View{
     var height : CGFloat = 180
     @EnvironmentObject var favMovies: MoviesFavourite
     @EnvironmentObject var favSeries: SeriesFavourite
-    init(movies: Binding<[MovieModel]?>?,series: Binding<[SeriesModel]?>?,width:CGFloat = 120 , height:CGFloat = 180) {
+    var viewType:ViewType
+    init(movies: Binding<[MovieModel]?>?,series: Binding<[SeriesModel]?>?,width:CGFloat = 120 , height:CGFloat = 180,view type:ViewType) {
         self._data = movies ?? Binding.constant(nil)
         self._series = series ?? Binding.constant(nil)
         self.width = width
         self.height = height
+        self.viewType = type
     }
     var body: some View{
         ScrollView {
@@ -50,9 +52,22 @@ struct CollectionGridView:View{
                                 }
                                 .contextMenu {
                                     Button {
-                                        favMovies.saveMovies(model: item)
+                                        if viewType == .favourite {
+                                            favMovies.deleteObject(model: item)
+                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+                                                data = favMovies.getMovies()
+                                            }
+                                        }else {
+                                            favMovies.saveMovies(model: item)
+                                        }
+                                        
                                     } label: {
-                                        Label("Add to Favourite", systemImage: "suit.heart")
+                                        if viewType == .favourite {
+                                            Label("Remove from Favourite", systemImage: "")
+                                        }else{
+                                            Label("Add to Favourite", systemImage: "")
+                                        }
+                                        
                                     }
                                     
                                 }
@@ -95,9 +110,22 @@ struct CollectionGridView:View{
                                 }
                                 .contextMenu {
                                     Button {
-                                        favSeries.saveMovies(model: item)
+                                        if viewType == .favourite {
+                                            favSeries.deleteSeries(model: item)
+                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+                                                series = favSeries.getSeries()
+                                            }
+                                        }
+                                        else{
+                                            favSeries.saveMovies(model: item)
+                                        }
+                                        
                                     } label: {
-                                        Label("Add to Favourite", systemImage: "suit.heart")
+                                        if viewType == .favourite {
+                                            Label("Remove from Favourite", systemImage: "")
+                                        }else{
+                                            Label("Add to Favourite", systemImage: "")
+                                        }
                                     }
                                     
                                 }
@@ -141,8 +169,14 @@ struct MovieCell<T:Codable>:View{
     var body: some View{
 #if os(tvOS)
         return  ZStack{
-            KFImage(.init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover ?? ""))
+            KFImage(.init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "https://via.placeholder.com/600x400?text=No+Image" : (data as! SeriesModel).cover ?? "https://via.placeholder.com/600x400?text=No+Image"))
                 .resizable()
+                .placeholder({
+                    Image("NoImage")
+                        .frame(minWidth: width,minHeight: height)
+                        .scaledToFill()
+                    
+                })
                 .frame(minWidth: width,minHeight: height)
             //.frame(width:width,height: height)
                 .scaledToFill()
@@ -155,9 +189,19 @@ struct MovieCell<T:Codable>:View{
 #else
         return ZStack{
             
-            KFImage(.init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "" : (data as! SeriesModel).cover))
+            KFImage(.init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "https://via.placeholder.com/600x400?text=No+Image" : (data as! SeriesModel).cover))
                 .resizable()
-                .scaledToFill()
+                
+                .placeholder({
+                    Image("NoImage")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        //.frame(maxWidth: width,maxHeight: height)
+                        .clipped()
+                    
+                })
+                //.frame(maxWidth: width,maxHeight: height)
+                .aspectRatio(contentMode: .fit)
                 .clipped()
                 .overlay(imageOverLayView,alignment: .bottom)
                 .overlay(ratingView,alignment: .topLeading)

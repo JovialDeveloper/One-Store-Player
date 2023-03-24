@@ -88,7 +88,7 @@ struct UserListView: View {
                                 .scaledToFill()
                                 .foregroundColor(.blue)
                             Spacer()
-                            VStack(alignment: .leading){
+                            VStack(alignment: .leading, spacing:10){
                                 Text(item.name)
                                     .font(.carioBold)
                                     .foregroundColor(.black)
@@ -105,6 +105,7 @@ struct UserListView: View {
                                 UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
                                 let currentModel = try? JSONEncoder().encode(item)
                                 UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
+                                NotificationCenter.default.post(name: .userSelect, object: self)
                                 presentationMode.wrappedValue.dismiss()
                             }
                             Spacer()
@@ -132,7 +133,7 @@ struct UserListView: View {
                                     if users.isEmpty {
                                         UserDefaults.standard.removeObject(forKey: AppStorageKeys.currentUser.rawValue)
                                         UserDefaults.standard.removeObject(forKey: AppStorageKeys.userInfo.rawValue)
-                                        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
 
                                             self.state.isLogin = false
                                         }

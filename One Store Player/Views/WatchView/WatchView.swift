@@ -84,6 +84,12 @@ struct WatchView<T:Codable>: View {
                             VStack{
                                 KFImage(.init(string: data is MovieModel ? customObject?.info.movieImage ?? "" : seriesObject?.info?.cover ?? ""))
                                     .resizable()
+                                    .placeholder({
+                                        Image("NoImage")
+                                            .frame(minWidth: 140,minHeight: 240)
+                                            .scaledToFill()
+                                        
+                                    })
                                     .frame(width:140,height: 240)
                                     .scaledToFill()
                                     .foregroundColor(.white)

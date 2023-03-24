@@ -27,6 +27,22 @@ struct MainHomeView: View {
     @State private var userInfo:UserInfo?
     @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = hour_12
     @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang
+   
+    fileprivate func fetchCurrentUser() {
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.currentUser.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                let userinfo = try decoder.decode(UserInfo.self, from: data)
+                userInfo = userinfo
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+        }
+    }
+    
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -246,18 +262,11 @@ struct MainHomeView: View {
         }
         .onAppear {
             
-            if let data = UserDefaults.standard.value(forKey: AppStorageKeys.currentUser.rawValue) as? Data {
-                do {
-                    // Create JSON Decoder
-                    let decoder = JSONDecoder()
-                    
-                    // Decode Note
-                    let userinfo = try decoder.decode(UserInfo.self, from: data)
-                    userInfo = userinfo
-                } catch {
-                    print("Unable to Decode Note (\(error))")
-                }
-            }
+            fetchCurrentUser()
+            
+        }
+        .onReceive(NotificationCenter.Publisher.init(center: .default, name: .userSelect)) { _ in
+            fetchCurrentUser()
         }
     }
     
@@ -271,7 +280,7 @@ fileprivate struct MainClassButtonTextOvarly:View{
     var body: some View {
         Text(title.localized(lang.rawValue))
             .padding()
-            .font(.carioBold)
+            .font(.carioSmallBold)
             .lineLimit(2)
             .minimumScaleFactor(0.5)
             .foregroundColor(.black)

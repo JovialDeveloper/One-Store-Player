@@ -53,6 +53,35 @@ class MoviesFavourite:ObservableObject
         }
     }
     
+    func deleteObject(model:MovieModel) {
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favMovies.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                var favMovies = try decoder.decode([MovieModel].self, from: data)
+                
+                if favMovies.contains(where: {$0.streamID == model.streamID}) {
+                    if let inde = favMovies.firstIndex(where: {$0.streamID == model.streamID}) {
+                        favMovies.remove(at: inde)
+                        let encoder = JSONEncoder()
+                            // Encode Note
+                        let modelData = try encoder.encode(favMovies)
+
+                        UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favMovies.rawValue)
+                    }
+                    
+                    return
+                }
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
+        }
+    }
+    
     func getMovies()->[MovieModel]{
         if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favMovies.rawValue) as? Data {
             do {
@@ -74,7 +103,7 @@ class MoviesFavourite:ObservableObject
 }
 struct ModernLayoutView:View{
     @Environment(\.presentationMode) var presentationMode
-    var subject : (String,ViewType)
+    @State var subject : (String,ViewType)
     @StateObject private var vm = ModernLayoutViewModel()
     @State private var categories = [MovieCategoriesModel]()
     @State private var movies : [MovieModel]?
@@ -92,7 +121,8 @@ struct ModernLayoutView:View{
                                     vm.isLoading = false
                             } receiveValue: { movies in
                                 vm.isLoading = false
-                                self.movies = movies
+                                
+                                self.movies = movies.sorted(by: {$0.added?.getDateWithTimeInterval().compare($1.added?.getDateWithTimeInterval() ?? Date()) == .orderedDescending })
                                 
                             }.store(in: &vm.subscriptions)
                         }
@@ -107,6 +137,7 @@ struct ModernLayoutView:View{
                         Button("Favourites") {
                             self.selectTitle = "Favourites"
                             self.movies = favMovies.getMovies()
+                            self.subject = ("Favourites",.favourite)
                         }
                         .padding()
                         .foregroundColor(.white)
@@ -144,6 +175,7 @@ struct ModernLayoutView:View{
                                             debugPrint("M",movies)
                                             vm.isLoading.toggle()
                                             self.movies?.removeAll()
+                                            self.subject = ("Movies",.movie)
                                             DispatchQueue.main.asyncAfter(deadline: .now()+2) {
                                                 self.movies = movies
                                             }
@@ -193,26 +225,28 @@ struct ModernLayoutView:View{
                                 }.store(in: &vm.subscriptions)
                         }
 
-                        CollectionGridView(movies: $movies, series: nil)
+                        CollectionGridView(movies: $movies, series: nil, view: subject.1)
                             .environmentObject(favMovies)
                     }
                     .frame(width:proxy.size.width * 0.7,height: UIScreen.main.bounds.height)
                     
                 }
                 .frame(maxWidth:.infinity,maxHeight: .infinity)
-                .toast(isPresented: $vm.isLoading) {
-                    ToastView("Loading...")
-                            .toastViewStyle(.indeterminate)
-                }
+//                .toast(isPresented: $vm.isLoading) {
+//                    ToastView("Loading...")
+//                            .toastViewStyle(.indeterminate)
+//                }
             }
             
             //.ignoresSafeArea(.keyboard,edges: .all)
         }
         .onAppear {
             
-            vm.fetchAllMoviewCategories(type: subject.1).sink { subError in
+            vm.fetchAllMoviewCategories(type: subject.1)
+                .sink { subError in
                 //
             } receiveValue: { categories in
+               
                 self.categories = categories
                 self.selectTitle = "ALL"
             }.store(in: &vm.subscriptions)

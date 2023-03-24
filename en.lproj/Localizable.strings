@@ -8,6 +8,8 @@
 
 "save" = "Save";
 "cl" = "Cancel";
+"Reload" = "Refresh";
+"Remove from Favourite" = "Remove from Favourite";
 "Expiration " = "Expiration ";
 "Login In: " = "Login In: ";
 "Movies" = "Movies";
@@ -39,6 +41,7 @@
 "Matches" = "Matches";
 "today" = "Today";
 "Yesterday" = "Yesterday";
+"Tomorrow" = "Tomorrow";
 "Now" = "Now";
 "Select Language" = "Select Language";
 "EPG Settings" = "EPG Settings";

@@ -16,13 +16,14 @@ struct OnePlayerFonts{
 }
 extension Font{
     
-    static let carioBold = Font.custom("cairo_bold", size: 20)
+    static let carioBold = Font.custom("cairo_bold", size: 18)
+    static let carioSmallBold = Font.custom("cairo_bold", size: 13)
     
     ///Font(OnePlayerFonts.cairoBold!)
-    static let carioLight = Font.custom("cairo_light", size: 16)
+    static let carioLight = Font.custom("cairo_light", size: 12)
     //Font(OnePlayerFonts.cairoLight ?? .systemFont(ofSize: 16, weight: .light))
     
-    static let carioRegular = Font.custom("cairo_regular", size: 17)
+    static let carioRegular = Font.custom("cairo_regular", size: 14)
     
     struct TVFonts{
         static let carioBold = Font.custom("cairo_bold", size: 30)

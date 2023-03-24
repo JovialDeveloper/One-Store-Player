@@ -24,6 +24,11 @@ struct SeasonsView: View {
                             if let url = URL.init(string: item.info?.movieImage ?? "") {
                                 KFImage(url)
                                     .resizable()
+                                    .placeholder({
+                                        Image("NoImage")
+                                            //.scaledToFill()
+                                        
+                                    })
                                     .frame(width:250)
                                     .background(Rectangle()
                                         .foregroundColor(Color.black)

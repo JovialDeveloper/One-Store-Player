@@ -11,6 +11,7 @@ import Foundation
 extension Notification.Name{
     static let resumePlaying = Notification.Name("resumePlaying")
     static let addNewUser = Notification.Name("addNewUser")
+    static let userSelect = Notification.Name("userSelect")
 }
 
 enum AppStorageKeys:String{
@@ -39,6 +40,7 @@ enum ViewType:String{
     case movie
     case series
     case liveTV
+    case favourite
 }
 enum APIError: Error, LocalizedError {
     case unknown, apiError(reason: String), credientialsWrong
@@ -89,6 +91,13 @@ extension String {
             return number.floatValue
         }
         return Float()
+    }
+    func getDateWithTimeInterval()->Date{
+        if let timeInterval = TimeInterval(self) {
+            return Date(timeIntervalSince1970: timeInterval)
+            
+        }
+        return Date()
     }
     
     func getDate()->String{
