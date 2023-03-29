@@ -168,6 +168,7 @@ extension SeriesView{
                                     //
                                 } receiveValue: { series in
                                     self.series = series
+                                    LocalStorgage.store.storeObject(array: series, key: LocalStorageKeys.sereis.rawValue)
 
                                 }.store(in: &vm.subscriptions)
                             }
@@ -256,6 +257,7 @@ extension SeriesView{
                         //
                     } receiveValue: { categories in
                         self.categories = categories
+                        LocalStorgage.store.storeObject(array: categories, key: LocalStorageKeys.seriesCategories.rawValue)
                         self.selectTitle = "ALL"
                     }.store(in: &vm.subscriptions)
 
@@ -266,7 +268,7 @@ extension SeriesView{
                     //
                 } receiveValue: { series in
                     self.series = series
-
+                    LocalStorgage.store.storeObject(array: series, key: LocalStorageKeys.sereis.rawValue)
                 }.store(in: &vm.subscriptions)
             }
         }
@@ -280,26 +282,44 @@ extension SeriesView{
         
         func fetchAllSeries() -> AnyPublisher<[SeriesModel], APIError>
         {
-            guard let userInfo =  Networking.shared.getUserDetails()
+            let localData : [SeriesModel] = LocalStorgage.store.getObject(key: LocalStorageKeys.sereis.rawValue)
+            if localData.count > 0 {
+                return Just(localData)
+                    .setFailureType(to: APIError.self)
+                    .eraseToAnyPublisher()
+            }
             else {
-                return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
+                guard let userInfo =  Networking.shared.getUserDetails()
+                else {
+                    return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
+                }
+                
+                let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series"
+                
+                return Networking.shared.fetch(uri: uri)
             }
             
-            let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series"
-            
-            return Networking.shared.fetch(uri: uri)
         }
         
         func fetchAllSeriesCategories(baseURL:String = "http://1player.cc:80",type:ViewType) -> AnyPublisher<[MovieCategoriesModel], APIError>
         {
-            guard let userInfo =  Networking.shared.getUserDetails()
+            let cat : [MovieCategoriesModel] = LocalStorgage.store.getObject(key: LocalStorageKeys.seriesCategories.rawValue)
+            if cat.count > 0 {
+                return Just(cat)
+                    .setFailureType(to: APIError.self)
+                    .eraseToAnyPublisher()
+            }
             else {
-                return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
+                guard let userInfo =  Networking.shared.getUserDetails()
+                else {
+                    return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
+                }
+                
+                let uri = "\(baseURL)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series_categories"
+                
+                return Networking.shared.fetch(uri: uri)
             }
             
-            let uri = "\(baseURL)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series_categories"
-            
-            return Networking.shared.fetch(uri: uri)
         }
         
         func fetchAllSeriesById(baseURL:String = "http://1player.cc:80",id:String,type:ViewType) -> AnyPublisher<[SeriesModel], APIError>

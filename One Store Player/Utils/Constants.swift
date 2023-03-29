@@ -7,6 +7,13 @@
 
 import Foundation
 
+enum LocalStorageKeys:String{
+    case liveStreams
+    case movies
+    case moviesCategories
+    case sereis
+    case seriesCategories
+}
 
 extension Notification.Name{
     static let resumePlaying = Notification.Name("resumePlaying")

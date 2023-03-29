@@ -18,6 +18,7 @@ struct ClassicLayoutView: View {
         } receiveValue: { categories in
             self.categories.removeAll()
             self.categories = categories
+            LocalStorgage.store.storeObject(array: categories, key: subject.1 == .movie ? LocalStorageKeys.moviesCategories.rawValue : LocalStorageKeys.seriesCategories.rawValue)
         }.store(in: &vm.subscriptions)
     }
     
@@ -30,6 +31,7 @@ struct ClassicLayoutView: View {
                     
                     self.categories = filters.count > 0 ? filters : categories
                 } moreAction: {
+                    LocalStorgage.store.deleteObject(key: subject.1 == .movie ? LocalStorageKeys.moviesCategories.rawValue : LocalStorageKeys.seriesCategories.rawValue)
                     self.fetchCategories()
                 }
                 ClassicListGridView(data: $categories, subject: subject)
@@ -83,6 +85,7 @@ struct ClassicListGridView:View{
                     self.filterSeries?.removeAll()
                     self.filterSeries = nil
                     self.series = movies
+                    LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.sereis.rawValue)
                     DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                         self.isSelectItem.toggle()
                     }
@@ -153,6 +156,7 @@ struct ClassicListGridView:View{
                     self.filterMovies?.removeAll()
                     self.filterMovies = nil
                     self.movies = movies
+                    LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.movies.rawValue)
                     DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                         self.isSelectItem.toggle()
                     }

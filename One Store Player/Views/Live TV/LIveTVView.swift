@@ -108,6 +108,7 @@ struct LIveTVView: View {
         } receiveValue: { livestreams in
             self.filterStreams = nil
             self.streams = livestreams
+            vm.storeLiveStreams(object: livestreams)
             selectTitle = "ALL"
             self.fetchSubStreams(stream: livestreams[0])
             vm.isLoading = false

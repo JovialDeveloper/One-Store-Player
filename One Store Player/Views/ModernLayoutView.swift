@@ -248,6 +248,7 @@ struct ModernLayoutView:View{
             } receiveValue: { categories in
                
                 self.categories = categories
+                LocalStorgage.store.storeObject(array: categories, key: LocalStorageKeys.moviesCategories.rawValue)
                 self.selectTitle = "ALL"
             }.store(in: &vm.subscriptions)
             
@@ -263,6 +264,7 @@ struct ModernLayoutView:View{
                     vm.isLoading = false
             } receiveValue: { movies in
                 vm.isLoading = false
+                LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.movies.rawValue)
                 self.movies = movies
                 
             }.store(in: &vm.subscriptions)
