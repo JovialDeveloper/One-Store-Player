@@ -32,6 +32,9 @@ struct StartView: View {
     var alertTitle = "Please enter your username and password."
     init() {
         state.checkSession()
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            debugPrint("IPADDDDDDDD")
+        }
     }
     @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang
     

@@ -38,10 +38,10 @@ struct UserListView: View {
                 HStack{
                     // Logo
                     if #available(iOS 13.0,tvOS 16.0, *) {
-                        Image("Icon")
+                        Image("arrow_back")
                             .resizable()
-                            .frame(width:60,height: 60)
-                            .scaledToFill()
+                            .frame(width:24,height: 24)
+                            .scaledToFit()
                             .onTapGesture {
                                 presentationMode.wrappedValue.dismiss()
                             }
@@ -245,10 +245,10 @@ struct UserListView: View {
         .onReceive(NotificationCenter.Publisher(center: .default, name: .addNewUser), perform: { _ in
             fetchUsersList()
         })
-        .sheet(isPresented: $showAddNewUser) {
+        .fullScreenCover(isPresented: $showAddNewUser) {
             LoginView(isGoBackToMain: true)
         }
-        .sheet(isPresented: $showUpdateUser) {
+        .fullScreenCover(isPresented: $showUpdateUser) {
             if selectUser != nil {
                 LoginView(isGoBackToMain: true,isUserUpdate: true,updateUser: selectUser)
             }

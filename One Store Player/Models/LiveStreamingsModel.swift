@@ -11,7 +11,7 @@ struct LiveStreams: Codable,Identifiable{
     var id = UUID().uuidString
     let num: Int
     let name: String
-    let streamType: StreamType
+    let streamType: String?
     let streamID: Int
     let streamIcon: String
     let epgChannelID: String?

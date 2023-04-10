@@ -17,7 +17,8 @@ struct LoginView: View {
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
         ZStack{
-            LinearGradient.bgGradient.ignoresSafeArea()
+            Color.black.ignoresSafeArea()
+            
             HStack{
                 Spacer()
                 VStack(spacing:20) {
@@ -61,8 +62,9 @@ struct LoginView: View {
                     }
 #endif
                     
-                    
-                    TextFieldView(text: $loginViewModel.port,placeHolder: "url")
+                    if !isUserUpdate {
+                        TextFieldView(text: $loginViewModel.port,placeHolder: "url")
+                    }
                     
                     HStack{
                         Spacer().frame(width:30)

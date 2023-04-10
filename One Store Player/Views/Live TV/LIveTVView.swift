@@ -29,6 +29,7 @@ class LiveStreamsFavourite:ObservableObject
                     let modelData = try encoder.encode(favLiveStreams)
                     
                     UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
+                    UserDefaults.standard.synchronize()
                     
                 }
                 
@@ -44,12 +45,68 @@ class LiveStreamsFavourite:ObservableObject
                 
                 let modelData = try encoder.encode([model])
                 UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
+                UserDefaults.standard.synchronize()
             }
             catch {
                 debugPrint(error)
             }
             
             //return model
+        }
+    }
+    
+    func findItem(model:LiveStreams)->Bool{
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                let favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
+                
+                if favLiveStreams.contains(where: {$0.streamID == model.streamID}) {
+                    if let _ = favLiveStreams.firstIndex(where: {$0.streamID == model.streamID}) {
+                        return true
+                    }
+                    
+                    return false
+                }
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
+        }
+        return false
+    }
+    
+    func deleteObject(model:LiveStreams) {
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                var favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
+                
+                if favLiveStreams.contains(where: {$0.streamID == model.streamID}) {
+                    if let inde = favLiveStreams.firstIndex(where: {$0.streamID == model.streamID}) {
+                        favLiveStreams.remove(at: inde)
+                        let encoder = JSONEncoder()
+                            // Encode Note
+                        let modelData = try encoder.encode(favLiveStreams)
+
+                        UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
+                        UserDefaults.standard.synchronize()
+                    }
+                    
+                    return
+                }
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
         }
     }
     

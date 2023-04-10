@@ -361,7 +361,7 @@ struct WatchView<T:Codable>: View {
                 self.isWatch.toggle()
             }
         })
-        .sheet(isPresented: $isWatch) {
+        .fullScreenCover(isPresented: $isWatch) {
             
             if data is MovieModel {
                 NavigationView{

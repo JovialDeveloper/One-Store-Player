@@ -18,10 +18,10 @@ struct UserAccountInfoView: View {
                 HStack{
                     // Logo
                     if #available(iOS 13.0,tvOS 16.0, *) {
-                        Image("Icon")
+                        Image("arrow_back")
                             .resizable()
-                            .frame(width:60,height: 60)
-                            .scaledToFill()
+                            .frame(width:24,height: 24)
+                            .scaledToFit()
                             .onTapGesture {
                                 presentationMode.wrappedValue.dismiss()
                             }
@@ -48,7 +48,7 @@ struct UserAccountInfoView: View {
                     VStack(spacing: 30){
                         SubscriptionCell(title: "Username:", description: Networking.shared.getUserDetails()?.username ?? "")
                         SubscriptionCell(title: "Account status:", description: Networking.shared.getUserDetails()?.status ?? "")
-                        SubscriptionCell(title: "Expiry Date:", description: Networking.shared.getUserDetails()?.createdAt ?? "")
+                        SubscriptionCell(title: "Expiry Date:", description: Networking.shared.getUserDetails()?.expDate?.getDate() ?? "")
                         SubscriptionCell(title: "Is trial:", description: Networking.shared.getUserDetails()?.isTrial ?? "")
                         SubscriptionCell(title: "Active Connections:", description: Networking.shared.getUserDetails()?.activeCons ?? "")
                         SubscriptionCell(title: "Created At:", description: Networking.shared.getUserDetails()?.createdAt ?? "")

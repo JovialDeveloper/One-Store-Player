@@ -50,16 +50,11 @@ struct MainHomeView: View {
                 VStack{
                     // Top Header View
                     HStack{
-                        // Logo
-                        Spacer()
-                        
                         Image("Icon")
                             .resizable()
                             .frame(width:60,height: 60)
                             .scaledToFill()
                         
-                        Spacer()
-
                         if #available(iOS 15.0, *) {
                             Text("\(Date().description.getDateFormatted(format:defualtDateFormatte)) \(Date().getTime(format: formatte))")
                                 .font(.carioRegular)
@@ -70,7 +65,7 @@ struct MainHomeView: View {
                         }
                         
                         Spacer()
-                        Spacer()
+
                         // Users Catalog
                         HStack{
                             Button {
@@ -112,6 +107,7 @@ struct MainHomeView: View {
                     .padding(.horizontal)
                     //.frame(height: 50)
                     // Mid View for Watchings
+                    Spacer()
                     VStack(spacing:20){
                         HStack{
                             
@@ -196,7 +192,7 @@ struct MainHomeView: View {
                         
                     }
 //                    .padding()
-                    
+                    Spacer()
                     HStack{
                         Text("\("Expiration ".localized(lang.rawValue)) \(userInfo?.expDate?.getDate() ?? "")")
                         .font(.carioBold)
@@ -280,7 +276,7 @@ fileprivate struct MainClassButtonTextOvarly:View{
     var body: some View {
         Text(title.localized(lang.rawValue))
             .padding()
-            .font(.carioSmallBold)
+            .font(.carioBold)
             .lineLimit(2)
             .minimumScaleFactor(0.5)
             .foregroundColor(.black)
