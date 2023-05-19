@@ -12,8 +12,20 @@ class LiveStreamingViewModel:ObservableObject{
     @Published var isfetched = false
     @Published var isError = (false,"")
     @Published var selectStream:LiveStreams?
+    @Published var selectCategory:MovieCategoriesModel?
     var subscriptions = [AnyCancellable]()
     private var defaults = UserDefaults.standard
+    
+    func fetchAllCategories() -> AnyPublisher<[MovieCategoriesModel], APIError>
+    {
+        guard let userInfo =  Networking.shared.getUserDetails()
+        else {
+            return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
+        }
+        let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_live_categories"
+        return Networking.shared.fetch(uri: uri)
+    }
+    
     func fetchAllLiveStreaming(baseURL:String = "http://1player.cc:80") -> AnyPublisher<[LiveStreams], APIError>
     {
         if getLocalLiveStreams().count > 0 {

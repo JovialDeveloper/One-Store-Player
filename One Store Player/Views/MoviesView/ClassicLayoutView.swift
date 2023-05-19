@@ -123,6 +123,7 @@ struct ClassicListGridView:View{
                     self.filterSeries?.removeAll()
                     self.filterSeries = nil
                     self.series = movies
+                    LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.sereis.rawValue)
                     DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                         self.isSelectItem.toggle()
                     }
@@ -195,6 +196,7 @@ struct ClassicListGridView:View{
                     self.filterMovies?.removeAll()
                     self.filterMovies = nil
                     self.movies = movies
+                    LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.movies.rawValue)
                     DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                         self.isSelectItem.toggle()
                     }
@@ -210,7 +212,7 @@ struct ClassicListGridView:View{
         ScrollView {
             HStack{
                 if #available(tvOS 16.0, *) {
-                    RowCell(data: .init(categoryID: "", categoryName: "ALL", parentID: 0))
+                    RowCell(data: .init(categoryID: "", categoryName: "ALL", parentID: 0), viewType: subject.1)
                         .onTapGesture {
                             selectItem = .init(categoryID: "", categoryName: "ALL", parentID: 0)
 
@@ -220,10 +222,10 @@ struct ClassicListGridView:View{
                 }
                 
                 if #available(tvOS 16.0, *) {
-                    RowCell(data: .init(categoryID: "", categoryName: "Favourites", parentID: 0))
+                    RowCell(data: .init(categoryID: "", categoryName: "Favourites", parentID: 0), viewType: subject.1)
                         .onTapGesture {
                             selectItem = .init(categoryID: "", categoryName: "Favourites", parentID: 0)
-                            self.subject = ("Favourites",ViewType.favourite)
+                            self.subject = ("Favourites",subject.1)
                         }
                 } else {
                     // Fallback on earlier versions
@@ -233,7 +235,7 @@ struct ClassicListGridView:View{
                 
                 ForEach(data, id: \.categoryID) { item in
                     if #available(iOS 13.0,tvOS 16.0, *) {
-                        RowCell(data: item)
+                        RowCell(data: item, viewType: subject.1)
                             .onTapGesture {
                                 selectItem = item
                                 
@@ -247,9 +249,11 @@ struct ClassicListGridView:View{
                 }
             }
         }
-        
+        .onAppear(perform: {
+            debugPrint("Classic View Type",subject)
+        })
         .onChange(of: selectItem, perform: { newValue in
-            selectItem = nil
+            //selectItem = nil
             if subject.1 == .series {
                 self.subject = ("",ViewType.series)
                 fetchSeries(newValue)
@@ -263,10 +267,7 @@ struct ClassicListGridView:View{
             }
             
         })
-//        .toast(isPresented: $vm.isLoading) {
-//            ToastView("Loading...")
-//                .toastViewStyle(.indeterminate)
-//        }
+
         .fullScreenCover(isPresented: $isSelectItem) {
             if movies != nil {
                 
@@ -382,19 +383,26 @@ struct ShowContainerView:View{
 
 struct RowCell:View{
     let data:MovieCategoriesModel
+    let viewType:ViewType
+    @EnvironmentObject private var vm:ClassicViewModel
+    @EnvironmentObject var favMovies : MoviesFavourite
+    @EnvironmentObject var favSeries : SeriesFavourite
+    @State private var count:Int = 0
     var body: some View{
         HStack{
             // Logo
             Image("tv")
                 .resizable()
-                .frame(width:40,height: 40)
+                .frame(width:20,height: 20)
                 .scaledToFill()
                 .foregroundColor(.white)
             Spacer()
             
             Text(data.categoryName)
-                .font(.carioBold)
                 .padding()
+                .font(.carioBold)
+                .minimumScaleFactor(0.7)
+                .lineLimit(3)
                 .frame(maxWidth:.infinity,alignment: .leading)
                 .foregroundColor(.white)
             Spacer()
@@ -403,7 +411,7 @@ struct RowCell:View{
             
             Spacer()
             // Users Catalog
-            Text(data.categoryID)
+            Text("\(count)")
                 .font(.carioBold)
                 .foregroundColor(.white)
             
@@ -421,9 +429,118 @@ struct RowCell:View{
             }
             
         }
+        .onAppear(perform: countTotalData)
         .padding()
         .frame(maxWidth:.infinity,maxHeight: 60)
         .background(RoundedRectangle(cornerRadius: 2).fill(Color.secondaryColor))
     }
+    
+    
+    func countTotalData(){
+        let re = CategoriesRealmModel()
+        re.categoryID = data.categoryID
+        re.categoryName = data.categoryName
+        re.parentID = data.parentID
+        re.totalCount = 0
+        if let storeValue:Int = LocalStorgage.store.getSingleObject(key: data.categoryName) {
+            debugPrint("Fetch From Local")
+            DispatchQueue.main.async {
+                self.count = storeValue
+                
+            }
+        }else{
+            if data.categoryName == "Favourites", viewType == .movie {
+                self.count = favMovies.getMovies().count
+            }
+            else if data.categoryName == "Favourites", viewType == .series {
+                self.count = favSeries.getSeries().count
+            }else{
+                if data.categoryName == "ALL", viewType == .movie {
+                    if let value: Int  = LocalStorgage.store.getSingleObject(key: LocalStorageKeys.allMoviesCategories.rawValue) {
+                        self.count = value
+                    }else{
+                        let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllData(type: viewType)
+                        responseType.sink { result in
+                            switch result {
+                            case .finished:
+                                break
+                            case .failure(let error):
+                                debugPrint(error.localizedDescription)
+                            }
+                        } receiveValue: { movies in
+                            DispatchQueue.main.async {
+                                self.count = movies.count
+                                LocalStorgage.store.storeSingleObject(array: movies.count, key: LocalStorageKeys.allMoviesCategories.rawValue)
+                                //RealmManager.shared.writeObject(object: re)
+                            }
+                        }.store(in: &vm.subscriptions)
+                    }
+                    
+                    
+                }else if data.categoryName == "ALL", viewType == .series {
+                    if let value: Int  = LocalStorgage.store.getSingleObject(key: LocalStorageKeys.allSeriesCategories.rawValue) {
+                        self.count = value
+                    }else{
+                        let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllData(type: viewType)
+                        responseType.sink { result in
+                            switch result {
+                            case .finished:
+                                break
+                            case .failure(let error):
+                                debugPrint(error.localizedDescription)
+                            }
+                        } receiveValue: { movies in
+                            DispatchQueue.main.async {
+                                self.count = movies.count
+                                LocalStorgage.store.storeSingleObject(array: movies.count, key: LocalStorageKeys.allSeriesCategories.rawValue)
+                                //RealmManager.shared.writeObject(object: re)
+                            }
+                        }.store(in: &vm.subscriptions)
+                    }
+                    
+                }
+                else if viewType == .movie {
+                    let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllMoviesById(id: data.categoryID, type:viewType)
+                    responseType.sink { result in
+                        switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error.localizedDescription)
+                        }
+                    } receiveValue: { movies in
+                        DispatchQueue.main.async {
+                            self.count = movies.count
+                            LocalStorgage.store.storeSingleObject(array: movies.count, key: data.categoryName)
+                            //RealmManager.shared.writeObject(object: re)
+                        }
+                    }.store(in: &vm.subscriptions)
+                }else if viewType == .series{
+                    let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllMoviesById(id: data.categoryID, type:viewType)
+                    responseType.sink { result in
+                        switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error.localizedDescription)
+                        }
+                    } receiveValue: { series in
+                        DispatchQueue.main.async {
+                            self.count = series.count
+                            LocalStorgage.store.storeSingleObject(array: series.count, key: data.categoryName)
+                            //RealmManager.shared.writeObject(object: re)
+                        }
+                    }.store(in: &vm.subscriptions)
+                }
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    
+    
 }
 

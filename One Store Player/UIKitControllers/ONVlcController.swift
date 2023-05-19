@@ -85,6 +85,7 @@ class ONVlcController: UIViewController {
       guard let url = URL(string:urlLink) else {return}
       videoPlayer.drawable = vlcView
       videoPlayer.media = VLCMedia(url: url)
+       
     }
 
     func setupOverlay( player:  VLCMediaPlayer){
@@ -98,6 +99,7 @@ class ONVlcController: UIViewController {
         guard let total = player.media?.length else {return}
         
         self.LabelcurrenT.text = "\(current)"
+        UserDefaults.standard.set(Float(truncating: guardcurrent) / 100, forKey: urlLink)
         self.LabelTotalT.text = "\(total)"
     }
     
@@ -168,17 +170,30 @@ class ONVlcController: UIViewController {
 }
 extension ONVlcController:VLCMediaPlayerDelegate{
     
+    
+    
     func mediaPlayerStateChanged(_ aNotification: Notification) {
         guard let videoPlayer = aNotification.object as? VLCMediaPlayer else {return}
         switch videoPlayer.state{
         case .playing:
             print("VLCMediaPlayerDelegate: PLAYING")
+            if let value = UserDefaults.standard.value(forKey: urlLink) as? Float {
+                debugPrint("Save Value \(value)")
+                let timeStart = Double(value)
+                let range = Float(truncating: self.videoPlayer.media?.length.value ?? 0.0)/100
+                let perCent = (Float(timeStart) / range)
+                self.videoPlayer.position = Float(perCent)
+                //self.videoPlayer.position = value
+                
+            }
             self.indicator.stopAnimating()
             self.controls.isHidden = false
         case .opening:
             print("VLCMediaPlayerDelegate: OPENING")
+            
             self.indicator.startAnimating()
             self.controls.isHidden = true
+            
         case .error:
             print("VLCMediaPlayerDelegate: ERROR")
             self.playPauseButton.isSelected = false

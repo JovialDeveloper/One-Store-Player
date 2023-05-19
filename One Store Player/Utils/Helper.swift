@@ -127,6 +127,14 @@ class LocalStorgage{
         }
     }
     
+    func storeSingleObject<T:Codable>(array:T,key:String) {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(array){
+            UserDefaults.standard.set(encoded, forKey: key)
+            debugPrint("Save in Local")
+        }
+    }
+    
     func deleteObject(key:String) {
         UserDefaults.standard.removeObject(forKey: key)
         UserDefaults.standard.synchronize()
@@ -144,4 +152,17 @@ class LocalStorgage{
         }
         
     }
+    func getSingleObject<T:Codable>(key:String)-> T?{
+         let decoder = JSONDecoder()
+         if let streamsData = UserDefaults.standard.value(forKey: key) as? Data
+         {
+             if let strs = try? decoder.decode(T.self, from: streamsData) {
+                 return strs
+             }
+              return nil
+         }else {
+             return nil
+         }
+         
+     }
 }

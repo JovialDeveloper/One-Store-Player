@@ -8,131 +8,12 @@
 import SwiftUI
 import ToastUI
 import MobileVLCKit
-class LiveStreamsFavourite:ObservableObject
-{
-    func saveMovies(model:LiveStreams){
-        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
-            do {
-                // Create JSON Decoder
-                let decoder = JSONDecoder()
-                
-                // Decode Note
-                var favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
-                
-                if favLiveStreams.contains(where: {$0.streamID == model.streamID}) {
-                    return
-                }else{
-                    favLiveStreams.append(model)
-                    
-                    let encoder = JSONEncoder()
-                    // Encode Note
-                    let modelData = try encoder.encode(favLiveStreams)
-                    
-                    UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
-                    UserDefaults.standard.synchronize()
-                    
-                }
-                
-            } catch {
-                print("Unable to Decode Note (\(error))")
-            }
-            
-        }
-        else{
-            do{
-                let encoder = JSONEncoder()
-                // Encode Note
-                
-                let modelData = try encoder.encode([model])
-                UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
-                UserDefaults.standard.synchronize()
-            }
-            catch {
-                debugPrint(error)
-            }
-            
-            //return model
-        }
-    }
-    
-    func findItem(model:LiveStreams)->Bool{
-        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
-            do {
-                // Create JSON Decoder
-                let decoder = JSONDecoder()
-                
-                // Decode Note
-                let favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
-                
-                if favLiveStreams.contains(where: {$0.streamID == model.streamID}) {
-                    if let _ = favLiveStreams.firstIndex(where: {$0.streamID == model.streamID}) {
-                        return true
-                    }
-                    
-                    return false
-                }
-                
-            } catch {
-                print("Unable to Decode Note (\(error))")
-            }
 
-        }
-        return false
-    }
-    
-    func deleteObject(model:LiveStreams) {
-        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
-            do {
-                // Create JSON Decoder
-                let decoder = JSONDecoder()
-                
-                // Decode Note
-                var favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
-                
-                if favLiveStreams.contains(where: {$0.streamID == model.streamID}) {
-                    if let inde = favLiveStreams.firstIndex(where: {$0.streamID == model.streamID}) {
-                        favLiveStreams.remove(at: inde)
-                        let encoder = JSONEncoder()
-                            // Encode Note
-                        let modelData = try encoder.encode(favLiveStreams)
-
-                        UserDefaults.standard.set(modelData, forKey: AppStorageKeys.favLiveStreams.rawValue)
-                        UserDefaults.standard.synchronize()
-                    }
-                    
-                    return
-                }
-                
-            } catch {
-                print("Unable to Decode Note (\(error))")
-            }
-
-        }
-    }
-    
-    func getLiveStreams()->[LiveStreams]{
-        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favLiveStreams.rawValue) as? Data {
-            do {
-                // Create JSON Decoder
-                let decoder = JSONDecoder()
-                
-                // Decode Note
-                var favLiveStreams = try decoder.decode([LiveStreams].self, from: data)
-                
-                return favLiveStreams
-                
-            } catch {
-                print("Unable to Decode Note (\(error))")
-            }
-            
-        }
-        return []
-    }
-}
 struct LIveTVView: View {
     @State private var isRemoveOverLay = false
     @Environment(\.presentationMode) private var presentationMode
     @StateObject private var vm = LiveStreamingViewModel()
+    @State private var categories = [MovieCategoriesModel]()
     @State private var streams = [LiveStreams]()
     @State private var subStreams = [LiveStreams]()
     
@@ -150,6 +31,20 @@ struct LIveTVView: View {
     @State private var sLink : String?
     private var playerViewModel = VLCMediaPlayer()
     @AppStorage(AppStorageKeys.layout.rawValue) var layout: AppKeys.RawValue = AppKeys.classic.rawValue
+    fileprivate func fetchCategories()
+    {
+        vm.fetchAllCategories().sink { _ in
+            
+        } receiveValue: { categories in
+            DispatchQueue.main.async {
+                self.filterStreams = nil
+                self.categories = categories
+                selectTitle = "ALL"
+                self.fetchSubStreams(id: categories[0].categoryID)
+            }
+        }.store(in: &vm.subscriptions)
+
+    }
     fileprivate func fetchAllStreaming() {
         vm.isLoading.toggle()
         vm.fetchAllLiveStreaming().sink { SubscriberError in
@@ -167,7 +62,7 @@ struct LIveTVView: View {
             self.streams = livestreams
             vm.storeLiveStreams(object: livestreams)
             selectTitle = "ALL"
-            self.fetchSubStreams(stream: livestreams[0])
+            //self.fetchSubStreams(id: livestreams[0])
             vm.isLoading = false
         }.store(in: &vm.subscriptions)
     }
@@ -197,8 +92,8 @@ struct LIveTVView: View {
                                         VStack{
                                             Button {
                                                 selectId = 0
-                                                self.streams.removeAll()
-                                                fetchAllStreaming()
+                                                //self.streams.removeAll()
+                                                fetchCategories()
                                             } label: {
                                                 Text("ALL")
                                                     .frame(maxWidth:.infinity,alignment: .leading)
@@ -234,14 +129,14 @@ struct LIveTVView: View {
                                                 .frame(maxWidth:.infinity,alignment: .leading)
                                         }
 
-                                        ForEach(streams) { stream in
+                                        ForEach(categories,id:\.categoryID) { item in
                                             Button {
-                                                //selectId = stream.categoryID
-                                                self.selectTitle = stream.name
-                                                fetchSubStreams(stream: stream)
+                                                selectId = Int(item.categoryID) ?? 0
+                                                self.selectTitle = item.categoryName
+                                                fetchSubStreams(id: item.categoryID)
                                             } label: {
                                                 VStack{
-                                                    Text(stream.name)
+                                                    Text(item.categoryName)
                                                         .font(.carioRegular)
                                                         .foregroundColor(.white)
                                                         .padding()
@@ -252,7 +147,7 @@ struct LIveTVView: View {
                                                         .overlay(Color.white)
                                                 }
                                             }
-                                            .background(selectTitle == stream.name ? Color.selectedColor : nil)
+                                            .background(selectTitle == item.categoryName ? Color.selectedColor : nil)
 
 
                                         }
@@ -296,7 +191,7 @@ struct LIveTVView: View {
                                                 .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                                 .contextMenu {
                                                     Button {
-                                                        favLiveStreams.saveMovies(model: stream)
+//                                                        favLiveStreams.saveMovies(model: stream)
                                                     } label: {
                                                         Label("Add to Favourite", systemImage: "suit.heart")
                                                     }
@@ -325,7 +220,7 @@ struct LIveTVView: View {
                                                 .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                                 .contextMenu {
                                                     Button {
-                                                        favLiveStreams.saveMovies(model: stream)
+//                                                        favLiveStreams.saveMovies(model: stream)
                                                     } label: {
                                                         Label("Add to Favourite", systemImage: "suit.heart")
                                                     }
@@ -358,7 +253,7 @@ struct LIveTVView: View {
                 
             }
             .onAppear {
-                fetchAllStreaming()
+                fetchCategories()
             }
             .frame(maxWidth:.infinity,maxHeight:.infinity)
            
@@ -388,8 +283,8 @@ struct LIveTVView: View {
                                 VStack{
                                     Button {
                                         selectId = 0
-                                        self.streams.removeAll()
-                                        fetchAllStreaming()
+                                        self.categories.removeAll()
+                                        fetchCategories()
                                     } label: {
                                         Text("ALL")
                                             .frame(maxWidth:.infinity,alignment: .leading)
@@ -407,9 +302,9 @@ struct LIveTVView: View {
                                 
                                 VStack{
                                     Button {
-                                        self.selectTitle = "Favourites"
-                                        selectId = -0
-                                        self.subStreams = favLiveStreams.getLiveStreams()
+//                                        self.selectTitle = "Favourites"
+//                                        selectId = -0
+//                                        self.subStreams = favLiveStreams.getLiveStreams()
                                     } label: {
                                         Text("Favourites")
                                             .frame(maxWidth:.infinity,alignment: .leading)
@@ -425,14 +320,14 @@ struct LIveTVView: View {
                                         .frame(maxWidth:.infinity,alignment: .leading)
                                 }
                                 
-                                ForEach(filterStreams != nil ? filterStreams! : streams) { stream in
+                                ForEach(categories,id:\.categoryID) { stream in
                                     Button {
                                         //selectId = stream.categoryID
-                                        self.selectTitle = stream.name
-                                        fetchSubStreams(stream: stream)
+                                        self.selectTitle = stream.categoryName
+                                        //fetchSubStreams(stream: stream)
                                     } label: {
                                         VStack{
-                                            Text(stream.name)
+                                            Text(stream.categoryName)
                                                 .font(.carioRegular)
                                                 .foregroundColor(.white)
                                                 .padding()
@@ -443,7 +338,7 @@ struct LIveTVView: View {
                                                 .overlay(Color.white)
                                         }
                                     }
-                                    .background(selectTitle == stream.name ? Color.selectedColor : nil)
+                                    .background(selectTitle == stream.categoryName ? Color.selectedColor : nil)
                                     
                                     
                                 }
@@ -488,7 +383,7 @@ struct LIveTVView: View {
                                         .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                         .contextMenu {
                                             Button {
-                                                favLiveStreams.saveMovies(model: stream)
+//                                                favLiveStreams.saveMovies(model: stream)
                                             } label: {
                                                 Label("Add to Favourite", systemImage: "suit.heart")
                                             }
@@ -517,7 +412,7 @@ struct LIveTVView: View {
                                         .background(selectTitle == stream.name ? Color.selectedColor : nil)
                                         .contextMenu {
                                             Button {
-                                                favLiveStreams.saveMovies(model: stream)
+//                                                favLiveStreams.saveMovies(model: stream)
                                             } label: {
                                                 Label("Add to Favourite", systemImage: "suit.heart")
                                             }
@@ -544,8 +439,8 @@ struct LIveTVView: View {
         }
     }
     
-    fileprivate func fetchSubStreams(stream:LiveStreams) {
-        vm.fetchAllSubStreamsInCategory(category: stream.categoryID).sink { SubscriberError in
+    fileprivate func fetchSubStreams(id:String) {
+        vm.fetchAllSubStreamsInCategory(category: id).sink { SubscriberError in
             switch SubscriberError {
             case .failure(let error):
                 debugPrint(error)
@@ -612,20 +507,20 @@ struct LIveTVView: View {
                 Menu(selectSortText) {
                     Button("Default", action: {
                         selectSortText = "Default"
-                        self.fetchAllStreaming()
+                        self.fetchCategories()
                     })
                     Button("Recently Added", action: {
                         selectSortText = "Recently Added"
-                        self.fetchAllStreaming()
+                        self.fetchCategories()
                     })
                     Button("A-Z", action: {
                         selectSortText = "A-Z"
-                        streams  =  streams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                        categories  =  categories.sorted { $0.categoryName.lowercased() < $1.categoryName.lowercased() }
                         subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
                     })
                     Button("Z-A", action: {
                         selectSortText = "Z-A"
-                        streams  =  streams.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                        categories  =  categories.sorted { $0.categoryName.lowercased() > $1.categoryName.lowercased() }
                         subStreams = subStreams.sorted { $0.name.lowercased() > $1.name.lowercased() }
                     })
                     
@@ -634,7 +529,7 @@ struct LIveTVView: View {
                 
                 
                 Button {
-                    fetchAllStreaming()
+                    fetchCategories()
                 } label: {
                     Image("ic_update")
                         .resizable()

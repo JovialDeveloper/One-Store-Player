@@ -245,16 +245,53 @@ struct WatchView<T:Codable>: View {
                         }else {
                             Button {
                                 // watch
-                                id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
-                                duration =  data is MovieModel ? customObject?.info.duration ?? "" : seriesObject?.info?.episodeRunTime ?? ""
-                                
+                                if data is MovieModel {
+                                    if let movieModel : MovieModel = LocalStorgage.store.getSingleObject(key: String((data as! MovieModel).streamID)) {
+                                        id = movieModel.streamID
+                                    }else{
+                                        id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
+                                    }
+                                    
+                                }else if data is SeriesModel {
+                                    if let movieModel : SeriesModel = LocalStorgage.store.getSingleObject(key: String((data as! SeriesModel).seriesID)) {
+                                        id = movieModel.seriesID
+                                    }else{
+                                        id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
+                                    }
+                                }
                                 
                             } label: {
-                                Text("WATCH")
-                                    .font(.carioRegular)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(width: 140,height: 46)
+                                if data is MovieModel {
+                                    if let mod : MovieModel =  LocalStorgage.store.getSingleObject(key: String((data as! MovieModel).streamID)) {
+                                        Text("RESUME")
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(width: 140,height: 46)
+                                    }else{
+                                        Text("WATCH")
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(width: 140,height: 46)
+                                    }
+                                    
+                                }else if data is SeriesModel {
+                                    if let mod : SeriesModel =  LocalStorgage.store.getSingleObject(key: String((data as! SeriesModel).seriesID)) {
+                                        Text("RESUME")
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(width: 140,height: 46)
+                                    }else{
+                                        Text("WATCH")
+                                            .font(.carioRegular)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .frame(width: 140,height: 46)
+                                    }
+                                }
+                                
                             }.background(Rectangle().fill(Color.blue))
 
                             

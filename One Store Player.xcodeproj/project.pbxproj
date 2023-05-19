@@ -12,6 +12,10 @@
 		D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */ = {isa = PBXBuildFile; productRef = D003EB10294CC8B100D625B8 /* XMLMapper */; };
 		D00926012922B29D0093648A /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926002922B29D0093648A /* UserListView.swift */; };
 		D00926042922B9360093648A /* UserAccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00926032922B9360093648A /* UserAccountInfoView.swift */; };
+		D0346B582A16A00E006A7D74 /* MovieRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0346B572A16A00E006A7D74 /* MovieRealmModel.swift */; };
+		D0346B5B2A16A25F006A7D74 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D0346B5A2A16A25F006A7D74 /* RealmSwift */; };
+		D0346B5D2A16A57E006A7D74 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0346B5C2A16A57E006A7D74 /* RealmManager.swift */; };
+		D0346B622A17F7F7006A7D74 /* LiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0346B612A17F7F7006A7D74 /* LiveViewModel.swift */; };
 		D035A57829C084A50046308B /* LiveClassicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035A57729C084A50046308B /* LiveClassicView.swift */; };
 		D041377729362A2600EC4723 /* MovieCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377629362A2600EC4723 /* MovieCategoriesModel.swift */; };
 		D041377929362A9300EC4723 /* ModernLayoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */; };
@@ -81,6 +85,9 @@
 		D003EB0D294CC06100D625B8 /* EPGLiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPGLiveView.swift; sourceTree = "<group>"; };
 		D00926002922B29D0093648A /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
 		D00926032922B9360093648A /* UserAccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountInfoView.swift; sourceTree = "<group>"; };
+		D0346B572A16A00E006A7D74 /* MovieRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRealmModel.swift; sourceTree = "<group>"; };
+		D0346B5C2A16A57E006A7D74 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		D0346B612A17F7F7006A7D74 /* LiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewModel.swift; sourceTree = "<group>"; };
 		D035A57729C084A50046308B /* LiveClassicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveClassicView.swift; sourceTree = "<group>"; };
 		D041377629362A2600EC4723 /* MovieCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCategoriesModel.swift; sourceTree = "<group>"; };
 		D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernLayoutViewModel.swift; sourceTree = "<group>"; };
@@ -141,6 +148,7 @@
 			files = (
 				D0424C932951F78200CC316A /* ToastUI in Frameworks */,
 				D06BBDD629C1DCDF008EA936 /* MbSwiftUIFirstResponder in Frameworks */,
+				D0346B5B2A16A25F006A7D74 /* RealmSwift in Frameworks */,
 				D003EB11294CC8B100D625B8 /* XMLMapper in Frameworks */,
 				D086321B2948A1200088142B /* SDWebImageSwiftUI in Frameworks */,
 				8A5ED811C11F0CF67CE93A61 /* Pods_One_Store_Player.framework in Frameworks */,
@@ -192,6 +200,23 @@
 				FB8D477EAEAF42B3F4EE2098 /* Pods_One_Store_Player.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D0346B552A169FC7006A7D74 /* LocalDatabaseManagers */ = {
+			isa = PBXGroup;
+			children = (
+				D0346B562A169FDD006A7D74 /* Local Databases */,
+				D0346B5C2A16A57E006A7D74 /* RealmManager.swift */,
+			);
+			path = LocalDatabaseManagers;
+			sourceTree = "<group>";
+		};
+		D0346B562A169FDD006A7D74 /* Local Databases */ = {
+			isa = PBXGroup;
+			children = (
+				D0346B572A16A00E006A7D74 /* MovieRealmModel.swift */,
+			);
+			path = "Local Databases";
 			sourceTree = "<group>";
 		};
 		D048C31E29292877001B4DD0 /* Live TV */ = {
@@ -266,6 +291,7 @@
 				D0FB64ED2933D73C009C55C4 /* LiveStreamingViewModel.swift */,
 				D041377829362A9300EC4723 /* ModernLayoutViewModel.swift */,
 				D0E65B2F293B999900DE3848 /* FixturesScoresViewModel.swift */,
+				D0346B612A17F7F7006A7D74 /* LiveViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -337,6 +363,7 @@
 		D084FFF9291670F900465873 /* One Store Player */ = {
 			isa = PBXGroup;
 			children = (
+				D0346B552A169FC7006A7D74 /* LocalDatabaseManagers */,
 				D08583232959C130001A1B87 /* UIKitControllers */,
 				D0F879F629324F2D00E5DD06 /* tvOS */,
 				D08400182916874500465873 /* One-Store-Player-Info.plist */,
@@ -413,6 +440,7 @@
 				D0424C922951F78200CC316A /* ToastUI */,
 				D08D430F29BF672A005D7ED1 /* Kingfisher */,
 				D06BBDD529C1DCDF008EA936 /* MbSwiftUIFirstResponder */,
+				D0346B5A2A16A25F006A7D74 /* RealmSwift */,
 			);
 			productName = "One Store Player";
 			productReference = D084FFF7291670F900465873 /* One Store Player.app */;
@@ -449,6 +477,7 @@
 				D0424C912951F78200CC316A /* XCRemoteSwiftPackageReference "ToastUI" */,
 				D08D430E29BF672A005D7ED1 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				D06BBDD429C1DCDF008EA936 /* XCRemoteSwiftPackageReference "MbSwiftUIFirstResponder" */,
+				D0346B592A16A25F006A7D74 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = D084FFF8291670F900465873 /* Products */;
 			projectDirPath = "";
@@ -528,11 +557,14 @@
 				D0F879F829324F5E00E5DD06 /* IptvView.swift in Sources */,
 				D035A57829C084A50046308B /* LiveClassicView.swift in Sources */,
 				D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */,
+				D0346B5D2A16A57E006A7D74 /* RealmManager.swift in Sources */,
 				D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */,
+				D0346B582A16A00E006A7D74 /* MovieRealmModel.swift in Sources */,
 				D0FB64EE2933D73C009C55C4 /* LiveStreamingViewModel.swift in Sources */,
 				D084FFFD291670F900465873 /* ContentView.swift in Sources */,
 				D00926012922B29D0093648A /* UserListView.swift in Sources */,
 				D084001D29168B8D00465873 /* TextFieldView.swift in Sources */,
+				D0346B622A17F7F7006A7D74 /* LiveViewModel.swift in Sources */,
 				D084FFFB291670F900465873 /* One_Store_PlayerApp.swift in Sources */,
 				D07CF829291BFCBF00EFEFFA /* ModernLayoutView.swift in Sources */,
 				D07CF82D291BFDB000EFEFFA /* ClassicLayoutView.swift in Sources */,
@@ -818,6 +850,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		D0346B592A16A25F006A7D74 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		D0424C912951F78200CC316A /* XCRemoteSwiftPackageReference "ToastUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/quanshousio/ToastUI.git";
@@ -857,6 +897,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D003EB0F294CC8B100D625B8 /* XCRemoteSwiftPackageReference "XMLMapper" */;
 			productName = XMLMapper;
+		};
+		D0346B5A2A16A25F006A7D74 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0346B592A16A25F006A7D74 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		D0424C922951F78200CC316A /* ToastUI */ = {
 			isa = XCSwiftPackageProductDependency;

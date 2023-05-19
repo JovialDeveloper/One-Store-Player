@@ -9,10 +9,13 @@ import Foundation
 
 enum LocalStorageKeys:String{
     case liveStreams
+    case liveCategories
     case movies
     case moviesCategories
     case sereis
     case seriesCategories
+    case allMoviesCategories
+    case allSeriesCategories
 }
 
 extension Notification.Name{

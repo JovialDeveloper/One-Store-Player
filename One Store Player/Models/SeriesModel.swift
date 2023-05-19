@@ -25,7 +25,7 @@ struct SeriesModel: Codable {
 //    let genre: Genre
     let releaseDate, lastModified, rating: String
     let rating5Based: Double
-    let backdropPath: [String]
+    //let backdropPath: [String]
     let youtubeTrailer, episodeRunTime, categoryID: String
 
     enum CodingKeys: String, CodingKey {
@@ -35,7 +35,7 @@ struct SeriesModel: Codable {
         case lastModified = "last_modified"
         case rating
         case rating5Based = "rating_5based"
-        case backdropPath = "backdrop_path"
+        //case backdropPath = "backdrop_path"
         case youtubeTrailer = "youtube_trailer"
         case episodeRunTime = "episode_run_time"
         case categoryID = "category_id"

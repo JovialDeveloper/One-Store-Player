@@ -56,6 +56,7 @@ struct MainHomeView: View {
                             .scaledToFill()
                         
                         if #available(iOS 15.0, *) {
+                            
                             Text("\(Date().description.getDateFormatted(format:defualtDateFormatte)) \(Date().getTime(format: formatte))")
                                 .font(.carioRegular)
                         } else {
