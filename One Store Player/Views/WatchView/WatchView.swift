@@ -27,6 +27,7 @@ struct WatchView<T:Codable>: View {
     @EnvironmentObject var favSeries : SeriesFavourite
     @State private var isFavourite = false
     @State private var moreText = false
+    @State private var isResumeable = false
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -56,11 +57,23 @@ struct WatchView<T:Codable>: View {
                     HStack{
                         Button {
                             if data is MovieModel {
-                                isFavourite = true
-                                favMovies.saveMovies(model: data as! MovieModel)
+                                if isFavourite {
+                                    isFavourite = false
+                                    favMovies.deleteObject(model: data as! MovieModel)
+                                }else{
+                                    isFavourite = true
+                                    favMovies.saveMovies(model: data as! MovieModel)
+                                }
+                                
                             }else{
-                                isFavourite = true
-                                favSeries.saveMovies(model: data as! SeriesModel)
+                                if isFavourite {
+                                    isFavourite = false
+                                    favSeries.deleteSeries(model: data as! SeriesModel)
+                                }else{
+                                    isFavourite = true
+                                    favSeries.saveMovies(model: data as! SeriesModel)
+                                }
+                                
                             }
                         } label: {
                             Image("heart")
@@ -245,52 +258,15 @@ struct WatchView<T:Codable>: View {
                         }else {
                             Button {
                                 // watch
-                                if data is MovieModel {
-                                    if let movieModel : MovieModel = LocalStorgage.store.getSingleObject(key: String((data as! MovieModel).streamID)) {
-                                        id = movieModel.streamID
-                                    }else{
-                                        id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
-                                    }
-                                    
-                                }else if data is SeriesModel {
-                                    if let movieModel : SeriesModel = LocalStorgage.store.getSingleObject(key: String((data as! SeriesModel).seriesID)) {
-                                        id = movieModel.seriesID
-                                    }else{
-                                        id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
-                                    }
-                                }
-                                
+                                id = data is MovieModel ? (data as! MovieModel).streamID : (data as! SeriesModel).seriesID
+                                LocalStorgage.store.storeSingleObject(array: true, key: String(id))
                             } label: {
-                                if data is MovieModel {
-                                    if let mod : MovieModel =  LocalStorgage.store.getSingleObject(key: String((data as! MovieModel).streamID)) {
-                                        Text("RESUME")
-                                            .font(.carioRegular)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .frame(width: 140,height: 46)
-                                    }else{
-                                        Text("WATCH")
-                                            .font(.carioRegular)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .frame(width: 140,height: 46)
-                                    }
-                                    
-                                }else if data is SeriesModel {
-                                    if let mod : SeriesModel =  LocalStorgage.store.getSingleObject(key: String((data as! SeriesModel).seriesID)) {
-                                        Text("RESUME")
-                                            .font(.carioRegular)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .frame(width: 140,height: 46)
-                                    }else{
-                                        Text("WATCH")
-                                            .font(.carioRegular)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                            .frame(width: 140,height: 46)
-                                    }
-                                }
+                                
+                                Text(isResumeable ? "RESUME" : "WATCH")
+                                    .font(.carioRegular)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(width: 140,height: 46)
                                 
                             }.background(Rectangle().fill(Color.blue))
 
@@ -308,8 +284,15 @@ struct WatchView<T:Codable>: View {
             .padding()
         }
         .onAppear {
+            
+            
+            
             if data is MovieModel {
-                
+                if let value : Bool = LocalStorgage.store.getSingleObject(key: String((data as! MovieModel).streamID)) {
+                    //id = (data as! MovieModel).streamID
+                    isResumeable = true
+                }
+               isFavourite = favMovies.findItem(model: data as! MovieModel)
                 guard let userInfo =  Networking.shared.getUserDetails()
                 else {
                     return 
@@ -351,10 +334,15 @@ struct WatchView<T:Codable>: View {
                 
 
             }else{
+                if let value : Bool = LocalStorgage.store.getSingleObject(key: String((data as! SeriesModel).seriesID)) {
+                    //id = (data as! SeriesModel).seriesID
+                    isResumeable = true
+                }
                 guard let userInfo =  Networking.shared.getUserDetails()
                 else {
                     return
                 }
+                isFavourite = favSeries.findItem(model: data as! SeriesModel)
                 if userInfo.port.last == "/" {
                     let uri = "\(userInfo.port)player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_series_info&series_id=\((data as! SeriesModel).seriesID)"
                     
@@ -394,7 +382,7 @@ struct WatchView<T:Codable>: View {
         }
         .onChange(of: id, perform: { new in
             
-            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                 self.isWatch.toggle()
             }
         })

@@ -55,6 +55,30 @@ class SeriesFavourite:ObservableObject
             //return model
         }
     }
+    func findItem(model:SeriesModel)->Bool{
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favSeries.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                let favSeries = try decoder.decode([SeriesModel].self, from: data)
+                
+                if favSeries.contains(where: {$0.seriesID == model.seriesID}) {
+                    if let _ = favSeries.firstIndex(where: {$0.seriesID == model.seriesID}) {
+                        return true
+                    }
+                    
+                    return false
+                }
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
+        }
+        return false
+    }
     func deleteSeries(model:SeriesModel){
         if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favSeries.rawValue) as? Data {
             do {
@@ -114,6 +138,7 @@ class SeriesFavourite:ObservableObject
         }
         return []
     }
+    
 }
 
 struct SeriesView: View {
@@ -353,9 +378,13 @@ extension SeriesView{
                     ForEach(data, id: \.num) { item in
                         if #available(tvOS 16.0, *) {
                             SeriesCell(serie: item).onTapGesture {
+                                vm.selectItem = nil
                                 vm.selectItem = item
-                                DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-                                    self.isShowWatch.toggle()
+                                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                    if vm.selectItem != nil {
+                                        self.isShowWatch.toggle()
+                                    }
+                                    
                                 }
                             }
                             .contextMenu {

@@ -52,6 +52,30 @@ class MoviesFavourite:ObservableObject
             //return model
         }
     }
+    func findItem(model:MovieModel)->Bool{
+        if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favMovies.rawValue) as? Data {
+            do {
+                // Create JSON Decoder
+                let decoder = JSONDecoder()
+                
+                // Decode Note
+                let favMovies = try decoder.decode([MovieModel].self, from: data)
+                
+                if favMovies.contains(where: {$0.streamID == model.streamID}) {
+                    if let _ = favMovies.firstIndex(where: {$0.streamID == model.streamID}) {
+                        return true
+                    }
+                    
+                    return false
+                }
+                
+            } catch {
+                print("Unable to Decode Note (\(error))")
+            }
+
+        }
+        return false
+    }
     
     func deleteObject(model:MovieModel) {
         if let data = UserDefaults.standard.value(forKey: AppStorageKeys.favMovies.rawValue) as? Data {
@@ -176,7 +200,7 @@ struct ModernLayoutView:View{
                                             vm.isLoading.toggle()
                                             self.movies?.removeAll()
                                             self.subject = ("Movies",.movie)
-                                            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                                                 self.movies = movies
                                             }
                                             

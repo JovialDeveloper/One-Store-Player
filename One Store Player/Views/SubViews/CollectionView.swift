@@ -45,28 +45,34 @@ struct CollectionGridView:View{
                             MovieCell(width: width, height: height, data: item)
                                 .onTapGesture {
                                     recentlyWatchMovies.append(item)
+                                    vm.selectItem = nil
                                     vm.selectItem = item
-                                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                        isShowWatch.toggle()
+                                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                        if vm.selectItem != nil
+                                        {
+                                            isShowWatch.toggle()
+                                        }
+                                        
                                     }
                                 }
                                 .contextMenu {
                                     Button {
-                                        if viewType == .favourite {
+                                        if favMovies.findItem(model: item) {
                                             favMovies.deleteObject(model: item)
-                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                                                data = favMovies.getMovies()
-                                            }
+//                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+//                                                data = favMovies.getMovies()
+//                                            }
                                         }else {
                                             favMovies.saveMovies(model: item)
                                         }
                                         
                                     } label: {
-                                        if viewType == .favourite {
+                                        if favMovies.findItem(model: item){
                                             Label("Remove from Favourite", systemImage: "")
                                         }else{
                                             Label("Add to Favourite", systemImage: "")
                                         }
+                                        
                                         
                                     }
                                     
@@ -75,53 +81,35 @@ struct CollectionGridView:View{
                             // Fallback on earlier versions
                         }
                         
-                        //                        Button {
-                        //                           recentlyWatchMovies.append(item)
-                        //                            vm.selectItem = item
-                        //                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                        //                                isShowWatch.toggle()
-                        //                            }
-                        //
-                        ////                            if selectItem != nil {
-                        ////                                selectItem = nil
-                        ////                                DispatchQueue.main.asyncAfter(deadline: .now()+0.8) {
-                        ////                                    selectItem = item
-                        ////                                }
-                        ////
-                        ////                            }else{
-                        ////                                selectItem = item
-                        ////                            }
-                        //
-                        //
-                        //                        } label: {
-                        //
-                        //
-                        //                        }
                     }
                 }else{
                     ForEach(series ?? [], id: \.id) { item in
                         if #available(tvOS 16.0, *) {
                             MovieCell(width: width, height: height, data: item)
                                 .onTapGesture {
+                                    vm.selectSeriesItem = nil
                                     vm.selectSeriesItem = item
                                     DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                        isShowWatch.toggle()
+                                        if vm.selectSeriesItem != nil {
+                                            isShowWatch.toggle()
+                                        }
+                                        
                                     }
                                 }
                                 .contextMenu {
                                     Button {
-                                        if viewType == .favourite {
+                                        if favSeries.findItem(model: item) {
                                             favSeries.deleteSeries(model: item)
-                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
-                                                series = favSeries.getSeries()
-                                            }
+//                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.3) {
+//                                                series = favSeries.getSeries()
+//                                            }
                                         }
                                         else{
                                             favSeries.saveMovies(model: item)
                                         }
                                         
                                     } label: {
-                                        if viewType == .favourite {
+                                        if favSeries.findItem(model: item) {
                                             Label("Remove from Favourite", systemImage: "")
                                         }else{
                                             Label("Add to Favourite", systemImage: "")
@@ -139,14 +127,14 @@ struct CollectionGridView:View{
         }
         .onChange(of: selectItem, perform: { newValue in
             
-            DispatchQueue.main.asyncAfter(wallDeadline: .now()+2) {
+            DispatchQueue.main.asyncAfter(wallDeadline: .now()+0.5) {
                 isShowWatch.toggle()
                 selectItem = nil
             }
         })
         .onChange(of: selectSeriesItem, perform: { newValue in
             
-            DispatchQueue.main.asyncAfter(wallDeadline: .now()+2) {
+            DispatchQueue.main.asyncAfter(wallDeadline: .now()+0.5) {
                 isShowWatch.toggle()
             }
         })

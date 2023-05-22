@@ -24,6 +24,7 @@
 		D04339E02930E54E00213D85 /* LIveTVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339DF2930E54E00213D85 /* LIveTVView.swift */; };
 		D04339E2293139D700213D85 /* TVOS Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04339E1293139D700213D85 /* TVOS Settings.swift */; };
 		D048C32129292AF4001B4DD0 /* WatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048C32029292AF4001B4DD0 /* WatchView.swift */; };
+		D058C2AB2A1BC60400DBC661 /* LiveClassisDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D058C2AA2A1BC60300DBC661 /* LiveClassisDetailView.swift */; };
 		D064B7582950789200D7B0B6 /* CatchUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7572950789200D7B0B6 /* CatchUpView.swift */; };
 		D064B75A2950A31C00D7B0B6 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D064B7592950A31C00D7B0B6 /* StartView.swift */; };
 		D06BBDD629C1DCDF008EA936 /* MbSwiftUIFirstResponder in Frameworks */ = {isa = PBXBuildFile; productRef = D06BBDD529C1DCDF008EA936 /* MbSwiftUIFirstResponder */; };
@@ -95,6 +96,7 @@
 		D04339DF2930E54E00213D85 /* LIveTVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIveTVView.swift; sourceTree = "<group>"; };
 		D04339E1293139D700213D85 /* TVOS Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TVOS Settings.swift"; sourceTree = "<group>"; };
 		D048C32029292AF4001B4DD0 /* WatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchView.swift; sourceTree = "<group>"; };
+		D058C2AA2A1BC60300DBC661 /* LiveClassisDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveClassisDetailView.swift; sourceTree = "<group>"; };
 		D05E9008295860C50073B23D /* MobileVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MobileVLCKit.xcframework; path = Carthage/Build/MobileVLCKit.xcframework; sourceTree = "<group>"; };
 		D05E900A295862150073B23D /* TVVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TVVLCKit.xcframework; path = Carthage/Build/TVVLCKit.xcframework; sourceTree = "<group>"; };
 		D064B7572950789200D7B0B6 /* CatchUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchUpView.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			children = (
 				D04339DF2930E54E00213D85 /* LIveTVView.swift */,
 				D035A57729C084A50046308B /* LiveClassicView.swift */,
+				D058C2AA2A1BC60300DBC661 /* LiveClassisDetailView.swift */,
 			);
 			path = "Live TV";
 			sourceTree = "<group>";
@@ -590,6 +593,7 @@
 				D0FB64F02933D7E1009C55C4 /* Networking.swift in Sources */,
 				D003EB0E294CC06100D625B8 /* EPGLiveView.swift in Sources */,
 				D06BBDD829C1EBA7008EA936 /* SeasonsView.swift in Sources */,
+				D058C2AB2A1BC60400DBC661 /* LiveClassisDetailView.swift in Sources */,
 				D064B75A2950A31C00D7B0B6 /* StartView.swift in Sources */,
 				D0AA08D1293775B7009E9D55 /* SeriesView.swift in Sources */,
 				D0C6189D291917D000A9529A /* MoviesView.swift in Sources */,

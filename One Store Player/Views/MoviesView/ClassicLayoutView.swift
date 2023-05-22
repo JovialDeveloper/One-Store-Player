@@ -16,8 +16,14 @@ struct ClassicLayoutView: View {
         vm.fetchAllMoviewCategories(type: subject.1).sink { subError in
             //
         } receiveValue: { categories in
-            self.categories.removeAll()
-            self.categories = categories
+            if categories.isEmpty {
+                self.categories.removeAll()
+                self.categories = categories
+            }else{
+                //self.categories.removeAll()
+                self.categories = categories
+            }
+            
             LocalStorgage.store.storeObject(array: categories, key: subject.1 == .movie ? LocalStorageKeys.moviesCategories.rawValue : LocalStorageKeys.seriesCategories.rawValue)
         }.store(in: &vm.subscriptions)
     }
@@ -86,7 +92,7 @@ struct ClassicListGridView:View{
                     self.filterSeries = nil
                     self.series = movies
                     LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.sereis.rawValue)
-                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                         self.isSelectItem.toggle()
                     }
                     
@@ -98,7 +104,7 @@ struct ClassicListGridView:View{
                 self.filterSeries = nil
                 self.series = favSeries.getSeries()
                 
-                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     self.isSelectItem.toggle()
                 }
                 
@@ -225,7 +231,7 @@ struct ClassicListGridView:View{
                     RowCell(data: .init(categoryID: "", categoryName: "Favourites", parentID: 0), viewType: subject.1)
                         .onTapGesture {
                             selectItem = .init(categoryID: "", categoryName: "Favourites", parentID: 0)
-                            self.subject = ("Favourites",subject.1)
+                            //self.subject = ("Favourites",subject.1)
                         }
                 } else {
                     // Fallback on earlier versions
@@ -249,9 +255,6 @@ struct ClassicListGridView:View{
                 }
             }
         }
-        .onAppear(perform: {
-            debugPrint("Classic View Type",subject)
-        })
         .onChange(of: selectItem, perform: { newValue in
             //selectItem = nil
             if subject.1 == .series {
@@ -280,47 +283,7 @@ struct ClassicListGridView:View{
            
             
             
-//            ZStack{
-//                Color.primaryColor.ignoresSafeArea()
-//                VStack{
-//
-//
-//                    NavigationHeaderView(title: subject.0) { text in
-//                        if movies != nil {
-//                            let filters = movies?.filter { $0.name!.localizedCaseInsensitiveContains(text)}
-//
-//                            self.movies = filters?.count ?? 0 > 0 ? filters : movies
-//                        }else{
-//                            let filters = series?.filter { $0.name.localizedCaseInsensitiveContains(text)}
-//
-//                            self.series = filters?.count ?? 0 > 0 ? filters : series
-//                        }
-//
-//                    } moreAction: {
-//                        isLoadedTapped = true
-//                        if movies != nil {
-//                            fetchMovies(.init(categoryID: "", categoryName: "ALL", parentID: 0))
-////                            self.filterMovies?.removeAll()
-////                            self.filterMovies = nil
-////                            self.filterMovies = movies
-//                        }else{
-//                            //self.filterSeries = nil
-//                            fetchSeries(.init(categoryID: "", categoryName: "ALL", parentID: 0))
-////                            self.filterSeries?.removeAll()
-////                            self.filterSeries = nil
-////                            self.filterSeries = series
-//                        }
-//                    }
-//
-//                    if series != nil {
-//                        CollectionGridView(movies: nil, series:filterSeries != nil ? $filterSeries: $series,width: .infinity)
-//                    }else{
-//                        CollectionGridView(movies:filterMovies != nil ? $filterMovies : $movies, series: nil,width: .infinity)
-//
-//                    }
-//
-//                }
-//            }
+
         }
     }
 }
