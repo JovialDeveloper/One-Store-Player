@@ -25,9 +25,10 @@ extension StateType: Identifiable {
 struct MainHomeView: View {
     @State private var stateType : StateType?
     @State private var userInfo:UserInfo?
+    @State private var isLayout = false
     @AppStorage(AppStorageKeys.timeFormatt.rawValue) var formatte = hour_12
     @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang
-   
+    @EnvironmentObject private var state:AppState
     fileprivate func fetchCurrentUser() {
         if let data = UserDefaults.standard.value(forKey: AppStorageKeys.currentUser.rawValue) as? Data {
             do {
@@ -46,7 +47,9 @@ struct MainHomeView: View {
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
+            
             if userInfo != nil {
+                
                 VStack{
                     // Top Header View
                     HStack{
@@ -57,7 +60,7 @@ struct MainHomeView: View {
                         
                         if #available(iOS 15.0, *) {
                             
-                            Text("\(Date().description.getDateFormatted(format:defualtDateFormatte)) \(Date().getTime(format: formatte))")
+                            Text("\(Date().description.getDateFormatted(format:englishDateFormatte)) \(Date().getTime(format: formatte))")
                                 .font(.carioRegular)
                         } else {
                             // Fallback on earlier versions
@@ -252,6 +255,10 @@ struct MainHomeView: View {
                         CatchUpView()
                     }
                 }
+               
+                if isLayout {
+                    LayoutDialoguView(isClose:$isLayout)
+                }
             }
             else{
                 LoginView()
@@ -260,11 +267,17 @@ struct MainHomeView: View {
         .onAppear {
             
             fetchCurrentUser()
+//            let isFirstTime = UserDefaults.standard.value(forKey: AppStorageKeys.isFirstTime.rawValue) as? Bool
+//            isLayout = isFirstTime ?? false
             
+        }
+        .onReceive(NotificationCenter.Publisher.init(center: .default, name: .selectLayout)) { _ in
+            isLayout = true
         }
         .onReceive(NotificationCenter.Publisher.init(center: .default, name: .userSelect)) { _ in
             fetchCurrentUser()
         }
+        
     }
     
     

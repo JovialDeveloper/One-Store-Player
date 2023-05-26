@@ -12,6 +12,7 @@ struct ClassicLayoutView: View {
     var subject : (String,ViewType)
     @StateObject private var vm = ClassicViewModel()
     @State private var categories = [MovieCategoriesModel]()
+    @State private var isSortPress = false
     fileprivate func fetchCategories() {
         vm.fetchAllMoviewCategories(type: subject.1).sink { subError in
             //
@@ -36,13 +37,66 @@ struct ClassicLayoutView: View {
                     let filters = categories.filter { $0.categoryName.localizedCaseInsensitiveContains(text)}
                     
                     self.categories = filters.count > 0 ? filters : categories
-                } moreAction: {
-                    LocalStorgage.store.deleteObject(key: subject.1 == .movie ? LocalStorageKeys.moviesCategories.rawValue : LocalStorageKeys.seriesCategories.rawValue)
-                    self.fetchCategories()
+                } moreAction: { isSort in
+                    if isSort{
+                        isSortPress.toggle()
+                    }
+                    else{
+                        LocalStorgage.store.deleteObject(key: subject.1 == .movie ? LocalStorageKeys.moviesCategories.rawValue : LocalStorageKeys.seriesCategories.rawValue)
+                        self.fetchCategories()
+                    }
+                    
                 }
                 ClassicListGridView(data: $categories, subject: subject)
                     .environmentObject(vm)
                 
+            }
+            if isSortPress {
+                VStack(spacing:10){
+                    
+                    Button("Default", action: {
+                        //selectSortText = "Default"
+                        isSortPress.toggle()
+                        fetchCategories()
+                        
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("Recently Added", action: {
+
+                        isSortPress.toggle()
+                        fetchCategories()
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("A-Z", action: {
+                        isSortPress.toggle()
+                        categories  =  categories.sorted { $0.categoryName.lowercased()  < $1.categoryName.lowercased()  }
+//                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("Z-A", action: {
+                        isSortPress.toggle()
+                        categories  =  categories.sorted { $0.categoryName.lowercased()  > $1.categoryName.lowercased()  }
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button {
+                        isSortPress.toggle()
+                    } label: {
+                        Text("Submit")
+                            .padding()
+                            .foregroundColor(.white)
+                    }
+                    .frame(width:150,height: 46)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+                    
+
+                }
+                .frame(width: 200,height: 200)
+                
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
             }
         }.onAppear {
             fetchCategories()
@@ -295,6 +349,7 @@ struct ShowContainerView:View{
     @State private var filterMovies : [MovieModel]?
     @Binding var selectItem : MovieCategoriesModel?
     var subject : (String,ViewType)
+    @State private var isSort = false
     //var action: (()->Void)?
     var body: some View{
         ZStack{
@@ -302,7 +357,7 @@ struct ShowContainerView:View{
             VStack{
                 
 
-                NavigationHeaderView(title: subject.0) { text in
+                NavigationHeaderView(title: selectItem?.categoryName ?? "ALL") { text in
                     if movies != nil {
                         let filters = movies?.filter {
                             $0.name!.range(of: text,options: .caseInsensitive) != nil
@@ -320,16 +375,22 @@ struct ShowContainerView:View{
                         filterSeries = filters?.count ?? 0 > 0 ? filters : nil
                     }
                     
-                } moreAction: {
-                    if series != nil {
-                        self.filterSeries = nil
-                        self.series = series
-                        
-                    }else{
-                        self.filterMovies = nil
-                        self.movies = movies
-                        
+                } moreAction: { issort in
+                    if issort {
+                        isSort.toggle()
                     }
+                    else{
+                        if series != nil {
+                            self.filterSeries = nil
+                            self.series = series
+                            
+                        }else{
+                            self.filterMovies = nil
+                            self.movies = movies
+                            
+                        }
+                    }
+                    
                 }
         
                 if series != nil {
@@ -339,6 +400,72 @@ struct ShowContainerView:View{
                     
                 }
                
+            }
+            if isSort{
+                VStack(spacing:10){
+                    
+                    Button("Default", action: {
+                        //selectSortText = "Default"
+                        isSort.toggle()
+                        if series != nil {
+                            self.series = series
+                        }else{
+                            self.movies = movies
+                        }
+                        
+                        
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("Recently Added", action: {
+//                        selectSortText = "Recently Added"
+//                        self.fetchCategories()
+                        isSort.toggle()
+                        if series != nil {
+                            self.series = series
+                        }else{
+                            self.movies = movies
+                        }
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("A-Z", action: {
+                        isSort.toggle()
+                        if series != nil {
+                            self.series = series?.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                        }else{
+                            movies  =  movies?.sorted { $0.name?.lowercased() ?? "" < $1.name?.lowercased() ?? "" }
+                        }
+                        
+//                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("Z-A", action: {
+                        isSort.toggle()
+                        if series != nil {
+                            self.series = series?.sorted { $0.name.lowercased() > $1.name.lowercased() }
+                        }else{
+                            movies  =  movies?.sorted { $0.name?.lowercased() ?? "" > $1.name?.lowercased() ?? "" }
+                        }
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button {
+                        isSort.toggle()
+                    } label: {
+                        Text("Submit")
+                            .padding()
+                            .foregroundColor(.white)
+                    }
+                    .frame(width:150,height: 46)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+                    
+
+                }
+                .frame(width: 200,height: 200)
+                
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
             }
         }
     }
@@ -374,7 +501,7 @@ struct RowCell:View{
             
             Spacer()
             // Users Catalog
-            Text("\(count)")
+            Text(count > 0 ? "\(count)" : "")
                 .font(.carioBold)
                 .foregroundColor(.white)
             

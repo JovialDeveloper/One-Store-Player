@@ -38,7 +38,7 @@ struct CollectionGridView:View{
     }
     var body: some View{
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 0) {
+            LazyVGrid(columns: columns, spacing: 20) {
                 if data != nil {
                     ForEach(data!, id: \.id) { item in
                         if #available(tvOS 16.0, *) {
@@ -178,21 +178,23 @@ struct MovieCell<T:Codable>:View{
         return ZStack{
             
             KFImage(.init(string:data is MovieModel ?  (data as! MovieModel).streamIcon ?? "https://via.placeholder.com/600x400?text=No+Image" : (data as! SeriesModel).cover))
+            
                 .resizable()
                 
                 .placeholder({
                     Image("NoImage")
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        //.frame(maxWidth: width,maxHeight: height)
+                        //.aspectRatio(contentMode: .fill)
+                        .frame(maxHeight: height)
                         .clipped()
                     
                 })
-                //.frame(maxWidth: width,maxHeight: height)
-                .aspectRatio(contentMode: .fit)
+                .frame(maxHeight: height)
+                //.aspectRatio(contentMode: .fill)
                 .clipped()
                 .overlay(imageOverLayView,alignment: .bottom)
-                .overlay(ratingView,alignment: .topLeading)
+            
+                .overlay(ratingView.offset(x:5,y:5),alignment: .topLeading)
         }.cornerRadius(5)
 #endif
     }
@@ -200,14 +202,13 @@ struct MovieCell<T:Codable>:View{
     var ratingView:some View{
         ZStack{
             Text("\(String(format: "%.2f",data is MovieModel ?  (data as! MovieModel).rating5Based ?? 0.0 : (data as! SeriesModel).rating5Based))")
-                .font(.carioLight)
+                .padding(5)
                 .foregroundColor(.white)
-                .lineLimit(0)
-                .minimumScaleFactor(0.5)
+            
+
         }
-        .frame(width: 25,height: 30)
-        .background(Color.purple.cornerRadius(5))
-        //.opacity(0.4)
+        .background(Color.purple.cornerRadius(4))
+        
     }
     
     var imageOverLayView:some View{
@@ -215,17 +216,12 @@ struct MovieCell<T:Codable>:View{
             Text(data is MovieModel ?  (data as! MovieModel).name ?? "" : (data as! SeriesModel).name)
                 .font(.carioBold)
                 .foregroundColor(.white)
-                .lineLimit(0)
-                .minimumScaleFactor(0.7)
-            
-            //            Text(movie. ?? "N/A")
-            //                .font(.carioRegular)
-            //                .lineLimit(0)
-            //            //.minimumScaleFactor(0.7)
-            //                .foregroundColor(.white)
+                .lineLimit(3)
+                .minimumScaleFactor(0.8)
+           
         }
         .padding()
         .frame(maxWidth:.infinity,maxHeight: 65)
-        .background(Color.black.opacity(0.4))
+        .background(Color.black.opacity(0.6))
     }
 }

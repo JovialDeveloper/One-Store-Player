@@ -22,6 +22,7 @@ extension Notification.Name{
     static let resumePlaying = Notification.Name("resumePlaying")
     static let addNewUser = Notification.Name("addNewUser")
     static let userSelect = Notification.Name("userSelect")
+    static let selectLayout = Notification.Name("choselayout")
 }
 
 enum AppStorageKeys:String{
@@ -39,6 +40,7 @@ enum AppStorageKeys:String{
     case automate
     case egp
     case paternalControl
+    case isFirstTime
 }
 enum AppKeys:String{
     typealias RawValue = String
@@ -82,6 +84,7 @@ enum SupportedLanguages:String{
 
 
 let defualtDateFormatte = "MM/dd/yyyy"
+let englishDateFormatte = "EEEE, MMM d, yyyy"
 
 enum VideoFormats:String{
     case ts
@@ -114,7 +117,7 @@ extension String {
         if let timeInterval = TimeInterval(self) {
             let date = Date(timeIntervalSince1970: timeInterval)
             let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd/yyyy"
+            formatter.dateFormat = englishDateFormatte //"MM/dd/yyyy"
             return formatter.string(from: date)
         }
         return "--"

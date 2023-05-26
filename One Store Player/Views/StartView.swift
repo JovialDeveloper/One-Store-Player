@@ -12,10 +12,14 @@ class AppState: ObservableObject {
 //    @Published var isAuthenticated = false
     
     @Published var isLogin = false
+    @Published var isFirstLogin = false
     @Published var isPaternalControlOn = false
     func checkSession(){
         if let _ = UserDefaults.standard.value(forKey: AppStorageKeys.currentUser.rawValue) as? Data {
             let econd = UserDefaults.standard.value(forKey: AppStorageKeys.paternalControl.rawValue) as? Data
+            
+//            let isFirstTime = UserDefaults.standard.value(forKey: AppStorageKeys.isFirstTime.rawValue) as? Bool
+//            isFirstLogin = isFirstTime ?? false
             if econd != nil {
                 isPaternalControlOn = true
             }else {

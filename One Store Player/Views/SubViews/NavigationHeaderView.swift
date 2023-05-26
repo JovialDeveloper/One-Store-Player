@@ -11,14 +11,15 @@ struct NavigationHeaderView: View {
     var title:String
     var isHideOptions = false
     var isHideReload = false
+    var isHideSort = false
     @State private var isSeachFieldHide = true
     @State private var searchText = ""
     var searchAction : ((String)->Void)? = nil
-    var moreAction : (()->Void)? = nil
+    var moreAction : ((Bool)->Void)? = nil
     
     @Environment(\.presentationMode) var presentationMode
     @AppStorage(AppStorageKeys.language.rawValue) var lang = SupportedLanguages.englishLang.rawValue
-    
+    @AppStorage(AppStorageKeys.layout.rawValue) var layout = AppKeys.classic.rawValue
     var body: some View {
         HStack{
             // Logo
@@ -48,7 +49,7 @@ struct NavigationHeaderView: View {
                 
 
             }
-            Text(title.localized(lang))
+            Text(title.localized(lang).uppercased())
                 .font(.carioBold)
                 .foregroundColor(.white)
             
@@ -73,10 +74,18 @@ struct NavigationHeaderView: View {
             if !isHideReload {
                 Menu {
                     Button {
-                        moreAction?()
+                        moreAction?(false)
                     } label: {
                         Label("Reload", image: "ic_update")
                     }
+                    if !isHideSort{
+                        Button {
+                            moreAction?(true)
+                        } label: {
+                            Label("Sort", image: "")
+                        }
+                    }
+                    
                 } label: {
                     Image("more")
                         .resizable()

@@ -22,7 +22,7 @@ class LiveStreamingViewModel:ObservableObject{
         else {
             return Fail(error: APIError.apiError(reason: "user Info is wrong")).eraseToAnyPublisher()
         }
-        let uri = "\(userInfo.port)/player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_live_categories"
+        let uri = "\(userInfo.port)player_api.php?username=\(userInfo.username)&password=\(userInfo.password)&action=get_live_categories"
         return Networking.shared.fetch(uri: uri)
     }
     

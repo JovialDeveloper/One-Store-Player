@@ -27,7 +27,8 @@ struct LIveTVView: View {
     @State private var selection  : Int?
     @State private var tvOSOptions = ["Default","Recently Added","A-Z","Z-A"]
     @StateObject private var favLiveStreams = LiveStreamsFavourite()
-    @State private var selectTitle = ""
+    @State private var selectSubCategoryTitle = ""
+    @State private var selectCategoryTitle = "ALL"
     @State private var sLink : String?
     private var playerViewModel = VLCMediaPlayer()
     @AppStorage(AppStorageKeys.layout.rawValue) var layout: AppKeys.RawValue = AppKeys.classic.rawValue
@@ -39,7 +40,7 @@ struct LIveTVView: View {
             DispatchQueue.main.async {
                 self.filterStreams = nil
                 self.categories = categories
-                selectTitle = "ALL"
+                selectSubCategoryTitle = "ALL"
                 self.fetchSubStreams(id: categories[0].categoryID)
             }
         }.store(in: &vm.subscriptions)
@@ -61,7 +62,8 @@ struct LIveTVView: View {
             self.filterStreams = nil
             self.streams = livestreams
             vm.storeLiveStreams(object: livestreams)
-            selectTitle = "ALL"
+            selectCategoryTitle = "ALL"
+            selectSubCategoryTitle = livestreams[0].name
             //self.fetchSubStreams(id: livestreams[0])
             vm.isLoading = false
         }.store(in: &vm.subscriptions)
@@ -93,46 +95,47 @@ struct LIveTVView: View {
                                             Button {
                                                 selectId = 0
                                                 //self.streams.removeAll()
+                                                selectCategoryTitle = "ALL"
                                                 fetchCategories()
                                             } label: {
                                                 Text("ALL")
-                                                    .frame(maxWidth:.infinity,alignment: .leading)
+                                                    .frame(maxWidth:.infinity,maxHeight:56,alignment: .leading)
                                             }
                                             .padding()
                                             .foregroundColor(.white)
 
                                             .frame(maxWidth:.infinity,alignment: .leading)
-                                            .background(selectTitle == "ALL" ? Color.selectedColor : nil)
+                                            .background(selectCategoryTitle == "ALL" ? Color.selectedColor : nil)
 
-                                            Divider()
-                                                .overlay(Color.white)
-                                                .frame(maxWidth:.infinity,alignment: .leading)
+//                                            Divider()
+//                                                .overlay(Color.white)
+//                                                .frame(maxWidth:.infinity,alignment: .leading)
                                         }
 
                                         VStack{
                                             Button {
-                                                self.selectTitle = "Favourites"
+                                                self.selectCategoryTitle = "Favourites"
                                                 selectId = -0
                                                 self.subStreams = favLiveStreams.getLiveStreams()
                                             } label: {
                                                 Text("Favourites")
-                                                    .frame(maxWidth:.infinity,alignment: .leading)
+                                                    .frame(maxWidth:.infinity,maxHeight:56,alignment: .leading)
                                             }
                                             .padding()
                                             .foregroundColor(.white)
 
                                             .frame(maxWidth:.infinity,alignment: .leading)
-                                            .background(selectTitle == "Favourites" ? Color.selectedColor : nil)
+                                            .background(selectCategoryTitle == "Favourites" ? Color.selectedColor : nil)
 
-                                            Divider()
-                                                .overlay(Color.white)
-                                                .frame(maxWidth:.infinity,alignment: .leading)
+//                                            Divider()
+//                                                .overlay(Color.white)
+//                                                .frame(maxWidth:.infinity,alignment: .leading)
                                         }
 
                                         ForEach(categories,id:\.categoryID) { item in
                                             Button {
                                                 selectId = Int(item.categoryID) ?? 0
-                                                self.selectTitle = item.categoryName
+                                                self.selectCategoryTitle = item.categoryName
                                                 fetchSubStreams(id: item.categoryID)
                                             } label: {
                                                 VStack{
@@ -140,14 +143,14 @@ struct LIveTVView: View {
                                                         .font(.carioRegular)
                                                         .foregroundColor(.white)
                                                         .padding()
-                                                        .frame(maxWidth:.infinity,alignment: .leading)
-                                                        .lineLimit(0)
-                                                        .minimumScaleFactor(0.5)
-                                                    Divider().frame(height:1)
-                                                        .overlay(Color.white)
+                                                        .frame(maxWidth:.infinity,maxHeight:56,alignment: .leading)
+                                                        //.lineLimit(0)
+                                                        //.minimumScaleFactor(0.5)
+//                                                    Divider().frame(height:1)
+//                                                        .overlay(Color.white)
                                                 }
                                             }
-                                            .background(selectTitle == item.categoryName ? Color.selectedColor : nil)
+                                            .background(selectCategoryTitle == item.categoryName ? Color.selectedColor : nil)
 
 
                                         }
@@ -162,7 +165,7 @@ struct LIveTVView: View {
 
                                             if selectId == stream.streamID {
                                                 Button {
-                                                    self.selectTitle = stream.name
+                                                    self.selectSubCategoryTitle = stream.name
                                                     self.selectId = stream.streamID
                                                 } label: {
                                                     VStack{
@@ -177,18 +180,18 @@ struct LIveTVView: View {
                                                                 .font(.carioRegular)
                                                                 .foregroundColor(.white)
 
-                                                                .frame(maxWidth:.infinity,alignment: .leading)
-                                                                .lineLimit(0)
-                                                                .minimumScaleFactor(0.5)
+                                                                .frame(maxWidth:.infinity,maxHeight:56,alignment: .leading)
+//                                                                .lineLimit(0)
+//                                                                .minimumScaleFactor(0.5)
                                                         }
 
-                                                        Divider().frame(height:1)
-                                                            .overlay(Color.white)
+//                                                        Divider().frame(height:1)
+//                                                            .overlay(Color.white)
                                                     }
 
                                                 }
                                                 .padding()
-                                                .background(selectTitle == stream.name ? Color.selectedColor : nil)
+                                                .background(selectSubCategoryTitle == stream.name ? Color.selectedColor : nil)
                                                 .contextMenu {
                                                     Button {
 //                                                        favLiveStreams.saveMovies(model: stream)
@@ -201,7 +204,7 @@ struct LIveTVView: View {
                                             }
                                             else{
                                                 Button {
-                                                    self.selectTitle = stream.name
+                                                    self.selectSubCategoryTitle = stream.name
                                                     self.selectId = stream.streamID
                                                 } label: {
                                                     VStack{
@@ -212,12 +215,12 @@ struct LIveTVView: View {
                                                             .frame(maxWidth:.infinity,alignment: .leading)
                                                             .lineLimit(0)
                                                             .minimumScaleFactor(0.5)
-                                                        Divider().frame(height:1)
-                                                            .overlay(Color.white)
+//                                                        Divider().frame(height:1)
+//                                                            .overlay(Color.white)
                                                     }
 
                                                 }
-                                                .background(selectTitle == stream.name ? Color.selectedColor : nil)
+                                                .background(selectSubCategoryTitle == stream.name ? Color.selectedColor : nil)
                                                 .contextMenu {
                                                     Button {
 //                                                        favLiveStreams.saveMovies(model: stream)
@@ -293,7 +296,7 @@ struct LIveTVView: View {
                                     .foregroundColor(.white)
                                     
                                     .frame(maxWidth:.infinity,alignment: .leading)
-                                    .background(selectTitle == "ALL" ? Color.selectedColor : nil)
+                                    .background(selectSubCategoryTitle == "ALL" ? Color.selectedColor : nil)
                                     
                                     Divider()
                                         .overlay(Color.white)
@@ -313,7 +316,7 @@ struct LIveTVView: View {
                                     .foregroundColor(.white)
                                  
                                     .frame(maxWidth:.infinity,alignment: .leading)
-                                    .background(selectTitle == "Favourites" ? Color.selectedColor : nil)
+                                    .background(selectSubCategoryTitle == "Favourites" ? Color.selectedColor : nil)
                                     
                                     Divider()
                                         .overlay(Color.white)
@@ -323,7 +326,7 @@ struct LIveTVView: View {
                                 ForEach(categories,id:\.categoryID) { stream in
                                     Button {
                                         //selectId = stream.categoryID
-                                        self.selectTitle = stream.categoryName
+                                        self.selectSubCategoryTitle = stream.categoryName
                                         //fetchSubStreams(stream: stream)
                                     } label: {
                                         VStack{
@@ -338,30 +341,30 @@ struct LIveTVView: View {
                                                 .overlay(Color.white)
                                         }
                                     }
-                                    .background(selectTitle == stream.categoryName ? Color.selectedColor : nil)
+                                    .background(selectSubCategoryTitle == stream.categoryName ? Color.selectedColor : nil)
                                     
                                     
                                 }
                             }
-                            .background(Color.black.opacity(0.5))
+                            .background(Color.gray.opacity(0.5))
                         }
                         
                         //MARK:- SubStreams List
                         
                         ScrollView {
                             LazyVStack {
-                                ForEach(filterSubStreams != nil ? filterSubStreams! : subStreams) { stream in
+                                ForEach(filterSubStreams?.isEmpty ?? false ? subStreams : filterSubStreams!) { stream in
                                     
                                     if selectId == stream.streamID {
                                         Button {
-                                            self.selectTitle = stream.name
+                                            self.selectSubCategoryTitle = stream.name
                                             self.selectId = stream.streamID
                                         } label: {
                                             VStack{
                                                 HStack(spacing: 10){
                                                     Image("play")
                                                         .resizable()
-                                                        .frame(width: 20,height: 20)
+                                                        .frame(width: 20)
                                                         .scaledToFit()
                                                         .clipped()
                                                         .foregroundColor(.green)
@@ -370,17 +373,18 @@ struct LIveTVView: View {
                                                         .foregroundColor(.white)
                                         
                                                         .frame(maxWidth:.infinity,alignment: .leading)
-                                                        .lineLimit(0)
-                                                        .minimumScaleFactor(0.5)
+                                                        .lineLimit(2)
+//                                                        .minimumScaleFactor(0.5)
                                                 }
+                                                .frame(height:46)
                                                 
-                                                Divider().frame(height:1)
-                                                    .overlay(Color.white)
-                                            }
+//                                                Divider().frame(height:1)
+//                                                    .overlay(Color.white)
+                                            }.frame(height:46)
                                             
                                         }
-                                        .padding()
-                                        .background(selectTitle == stream.name ? Color.selectedColor : nil)
+                                        .frame(height:46)
+                                        .background(selectSubCategoryTitle == stream.name ? Color.selectedColor : nil)
                                         .contextMenu {
                                             Button {
 //                                                favLiveStreams.saveMovies(model: stream)
@@ -393,7 +397,7 @@ struct LIveTVView: View {
                                     }
                                     else{
                                         Button {
-                                            self.selectTitle = stream.name
+                                            self.selectSubCategoryTitle = stream.name
                                             self.selectId = stream.streamID
                                         } label: {
                                             VStack{
@@ -402,14 +406,15 @@ struct LIveTVView: View {
                                                     .foregroundColor(.white)
                                                     .padding()
                                                     .frame(maxWidth:.infinity,alignment: .leading)
-                                                    .lineLimit(0)
-                                                    .minimumScaleFactor(0.5)
-                                                Divider().frame(height:1)
-                                                    .overlay(Color.white)
-                                            }
+                                                    .lineLimit(2)
+//                                                    .minimumScaleFactor(0.5)
+//                                                Divider().frame(height:1)
+//                                                    .overlay(Color.white)
+                                            }.frame(height:46)
                                             
                                         }
-                                        .background(selectTitle == stream.name ? Color.selectedColor : nil)
+                                        .frame(height:46)
+                                        .background(selectSubCategoryTitle == stream.name ? Color.selectedColor : nil)
                                         .contextMenu {
                                             Button {
 //                                                favLiveStreams.saveMovies(model: stream)
@@ -423,7 +428,7 @@ struct LIveTVView: View {
                                     
                                 }
                             }
-                            .background(Color.black.opacity(0.5))
+                            .background(Color.gray.opacity(0.5))
                         }
                     }
                     .frame(width:proxy.size.width * 0.5,height: proxy.size.height)
@@ -453,6 +458,7 @@ struct LIveTVView: View {
             self.filterSubStreams = nil
             DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
                 self.subStreams = livestreams
+                self.selectSubCategoryTitle = livestreams[0].name
                 self.selectId = livestreams[0].streamID
             }
             
@@ -472,20 +478,28 @@ struct LIveTVView: View {
                 }
                 if isSearch {
                     CustomTextField(searchText: $searchText, isSeachFieldHide: $isSearch) { text in
-                
-                        self.filterStreams = streams.filter {
-                            $0.name.contains(text)
-//                            $0.name.lowercased().range(of: text.lowercased(),options: .caseInsensitive) != nil
-//
-                        }
                         
-                        
-                       
-                        self.filterSubStreams = subStreams.filter {
-                            $0.name.contains(text)
-//                            $0.name.lowercased().range(of: text.lowercased(),options: .caseInsensitive) != nil
+                        if text.isEmpty {
+                            if selectCategoryTitle == "ALL"{
+                                fetchAllStreaming()
+                            } else if selectCategoryTitle == "Favourite" {
+                               subStreams =  favLiveStreams.getLiveStreams()
+                            }else {
+                                fetchSubStreams(id: String(selectId))
+                            }
                             
+                        }else{
+                            self.subStreams = subStreams.filter {
+                                //$0.name.contains(text)
+                                $0.name.lowercased().range(of: text.lowercased(),options: .caseInsensitive) != nil
+                                
+                            }
                         }
+                        
+                        
+//                        debugPrint(filter)
+//
+//                        self.filterSubStreams = filter
                         
                         
                     }
@@ -504,6 +518,7 @@ struct LIveTVView: View {
                 // TV OS
                 
                 #else
+                
                 Menu(selectSortText) {
                     Button("Default", action: {
                         selectSortText = "Default"
@@ -567,6 +582,7 @@ struct MyDemoView:UIViewRepresentable {
    var player : VLCMediaPlayer
     
     func makeUIView(context: Context) -> UIView {
+        
         let view = UIView()
 //        player.drawable = view
 //        player.media = VLCMedia(url: .init(string: link)!)

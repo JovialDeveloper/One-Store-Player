@@ -17,6 +17,7 @@ struct LiveClassicView: View {
     @State private var filterStreams : [LiveStreams]?
     @StateObject private var favLiveStreams = LiveStreamsFavourite()
     @State private var isSelectItem = false
+    @State private var isSortPress = false
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     
     fileprivate func fetchLiveStreams() {
@@ -34,7 +35,7 @@ struct LiveClassicView: View {
             if live.isEmpty {
                 LocalStorgage.store.storeObject(array: livestreams, key: LocalStorageKeys.liveStreams.rawValue)
             }
-            
+            self.filterStreams = livestreams
             self.streams = livestreams
         }.store(in: &vm.subscriptions)
     }
@@ -46,6 +47,7 @@ struct LiveClassicView: View {
             case .failure:
                 break
             case .finished: break
+                
             }
         } receiveValue: { categories in
             DispatchQueue.main.async {
@@ -67,10 +69,15 @@ struct LiveClassicView: View {
                     filterStreams = streams.filter { $0.name.localizedCaseInsensitiveContains(text)
                         
                     }
-                } moreAction: {
-                    LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveCategories.rawValue)
+                } moreAction: { isSort in
+                    if isSort{
+                        isSortPress.toggle()
+                    }else{
+                        LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveCategories.rawValue)
+                        
+                        self.fetchCategories()
+                    }
                     
-                    self.fetchCategories()
                 }
                 
                 if !categories.isEmpty {
@@ -208,7 +215,7 @@ struct LiveClassicView: View {
                                         filterStreams = streams.filter({$0.categoryID == item.categoryID})
                                         favStreams.removeAll()
                                         vm.selectStream = filterStreams?[0]
-                                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+2.0) {
                                             self.isSelectItem.toggle()
                                         }
                                         
@@ -226,7 +233,53 @@ struct LiveClassicView: View {
                 
                 
             }
-            
+            if isSortPress {
+                VStack(spacing:10){
+                    
+                    Button("Default", action: {
+                        //selectSortText = "Default"
+                        isSortPress.toggle()
+                        fetchCategories()
+                        
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("Recently Added", action: {
+
+                        isSortPress.toggle()
+                        fetchCategories()
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("A-Z", action: {
+                        isSortPress.toggle()
+                        categories  =  categories.sorted { $0.categoryName.lowercased()  < $1.categoryName.lowercased()  }
+//                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button("Z-A", action: {
+                        isSortPress.toggle()
+                        categories  =  categories.sorted { $0.categoryName.lowercased()  > $1.categoryName.lowercased()  }
+                    })
+                    .foregroundColor(.black)
+                    
+                    Button {
+                        isSortPress.toggle()
+                    } label: {
+                        Text("Submit")
+                            .padding()
+                            .foregroundColor(.white)
+                    }
+                    .frame(width:150,height: 46)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+                    
+
+                }
+                .frame(width: 200,height: 200)
+                
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
+            }
             
         }
         .onAppear {
@@ -249,6 +302,7 @@ struct LiveClassicView: View {
                     if !(filterStreams?.isEmpty ?? false) {
                         LiveTVDetailView(selectedStream: item, streams: filterStreams!, model: vm,isFavourite: false)
                     }
+//                    LiveTVDetailView(selectedStream: item, streams: streams, model: vm,isFavourite: false)
                     
                 }
                 
@@ -287,7 +341,8 @@ fileprivate struct LiveRowCell:View{
             
             Spacer()
             // Users Catalog
-            Text("\(totalCount)")
+            
+            Text(totalCount > 0 ? "\(totalCount)" : "")
                 .font(.carioBold)
                 .foregroundColor(.white)
             

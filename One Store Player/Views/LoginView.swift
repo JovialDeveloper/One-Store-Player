@@ -109,9 +109,16 @@ struct LoginView: View {
                                         
                                     } receiveValue: { data in
                                         state.isLogin = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                            NotificationCenter.default.post(name: .selectLayout, object: nil)
+                                        }
+                                        
+                                        
                                         if isGoBackToMain {
                                             presentationMode.wrappedValue.dismiss()
                                             NotificationCenter.default.post(name: .addNewUser, object: self)
+                                            
+                                            
                                         }
                                         debugPrint(data)
                                     }.store(in: &loginViewModel.subscriptions)

@@ -253,7 +253,7 @@ struct AlertPCView:View{
     }
 }
 
-fileprivate struct LayoutDialoguView: View{
+struct LayoutDialoguView: View{
     var buttons = ["Modern","Classic"]
     
     @State var buttonSelected: Int = 0

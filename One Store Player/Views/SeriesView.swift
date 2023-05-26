@@ -182,99 +182,191 @@ extension SeriesView{
         @State private var series = [SeriesModel]()
         @EnvironmentObject private var favSeries : SeriesFavourite
         @State private var selectTitle = ""
+        @State private var isSortPress = false
         var body: some View {
             GeometryReader{ proxy in
-                ScrollView{
-                    HStack{
-                        ScrollView{
-                            Button("ALL") {
+                ZStack{
+                    ScrollView{
+                        HStack{
+                            ScrollView{
+                                Button("ALL") {
+                                    selectTitle = "ALL"
+                                    vm.fetchAllSeries()
+                                        .sink { subError in
+                                        //
+                                    } receiveValue: { series in
+                                        self.series = series
+                                        LocalStorgage.store.storeObject(array: series, key: LocalStorageKeys.sereis.rawValue)
+
+                                    }.store(in: &vm.subscriptions)
+                                }
+                                .padding()
+                                .foregroundColor(.white)
+                                .frame(maxWidth:.infinity,alignment: .leading)
+                                .background(selectTitle == "ALL" ? Color.selectedColor : nil)
+//                                Divider().frame(height:1)
+//                                    .overlay(Color.white)
+                                
+                                Button("Favourites") {
+                                    self.selectTitle = "Favourites"
+                                    self.series = favSeries.getSeries()
+                                    self.subject = ("Favourites",.favourite)
+                                }
+                                .padding()
+                                .foregroundColor(.white)
+                                .frame(maxWidth:.infinity,alignment: .leading)
+                                .background(selectTitle == "Favourites" ? Color.selectedColor : nil)
+                                
+//                                Divider().frame(height:1)
+//                                    .overlay(Color.white)
+                                
+                                LazyVStack{
+                                    ForEach(categories,id: \.categoryID) { category in
+                                        Button {
+                                            self.selectTitle = category.categoryName
+                                                vm.fetchAllSeriesById(id: category.categoryID, type: subject.1)
+                                                    .sink { subError in
+                                                        
+                                                        switch subError {
+                                                        case .failure(let error):
+                                                            vm.isLoading = false
+                                                            debugPrint(error)
+                                                        case .finished:
+                                                            vm.isLoading = false
+                                                            break
+                                                        }
+                                                    } receiveValue: { series in
+                                                        vm.isLoading = false
+                                                        
+                                                        self.series = series
+                                                        self.subject = ("Series",.series)
+                                                    }.store(in: &vm.subscriptions)
+                                                
+                                            
+                                        } label: {
+                                            VStack{
+                                                Text(category.categoryName)
+                                                    .font(.carioRegular)
+                                                    .foregroundColor(.white)
+                                                    .padding()
+                                                    .frame(maxWidth:.infinity,alignment: .leading)
+                                                
+//                                                Divider().frame(height:1)
+//                                                    .overlay(Color.white)
+                                                
+                                            }
+                                        }
+                                        .background(selectTitle == category.categoryName ? Color.selectedColor : nil)
+                                    }
+                                    
+                                }
+                            }
+                            .padding(.top,30)
+                            .frame(width:proxy.size.width * 0.3,height: proxy.size.height,alignment: .leading)
+                            Spacer()
+                            
+                            VStack{
+                                NavigationHeaderView(title: selectTitle) { text in
+                                    let filters = series.filter { $0.name.localizedCaseInsensitiveContains(text)}
+                                    
+                                    self.series = filters.count > 0 ? filters : series
+                                    
+                                } moreAction: { isSort in
+                                    if isSort {
+                                        isSortPress.toggle()
+                                    }else{
+                                        vm.fetchAllSeries()
+                                            .sink { subError in
+                                                vm.isLoading = false
+                                        } receiveValue: { series in
+                                            vm.isLoading = false
+                                            
+                                            self.series = series
+           
+                                            
+                                        }.store(in: &vm.subscriptions)
+                                    }
+                                }
+
+                                SeriesGridView(data: $series, viewType: subject.1)
+                            }
+                            .frame(width:proxy.size.width * 0.7,height: proxy.size.height)
+                            
+                        }
+                        .frame(maxWidth:.infinity,maxHeight: .infinity)
+    //                    .toast(isPresented: $vm.isLoading) {
+    //                        ToastView("Loading...")
+    //                            .toastViewStyle(.indeterminate)
+    //                    }
+                    }
+                    if isSortPress{
+                        VStack(spacing:10){
+                            
+                            Button("Default", action: {
+                                //selectSortText = "Default"
+                                isSortPress.toggle()
                                 vm.fetchAllSeries()
                                     .sink { subError in
-                                    //
+                                        vm.isLoading = false
                                 } receiveValue: { series in
+                                    vm.isLoading = false
+                                    
                                     self.series = series
-                                    LocalStorgage.store.storeObject(array: series, key: LocalStorageKeys.sereis.rawValue)
-
+   
+                                    
                                 }.store(in: &vm.subscriptions)
-                            }
-                            .padding()
-                            .foregroundColor(.white)
-                            .frame(maxWidth:.infinity,alignment: .leading)
-                            .background(selectTitle == "ALL" ? Color.yellow : nil)
-                            Divider().frame(height:1)
-                                .overlay(Color.white)
-                            
-                            Button("Favourites") {
-                                self.selectTitle = "Favourites"
-                                self.series = favSeries.getSeries()
-                                self.subject = ("Favourites",.favourite)
-                            }
-                            .padding()
-                            .foregroundColor(.white)
-                            .frame(maxWidth:.infinity,alignment: .leading)
-                            .background(selectTitle == "Favourites" ? Color.yellow : nil)
-                            
-                            Divider().frame(height:1)
-                                .overlay(Color.white)
-                            
-                            LazyVStack{
-                                ForEach(categories,id: \.categoryID) { category in
-                                    Button {
-                                        self.selectTitle = category.categoryName
-                                            vm.fetchAllSeriesById(id: category.categoryID, type: subject.1)
-                                                .sink { subError in
-                                                    
-                                                    switch subError {
-                                                    case .failure(let error):
-                                                        vm.isLoading = false
-                                                        debugPrint(error)
-                                                    case .finished:
-                                                        vm.isLoading = false
-                                                        break
-                                                    }
-                                                } receiveValue: { series in
-                                                    vm.isLoading = false
-                                                    
-                                                    self.series = series
-                                                    self.subject = ("Series",.series)
-                                                }.store(in: &vm.subscriptions)
-                                            
-                                        
-                                    } label: {
-                                        VStack{
-                                            Text(category.categoryName)
-                                                .font(.carioRegular)
-                                                .foregroundColor(.white)
-                                                .padding()
-                                                .frame(maxWidth:.infinity,alignment: .leading)
-                                            
-                                            Divider().frame(height:1)
-                                                .overlay(Color.white)
-                                            
-                                        }
-                                    }
-                                    .background(selectTitle == category.categoryName ? Color.yellow : nil)
-                                }
                                 
+                            })
+                            .foregroundColor(.black)
+                            
+                            Button("Recently Added", action: {
+       
+                                isSortPress.toggle()
+                                vm.fetchAllSeries()
+                                    .sink { subError in
+                                        vm.isLoading = false
+                                } receiveValue: { series in
+                                    vm.isLoading = false
+                                    
+                                    self.series = series
+                                    
+    //                                        .sorted(by: {$0.added?.getDateWithTimeInterval().compare($1.added?.getDateWithTimeInterval() ?? Date()) == .orderedDescending })
+                                    
+                                }.store(in: &vm.subscriptions)
+                            })
+                            .foregroundColor(.black)
+                            
+                            Button("A-Z", action: {
+                                isSortPress.toggle()
+                                series  =  series.sorted { $0.name.lowercased()  < $1.name.lowercased()  }
+    //                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
+                            })
+                            .foregroundColor(.black)
+                            
+                            Button("Z-A", action: {
+                                isSortPress.toggle()
+                                series  =  series.sorted { $0.name.lowercased()  > $1.name.lowercased()  }
+                            })
+                            .foregroundColor(.black)
+                            
+                            Button {
+                                isSortPress.toggle()
+                            } label: {
+                                Text("Submit")
+                                    .padding()
+                                    .foregroundColor(.white)
                             }
+                            .frame(width:150,height: 46)
+                            .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+                            
+
                         }
-                        .padding(.top,30)
-                        .frame(width:proxy.size.width * 0.3,height: proxy.size.height,alignment: .leading)
-                        Spacer()
+                        .frame(width: 200,height: 200)
                         
-                        VStack{
-                            NavigationHeaderView(title: subject.0)
-                            SeriesGridView(data: $series, viewType: subject.1)
-                        }
-                        .frame(width:proxy.size.width * 0.7,height: proxy.size.height)
-                        
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.white))
                     }
-                    .frame(maxWidth:.infinity,maxHeight: .infinity)
-//                    .toast(isPresented: $vm.isLoading) {
-//                        ToastView("Loading...")
-//                            .toastViewStyle(.indeterminate)
-//                    }
                 }
+                
                 
             }.onAppear {
                 vm.fetchAllSeriesCategories(type: .series)
@@ -374,7 +466,7 @@ extension SeriesView{
         @EnvironmentObject private var favSeries : SeriesFavourite
         var body: some View{
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 0) {
+                LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(data, id: \.num) { item in
                         if #available(tvOS 16.0, *) {
                             SeriesCell(serie: item).onTapGesture {
@@ -456,7 +548,7 @@ extension SeriesView{
                     .scaledToFill()
                 //.clipped()
                     .overlay(imageOverLayView,alignment: .bottom)
-                    .overlay(ratingView,alignment: .topLeading)
+                    .overlay(ratingView.offset(x:5,y:5),alignment: .topLeading)
                 
                 //.frame(height: 130)
             }.cornerRadius(5)
@@ -466,17 +558,17 @@ extension SeriesView{
                     .resizable()
                     .placeholder({
                         Image("NoImage")
+                            .resizable()
                             .frame(minWidth: width,minHeight: height)
-                            .scaledToFill()
+                            //.scaledToFill()
                         
                     })
                     .frame(width:width,height: height)
                     .scaledToFill()
-                //.clipped()
                     .overlay(imageOverLayView,alignment: .bottom)
-                    .overlay(ratingView,alignment: .topLeading)
+                    .overlay(ratingView.offset(x:5,y:5),alignment: .topLeading)
                 
-                //.frame(height: 130)
+                
             }.cornerRadius(5)
 #endif
         }
@@ -484,14 +576,13 @@ extension SeriesView{
         var ratingView:some View{
             ZStack{
                 Text("\(String(format: "%.2f",serie.rating5Based))")
-                    .font(.carioLight)
+//                    .font(.carioLight)
+                    .padding(5)
                     .foregroundColor(.white)
-                    .lineLimit(0)
-                    .minimumScaleFactor(0.5)
+                    
             }
-            .frame(width: 40,height: 20)
-            .background(Color.purple.cornerRadius(5))
-            //.opacity(0.4)
+            .background(Color.purple.cornerRadius(4))
+
         }
         
         var imageOverLayView:some View{
@@ -499,8 +590,8 @@ extension SeriesView{
                 Text(serie.name)
                     .font(.carioBold)
                     .foregroundColor(.white)
-                    .lineLimit(0)
-                    .minimumScaleFactor(0.5)
+                    .lineLimit(3)
+                    .minimumScaleFactor(0.8)
             }
             .padding()
             .frame(maxWidth:.infinity,maxHeight: 65)

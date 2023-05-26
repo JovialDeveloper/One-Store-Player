@@ -93,6 +93,8 @@ extension LoginView {
                                     
                                     UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
                                     
+                                    
+                                    
                                     //return model
                                 }
                                 
@@ -109,7 +111,12 @@ extension LoginView {
                             UserDefaults.standard.set(modelData, forKey: AppStorageKeys.userInfo.rawValue)
                             let currentModel = try encoder.encode(model)
                             UserDefaults.standard.set(currentModel, forKey: AppStorageKeys.currentUser.rawValue)
-                            
+                            if let isFirstTime = UserDefaults.standard.value(forKey: AppStorageKeys.isFirstTime.rawValue) as? Bool{
+                                debugPrint(isFirstTime)
+                            }else{
+                                
+                                UserDefaults.standard.set(true, forKey: AppStorageKeys.isFirstTime.rawValue)
+                            }
                             //return model
                         }
                         return model
