@@ -9,8 +9,9 @@ import Foundation
 import SwiftUI
 import Kingfisher
 import MobileVLCKit
+
 struct LiveTVDetailView:View {
-    @State var selectedStream : LiveStreams
+    @State private var selectedStream : LiveStreams!
     @State var streams:[LiveStreams]
     let model:LiveStreamingViewModel
     var isFavourite = false
@@ -62,6 +63,8 @@ struct LiveTVDetailView:View {
                                 TextField("Search", text: $selectSearchText)
                                     
                                     .foregroundColor(.white)
+                                    
+                                
                                 Divider().overlay(Color.white)
                             }
                         }
@@ -77,11 +80,13 @@ struct LiveTVDetailView:View {
                             Button("Default", action: {
                                 selectedSort = "Default"
                                 subFilterStreams = nil
-                                //self.fetchCategories()
+                                //fetchStreams()
+                                
                             })
                             Button("Recently Added", action: {
                                 selectedSort = "Recently Added"
                                 subFilterStreams = nil
+                                //fetchStreams()
                                 //self.fetchCategories()
                             })
                             Button("A-Z", action: {
@@ -100,9 +105,9 @@ struct LiveTVDetailView:View {
                         
                     }
                     .onChange(of: selectSearchText) { newValue in
-                        if streams.filter({$0.name == newValue}).count > 0
+                        if streams.filter({$0.name.contains(newValue)}).count > 0
                         {
-                            subFilterStreams = streams.filter({$0.name == newValue})
+                            subFilterStreams = streams.filter({$0.name.contains(newValue)})
                         }
                         else {
                             subFilterStreams = nil
@@ -133,7 +138,7 @@ struct LiveTVDetailView:View {
                                 }
                                 Spacer()
                                 
-                                Text(selectedStream.name)
+                                Text(selectedStream?.name ?? "")
                                     .font(.carioRegular)
                                     .foregroundColor(.white)
                                 
@@ -202,7 +207,7 @@ struct LiveTVDetailView:View {
                                             Spacer()
                                         }
                                         .frame(width:proxy.size.width * 0.5,height:70)
-                                        .background(selectedStream.streamID == stream.streamID ? Color.selectedColor : Color.secondaryColor)
+                                        .background(selectedStream?.streamID == stream.streamID ? Color.selectedColor : Color.secondaryColor)
                                         .onTapGesture {
                                             selectedStream = stream
                                         }
@@ -228,79 +233,86 @@ struct LiveTVDetailView:View {
                                     }
                                 }
                             }else{
-                                ScrollView {
-                                    ForEach(subFilterStreams != nil ? subFilterStreams! : subStreams) { stream in
-                                        HStack{
-                                            if selectedStream.id == stream.id {
-                                                Image("pause_exo")
-                                                    .resizable()
-                                                    .frame(width:40)
-                                                    .scaledToFill()
-                                                    .foregroundColor(.green)
-                                                
-                                            }
-                                            else{
-                                                Spacer().frame(width:40)
-                                            }
-                                            
-                                            Text("\(stream.streamID)".replacingOccurrences(of: ",", with: ""))
-                                            //                                                .frame(width:40)
-                                                .font(.carioRegular)
-                                                .lineLimit(1)
-                                                .minimumScaleFactor(0.5)
-                                            
-                                            Spacer().frame(width:20)
-                                            
-                                            KFImage(URL.init(string: stream.streamIcon))
-                                                .placeholder {
-                                                    Image("Icon")
+                                if #available(iOS 16.0, *) {
+                                    List {
+                                        ForEach(subFilterStreams != nil ? subFilterStreams! : subStreams,id:\.id) { stream in
+                                            LazyHStack{
+                                                if selectedStream.id == stream.id {
+                                                    Image("pause_exo")
                                                         .resizable()
-                                                        .frame(width:80,height: 50)
-                                                        .scaledToFit()
+                                                        .frame(width:40)
+                                                        .scaledToFill()
+                                                        .foregroundColor(.green)
+                                                    
                                                 }
-                                                .resizable()
-                                                .frame(width:80,height: 50)
-                                                .scaledToFit()
-                                            //.clipShape(Rectangle().fill())
-                                            
-                                            Spacer().frame(width:20)
-                                            
-                                            Text(stream.name)
-                                            //.frame(width:80)
-                                                .font(.carioRegular)
-                                            //                                                .lineLimit(1)
-                                            //                                                .minimumScaleFactor(0.5)
-                                            
-                                            Spacer()
-                                        }
-                                        .frame(width:proxy.size.width * 0.5,height:70)
-                                        .background(selectedStream.streamID == stream.streamID ? Color.selectedColor : Color.secondaryColor)
-                                        .onTapGesture {
-                                            let index = streams.firstIndex(where: {$0.categoryID == stream.categoryID})
-                                            currentIndex = index ?? 0
-                                            selectedStream = stream
-                                        }
-                                        .contextMenu {
-                                            Button {
-                                                if favLiveStreams.findItem(model: stream) {
-                                                    // remove from fav
-                                                    favLiveStreams.deleteObject(model: stream)
-                                                }
-                                                else {
-                                                    favLiveStreams.saveMovies(model: stream)
-                                                }
+//                                                else{
+//                                                    Spacer().frame(width:40)
+//                                                }
                                                 
-                                            } label: {
-                                                if favLiveStreams.findItem(model: stream) {
-                                                    Text("Remove from Favourite")
-                                                }else{
-                                                    Text("Add to Favourite")
-                                                }
+                                                Text("\(stream.streamID)".replacingOccurrences(of: ",", with: ""))
+                                                //                                                .frame(width:40)
+                                                    .font(.carioRegular)
+                                                    .lineLimit(1)
+                                                    .minimumScaleFactor(0.5)
                                                 
+                                                Spacer()
+                                                
+                                                KFImage(URL.init(string: stream.streamIcon))
+                                                    .placeholder {
+                                                        Image("Icon")
+                                                            .resizable()
+                                                            .frame(width:80,height: 50)
+                                                            .scaledToFit()
+                                                    }
+                                                    .resizable()
+                                                    .frame(width:80,height: 50)
+                                                    .scaledToFit()
+                                                //.clipShape(Rectangle().fill())
+                                                
+                                                Spacer()
+                                                
+                                                Text(stream.name)
+                                                    .font(.carioRegular)
+                                               
+                                                Spacer()
                                             }
-                                        }
+                                            .frame(width: proxy.size.width * 0.5,height:80)
+                                            .background(selectedStream?.streamID == stream.streamID ? Color.selectedColor : Color.secondaryColor)
+                                            .listRowInsets(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
+                                            .onTapGesture {
+                                                let index = streams.firstIndex(where: {$0.categoryID == stream.categoryID})
+                                                currentIndex = index ?? 0
+                                                selectedStream = stream
+                                            }
+                                            .contextMenu {
+                                                Button {
+                                                    if favLiveStreams.findItem(model: stream) {
+                                                        // remove from fav
+                                                        favLiveStreams.deleteObject(model: stream)
+                                                    }
+                                                    else {
+                                                        favLiveStreams.saveMovies(model: stream)
+                                                    }
+                                                    
+                                                } label: {
+                                                    if favLiveStreams.findItem(model: stream) {
+                                                        Text("Remove from Favourite")
+                                                    }else{
+                                                        Text("Add to Favourite")
+                                                    }
+                                                    
+                                                }
+                                            }
+                                        }.listRowBackground(Color.clear)
                                     }
+                                    .listStyle(PlainListStyle())
+                                    .frame(width: proxy.size.width * 0.5)
+                                    .scrollContentBackground(.hidden)
+                                    .background(Color.black)
+                                } else {
+                                    // Fallback on earlier versions
                                 }
+                               
                             }
                             // Streams List
                             
@@ -308,71 +320,111 @@ struct LiveTVDetailView:View {
                         }
                         .frame(width: proxy.size.width * 0.5)
                         .onAppear {
-                            self.subStreams = streams
-                            //                            if !isFavourite {
-                            //                                fetchSubStreams(stream: selectedStream)
-                            //                            }
-                            
-                        }
-                        
-                        VStack{
                             
                             
-                            if (UIDevice.current.userInterfaceIdiom == .pad)
-                            {
-                                MyDemoView(link: Networking.shared.getStreamingLink(id: selectedStream.streamID, type: "live"), player: playerModel)
-                                    .frame(maxWidth: .infinity,maxHeight:.infinity)
-                                    .onTapGesture {
-                                        playerModel.pause()
-                                        isFullScreen.toggle()
-                                    }
-                                    .onReceive(NotificationCenter.Publisher(center: .default, name: .resumePlaying)) { _ in
-                                        playerModel.play()
-                                    }
-                                Spacer()
+                            if model.selectCategory?.categoryName == "ALL" {
+                                LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveStreams.rawValue)
                                 
-                            } else {
-                                MyDemoView(link: Networking.shared.getStreamingLink(id: selectedStream.streamID, type: "live"), player: playerModel)
-                                    .frame(height: 200)
-                                    .onTapGesture {
-                                        playerModel.pause()
-                                        isFullScreen.toggle()
+                                model.fetchAllLiveStreaming().sink(receiveCompletion: { _ in
+                                    //
+                                }, receiveValue: { live in
+                                    debugPrint(live.count)
+                                    self.subStreams.removeAll()
+                                    DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+                                        self.subStreams = live
+                                        selectedStream = live[0]
+                                        //self.selectId = livestreams[0].streamID
                                     }
-                                    .onReceive(NotificationCenter.Publisher(center: .default, name: .resumePlaying)) { _ in
-                                        playerModel.play()
-                                    }
-                                Spacer()
+                                }).store(in: &model.subscriptions)
+                            }else{
+                                if let id = model.selectCategory?.categoryID {
+                                    fetchSubStreams(stream: id)
+                                }
+                                
+                            }
+                        }
+                        if selectedStream != nil {
+                            VStack{
+                                
+                                
+                                if (UIDevice.current.userInterfaceIdiom == .pad)
+                                {
+                                    MyDemoView(link: Networking.shared.getStreamingLink(id: selectedStream!.streamID, type: "live"), player: playerModel)
+                                        .frame(maxWidth: .infinity,maxHeight:.infinity)
+                                        .onTapGesture {
+                                            playerModel.pause()
+                                            isFullScreen.toggle()
+                                        }
+                                        .onReceive(NotificationCenter.Publisher(center: .default, name: .resumePlaying)) { _ in
+                                            playerModel.play()
+                                        }
+                                    Spacer()
+                                    
+                                } else {
+                                    MyDemoView(link: Networking.shared.getStreamingLink(id: selectedStream!.streamID, type: "live"), player: playerModel)
+                                        .frame(height: 200)
+                                        .onTapGesture {
+                                            playerModel.pause()
+                                            isFullScreen.toggle()
+                                        }
+                                        .onReceive(NotificationCenter.Publisher(center: .default, name: .resumePlaying)) { _ in
+                                            playerModel.play()
+                                        }
+                                    Spacer()
+                                }
                             }
                         }
                         
                         
                     }
                     .fullScreenCover(isPresented: $isFullScreen) {
-                        ZStack{
-                            Color.primaryColor.ignoresSafeArea()
-                            VStack{
-                                HStack{
-                                    Button(action: {
-                                        isFullScreen.toggle()
-                                    }, label: {
-                                        Image("arrow_back")
-                                            .resizable()
-                                            .frame(width: 24, height: 30, alignment: .leading)
-                                            .clipped()
-                                            .foregroundColor(.white)
-                                    })
-                                    
-                                    Spacer()
+                        NavigationView{
+                            VLCView(link: Networking.shared.getStreamingLink(id: selectedStream.streamID, type: "live"), isOvarLayHide: false)
+                                .ignoresSafeArea()
+                                .toolbar {
+                                    ToolbarItem(placement:.navigationBarLeading) {
+                                        Button {
+                                            isFullScreen.toggle()
+                                        } label: {
+                                            Image("arrow_back")
+                                                .resizable()
+                                                .frame(width:46,height:46)
+                                                
+                                        }
+                                        .frame(width:46,height:46)
+                                        .foregroundColor(Color.white)
+
+                                    }
                                 }
-                                
-                                MyDemoView(link: Networking.shared.getStreamingLink(id: selectedStream.streamID, type: "live"), player: playerFullModel)
-                                    .frame(maxWidth: .infinity,maxHeight:.infinity)
-                                    .ignoresSafeArea()
-                            }
-                            
-                            
-                            
                         }
+                        
+                            //.ignoresSafeArea()
+                        
+//                        ZStack{
+//                            Color.primaryColor.ignoresSafeArea()
+//                            VStack{
+//                                HStack{
+//                                    Button(action: {
+//                                        isFullScreen.toggle()
+//                                    }, label: {
+//                                        Image("arrow_back")
+//                                            .resizable()
+//                                            .frame(width: 24, height: 30, alignment: .leading)
+//                                            .clipped()
+//                                            .foregroundColor(.white)
+//                                    })
+//
+//                                    Spacer()
+//                                }
+//
+//                                MyDemoView(link: Networking.shared.getStreamingLink(id: selectedStream.streamID, type: "live"), player: playerFullModel)
+//                                    .frame(maxWidth: .infinity,maxHeight:.infinity)
+//                                    .ignoresSafeArea()
+//                            }
+//
+//
+//
+//                        }
                         
                         
                     }
@@ -381,31 +433,49 @@ struct LiveTVDetailView:View {
             }
             
         }
+        .onDisappear {
+            playerModel.stop()
+            playerFullModel.stop()
+        }
         
         
         
     }
     
+//    private func fetchStreams(){
+//        if selectedStream !=
+//        model.fetchAllSubStreamsInCategory(category: selectedStream.categoryID)
+//            .sink { res in
+//                //
+//            } receiveValue: { streams in
+//                self.streams = []
+//                self.subStreams = []
+//                self.streams = streams
+//                self.subStreams = streams
+//            }.store(in: &model.subscriptions)
+//
+//    }
     
-    //    fileprivate func fetchSubStreams(stream:LiveStreams) {
-    //        model.fetchAllSubStreamsInCategory(category: stream.categoryID).sink { SubscriberError in
-    //            switch SubscriberError {
-    //            case .failure(let error):
-    //                debugPrint(error)
-    //                break
-    //            case .finished:
-    //                break
-    //            }
-    //        } receiveValue: { livestreams in
-    //            self.subStreams.removeAll()
-    //            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
-    //                self.subStreams = livestreams
-    //                selectedStream = livestreams[0]
-    //                //self.selectId = livestreams[0].streamID
-    //            }
-    //
-    //        }.store(in: &model.subscriptions)
-    //    }
+    
+        fileprivate func fetchSubStreams(stream:String) {
+            model.fetchAllSubStreamsInCategory(category: stream).sink { SubscriberError in
+                switch SubscriberError {
+                case .failure(let error):
+                    debugPrint(error)
+                    break
+                case .finished:
+                    break
+                }
+            } receiveValue: { livestreams in
+                self.subStreams.removeAll()
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+                    self.subStreams = livestreams
+                    selectedStream = livestreams[0]
+                    //self.selectId = livestreams[0].streamID
+                }
+    
+            }.store(in: &model.subscriptions)
+        }
 }
 
 

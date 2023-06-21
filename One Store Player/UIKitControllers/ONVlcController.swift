@@ -94,7 +94,7 @@ class ONVlcController: UIViewController {
         self.slider.maximumValue = Float(truncating: grandtotal) / 100
         self.slider.value = Float(truncating: guardcurrent) / 100
         self.slider.isContinuous = true
-          
+        
         let current = player.time
         guard let total = player.media?.length else {return}
         

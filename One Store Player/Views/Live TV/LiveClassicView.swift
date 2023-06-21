@@ -74,8 +74,10 @@ struct LiveClassicView: View {
                         isSortPress.toggle()
                     }else{
                         LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveCategories.rawValue)
-                        
+                        LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveStreams.rawValue)
+                        self.categories = []
                         self.fetchCategories()
+                        self.fetchLiveStreams()
                     }
                     
                 }
@@ -131,10 +133,14 @@ struct LiveClassicView: View {
                             .frame(maxWidth:.infinity,maxHeight: 60)
                             .background(RoundedRectangle(cornerRadius: 2).fill(Color.secondaryColor))
                             .onTapGesture {
-                                vm.selectStream = streams[0]
-                                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
-                                    self.isSelectItem.toggle()
+                                vm.selectCategory = MovieCategoriesModel(categoryID: "0", categoryName: "ALL", parentID: 0)
+                                if streams.count > 0 {
+                                    vm.selectStream = streams[0]
+                                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                                        self.isSelectItem.toggle()
+                                    }
                                 }
+                                
                                 
                                 
                             }
@@ -214,10 +220,15 @@ struct LiveClassicView: View {
                                         
                                         filterStreams = streams.filter({$0.categoryID == item.categoryID})
                                         favStreams.removeAll()
-                                        vm.selectStream = filterStreams?[0]
-                                        DispatchQueue.main.asyncAfter(deadline: .now()+2.0) {
-                                            self.isSelectItem.toggle()
+                                        vm.selectCategory = item
+                                        if filterStreams?.count ?? 0 > 0 {
+                                            vm.selectStream = filterStreams?[0]
+                                            DispatchQueue.main.asyncAfter(deadline: .now()+0.8) {
+                                                self.isSelectItem.toggle()
+                                            }
                                         }
+                                        
+                                        
                                         
                                         
                                     }
@@ -239,7 +250,12 @@ struct LiveClassicView: View {
                     Button("Default", action: {
                         //selectSortText = "Default"
                         isSortPress.toggle()
+                        LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveCategories.rawValue)
+                        LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveStreams.rawValue)
+                        self.categories = []
                         fetchCategories()
+                        fetchLiveStreams()
+                        
                         
                     })
                     .foregroundColor(.black)
@@ -247,7 +263,12 @@ struct LiveClassicView: View {
                     Button("Recently Added", action: {
 
                         isSortPress.toggle()
+                        LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveCategories.rawValue)
+                        LocalStorgage.store.deleteObject(key: LocalStorageKeys.liveStreams.rawValue)
+                        self.categories = []
                         fetchCategories()
+                        fetchLiveStreams()
+                        
                     })
                     .foregroundColor(.black)
                     
@@ -297,11 +318,10 @@ struct LiveClassicView: View {
         .fullScreenCover(isPresented: $isSelectItem) {
             if let item = vm.selectStream {
                 if favStreams.count > 0 {
-                    LiveTVDetailView(selectedStream: item, streams: favStreams, model: vm,isFavourite: true)
+                    LiveTVDetailView(streams: favStreams, model: vm)
+//                    LiveTVDetailView(selectedStream: <#LiveStreams#>, streams: favStreams, model: vm,isFavourite: true)
                 }else{
-                    if !(filterStreams?.isEmpty ?? false) {
-                        LiveTVDetailView(selectedStream: item, streams: filterStreams!, model: vm,isFavourite: false)
-                    }
+                    LiveTVDetailView(streams: streams, model: vm)
 //                    LiveTVDetailView(selectedStream: item, streams: streams, model: vm,isFavourite: false)
                     
                 }

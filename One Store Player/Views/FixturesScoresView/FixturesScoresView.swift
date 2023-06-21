@@ -263,7 +263,8 @@ fileprivate struct Fixtures_SocroesCell:View{
                 }
                 Spacer()
                 VStack(spacing:20){
-                    Text(data.updatedAt?.getDateFormatted(givenFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSZ", format: "yyyy-MM-dd") ?? "")
+                    
+                    Text(data.status?.elapsedTime ?? "--")
                         .font(.carioRegular)
                     WebImage(url: .init(string: data.teams?[1].logo ?? ""))
                         .resizable()

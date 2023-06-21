@@ -250,7 +250,20 @@ struct UserListView: View {
         }
         .fullScreenCover(isPresented: $showUpdateUser) {
             if selectUser != nil {
-                LoginView(isGoBackToMain: true,isUserUpdate: true,updateUser: selectUser)
+                NavigationView {
+                    LoginView(isGoBackToMain: true,isUserUpdate: true,updateUser: selectUser)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button {
+                                    showUpdateUser.toggle()
+                                } label: {
+                                    Image("arrow_back")
+                                }
+                                .foregroundColor(.white)
+                            }
+                        }
+                }
+               
             }
             
         }

@@ -29,6 +29,12 @@ struct ClassicLayoutView: View {
         }.store(in: &vm.subscriptions)
     }
     
+    fileprivate func removingItemsFromLocalStorage() {
+        LocalStorgage.store.deleteObject(key: subject.1 == .movie ? LocalStorageKeys.moviesCategories.rawValue : LocalStorageKeys.seriesCategories.rawValue)
+        LocalStorgage.store.deleteObject(key: subject.1 == .movie ? LocalStorageKeys.allMoviesCategories.rawValue : LocalStorageKeys.allSeriesCategories.rawValue)
+        LocalStorgage.store.deleteObject(key: subject.1 == .movie ? LocalStorageKeys.movies.rawValue : LocalStorageKeys.sereis.rawValue)
+    }
+    
     var body: some View {
         ZStack{
             Color.primaryColor.ignoresSafeArea()
@@ -42,7 +48,10 @@ struct ClassicLayoutView: View {
                         isSortPress.toggle()
                     }
                     else{
-                        LocalStorgage.store.deleteObject(key: subject.1 == .movie ? LocalStorageKeys.moviesCategories.rawValue : LocalStorageKeys.seriesCategories.rawValue)
+                        removingItemsFromLocalStorage()
+                        NotificationCenter.default.post(name: .init("reloa_d"), object: self)
+                        
+                        self.categories = []
                         self.fetchCategories()
                     }
                     
@@ -57,6 +66,7 @@ struct ClassicLayoutView: View {
                     Button("Default", action: {
                         //selectSortText = "Default"
                         isSortPress.toggle()
+                        self.categories = []
                         fetchCategories()
                         
                     })
@@ -65,6 +75,8 @@ struct ClassicLayoutView: View {
                     Button("Recently Added", action: {
 
                         isSortPress.toggle()
+                        self.categories = []
+                        removingItemsFromLocalStorage()
                         fetchCategories()
                     })
                     .foregroundColor(.black)
@@ -72,7 +84,6 @@ struct ClassicLayoutView: View {
                     Button("A-Z", action: {
                         isSortPress.toggle()
                         categories  =  categories.sorted { $0.categoryName.lowercased()  < $1.categoryName.lowercased()  }
-//                            subStreams = subStreams.sorted { $0.name.lowercased() < $1.name.lowercased() }
                     })
                     .foregroundColor(.black)
                     
@@ -114,7 +125,7 @@ struct ClassicListGridView:View{
     @Binding var data : [MovieCategoriesModel]
     let columns : [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     @State private var selectItem : MovieCategoriesModel?
-    
+    @State private var isRefresh = false
     @EnvironmentObject private var vm:ClassicViewModel
     @State private var series : [SeriesModel]?
     @State private var movies : [MovieModel]?
@@ -146,9 +157,12 @@ struct ClassicListGridView:View{
                     self.filterSeries = nil
                     self.series = movies
                     LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.sereis.rawValue)
-                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
-                        self.isSelectItem.toggle()
+                    if !isRefresh {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                            self.isSelectItem.toggle()
+                        }
                     }
+                    
                     
                 }.store(in: &vm.subscriptions)
                 
@@ -158,8 +172,10 @@ struct ClassicListGridView:View{
                 self.filterSeries = nil
                 self.series = favSeries.getSeries()
                 
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
-                    self.isSelectItem.toggle()
+                if !isRefresh {
+                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                        self.isSelectItem.toggle()
+                    }
                 }
                 
             }
@@ -184,8 +200,10 @@ struct ClassicListGridView:View{
                     self.filterSeries = nil
                     self.series = movies
                     LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.sereis.rawValue)
-                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                        self.isSelectItem.toggle()
+                    if !isRefresh {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                            self.isSelectItem.toggle()
+                        }
                     }
                     
                 }.store(in: &vm.subscriptions)
@@ -218,8 +236,10 @@ struct ClassicListGridView:View{
                     self.filterMovies = nil
                     self.movies = movies
                     LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.movies.rawValue)
-                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                        self.isSelectItem.toggle()
+                    if !isRefresh {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                            self.isSelectItem.toggle()
+                        }
                     }
                     
                     
@@ -232,8 +252,10 @@ struct ClassicListGridView:View{
                 self.filterMovies = nil
                 self.movies = favMovies.getMovies()
                 
-                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                    self.isSelectItem.toggle()
+                if !isRefresh {
+                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                        self.isSelectItem.toggle()
+                    }
                 }
             }
             else {
@@ -257,8 +279,10 @@ struct ClassicListGridView:View{
                     self.filterMovies = nil
                     self.movies = movies
                     LocalStorgage.store.storeObject(array: movies, key: LocalStorageKeys.movies.rawValue)
-                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                        self.isSelectItem.toggle()
+                    if !isRefresh {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                            self.isSelectItem.toggle()
+                        }
                     }
                     
                 }.store(in: &vm.subscriptions)
@@ -324,7 +348,6 @@ struct ClassicListGridView:View{
             }
             
         })
-
         .fullScreenCover(isPresented: $isSelectItem) {
             if movies != nil {
                 
@@ -338,6 +361,22 @@ struct ClassicListGridView:View{
             
             
 
+        }
+        .onReceive(NotificationCenter.Publisher.init(center: .default, name: .init("refe"))) { out in
+            if let inf = out.userInfo?["isUp"] as? Bool, inf == true {
+                isRefresh = true
+            }
+            if subject.1 == .series {
+                self.subject = ("",ViewType.series)
+                fetchSeries(selectItem)
+                
+                
+            }else{
+                self.subject = ("",ViewType.movie)
+                fetchMovies(selectItem)
+                
+                
+            }
         }
     }
 }
@@ -382,11 +421,14 @@ struct ShowContainerView:View{
                     else{
                         if series != nil {
                             self.filterSeries = nil
-                            self.series = series
                             
+                            self.series = []
+                            NotificationCenter.default.post(name: .init("refe"), object: self,userInfo: ["isUp":true])
                         }else{
                             self.filterMovies = nil
-                            self.movies = movies
+                            self.movies = []
+                            NotificationCenter.default.post(name: .init("refe"), object: self,userInfo: ["isUp":true])
+                            
                             
                         }
                     }
@@ -408,9 +450,11 @@ struct ShowContainerView:View{
                         //selectSortText = "Default"
                         isSort.toggle()
                         if series != nil {
-                            self.series = series
+                            self.series = []
+                            NotificationCenter.default.post(name: .init("refe"), object: self,userInfo: ["isUp":true])
                         }else{
-                            self.movies = movies
+                            self.movies = []
+                            NotificationCenter.default.post(name: .init("refe"), object: self,userInfo: ["isUp":true])
                         }
                         
                         
@@ -422,9 +466,11 @@ struct ShowContainerView:View{
 //                        self.fetchCategories()
                         isSort.toggle()
                         if series != nil {
-                            self.series = series
+                            self.series = []
+                            NotificationCenter.default.post(name: .init("refe"), object: self,userInfo: ["isUp":true])
                         }else{
-                            self.movies = movies
+                            self.movies = []
+                            NotificationCenter.default.post(name: .init("refe"), object: self,userInfo: ["isUp":true])
                         }
                     })
                     .foregroundColor(.black)
@@ -523,6 +569,52 @@ struct RowCell:View{
         .padding()
         .frame(maxWidth:.infinity,maxHeight: 60)
         .background(RoundedRectangle(cornerRadius: 2).fill(Color.secondaryColor))
+        .onReceive(NotificationCenter.Publisher(center: .default, name: .init("reloa_d"))) { _ in
+            if data.categoryName == "ALL", viewType == .movie {
+                if let value: Int  = LocalStorgage.store.getSingleObject(key: LocalStorageKeys.allMoviesCategories.rawValue) {
+                    self.count = value
+                }else{
+                    let responseType : AnyPublisher<[MovieModel], APIError>  = vm.fetchAllData(type: viewType)
+                    responseType.sink { result in
+                        switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error.localizedDescription)
+                        }
+                    } receiveValue: { movies in
+                        DispatchQueue.main.async {
+                            self.count = movies.count
+                            LocalStorgage.store.storeSingleObject(array: movies.count, key: LocalStorageKeys.allMoviesCategories.rawValue)
+                            //RealmManager.shared.writeObject(object: re)
+                        }
+                    }.store(in: &vm.subscriptions)
+                }
+                
+                
+            }else if data.categoryName == "ALL", viewType == .series {
+                if let value: Int  = LocalStorgage.store.getSingleObject(key: LocalStorageKeys.allSeriesCategories.rawValue) {
+                    self.count = value
+                }else{
+                    let responseType : AnyPublisher<[SeriesModel], APIError>  = vm.fetchAllData(type: viewType)
+                    responseType.sink { result in
+                        switch result {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            debugPrint(error.localizedDescription)
+                        }
+                    } receiveValue: { movies in
+                        DispatchQueue.main.async {
+                            self.count = movies.count
+                            LocalStorgage.store.storeSingleObject(array: movies.count, key: LocalStorageKeys.allSeriesCategories.rawValue)
+                            //RealmManager.shared.writeObject(object: re)
+                        }
+                    }.store(in: &vm.subscriptions)
+                }
+                
+            }
+        }
     }
     
     

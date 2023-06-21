@@ -8,6 +8,7 @@
 import SwiftUI
 import ToastUI
 import MobileVLCKit
+import MediaPlayer
 
 struct LIveTVView: View {
     @State private var isRemoveOverLay = false
@@ -595,7 +596,17 @@ struct MyDemoView:UIViewRepresentable {
         player.stop()
         player.drawable = uiView
         player.media = VLCMedia(url: .init(string: link)!)
+        let volumeView = MPVolumeView()
+//        if let view = volumeView.subviews.first as? UISlider
+//        {
+//            DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
+//                player.audio?.volume = Int32(view.value)
+//            }
+//        }
+         
         player.play()
+        
+
     }
     func makeCoordinator() -> Coordinator {
         return Coordinator()

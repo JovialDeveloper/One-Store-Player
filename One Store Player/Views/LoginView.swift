@@ -62,9 +62,7 @@ struct LoginView: View {
                     }
 #endif
                     
-                    if !isUserUpdate {
-                        TextFieldView(text: $loginViewModel.port,placeHolder: "url")
-                    }
+                    TextFieldView(text: $loginViewModel.port,placeHolder: "url")
                     
                     HStack{
                         Spacer().frame(width:30)

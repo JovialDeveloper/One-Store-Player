@@ -13,9 +13,9 @@ extension LoginView {
         @Published var isLogin = false
         @Published var isError = (false,"")
         @Published var name = "Ali"
-        @Published var password =  "332255566"
-        @Published var port = "http://1player.cc:80/"
-        @Published var userName = "Test2345"
+        @Published var password =  "ULaH9AmLRXDmBy7"
+        @Published var port = "http://1player.cc:80"
+        @Published var userName = "ec1RxLkPaWiHVy"
         @Published var successfullyLogin = false
         @Published var isUserUpdate = false
         var selectUser:UserInfo?
@@ -28,23 +28,24 @@ extension LoginView {
                 return Fail(error: APIError.apiError(reason: "Kindly fill all fields")).eraseToAnyPublisher()
             }
             
-            guard port.hasSuffix("/") else {
-                isError = (true,"Kindly insert / at the end of url")
-                return Fail(error: APIError.apiError(reason: "Kindly insert / at the end of url")).eraseToAnyPublisher()
-            }
-            
-            guard !port.hasSuffix("//") else {
-                isError = (true,"Kindly insert correct url")
-                return Fail(error: APIError.apiError(reason: "Kindly insert correct url")).eraseToAnyPublisher()
-            }
+//            guard port.hasSuffix("/") else {
+//                isError = (true,"Kindly insert / at the end of url")
+//                return Fail(error: APIError.apiError(reason: "Kindly insert / at the end of url")).eraseToAnyPublisher()
+//            }
+//
+//            guard !port.hasSuffix("//") else {
+//                isError = (true,"Kindly insert correct url")
+//                return Fail(error: APIError.apiError(reason: "Kindly insert correct url")).eraseToAnyPublisher()
+//            }
             
             guard !port.contains(" ") else {
                 isError = (true,"Kindly insert correct url")
                 return Fail(error: APIError.apiError(reason: "Kindly insert correct url")).eraseToAnyPublisher()
             }
             
-            
+            port = port.hasSuffix("/") ? port : "\(port)/"
             let uri = "\(port)player_api.php?username=\(userName)&password=\(password)"
+            
             let url = URL(string: uri)!
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
